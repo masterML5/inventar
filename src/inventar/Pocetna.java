@@ -5,25 +5,53 @@
  */
 package inventar;
 
+
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 
 /**
  *
  * @author milosjelic
  */
 public class Pocetna extends javax.swing.JFrame {
-
+    private static Connection conSQL;
+    private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
     /**
      * Creates new form Pocetna
      */
     public Pocetna() throws IOException {
         initComponents();
+        try {
+            Class.forName("org.mysql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+
+        }
+        try {
+            conSQL = DriverManager.getConnection(connectionUrlMySQL);
+            conSQL.setAutoCommit(false);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+
+        }
         Image logo = createImageIcon("/res/pionir-logo.png","logo").getImage().getScaledInstance(90, 48, Image.SCALE_SMOOTH);
         ImageIcon logoIcon = new ImageIcon(logo);
         logoLabel.setIcon(logoIcon);
@@ -51,32 +79,46 @@ public class Pocetna extends javax.swing.JFrame {
         korisnickoTextField = new javax.swing.JTextField();
         korisnickoLabel = new javax.swing.JLabel();
         lozinkaLabel = new javax.swing.JLabel();
+        registracijaButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("IT Inventar");
 
         logoLabel.setText("jLabel1");
 
         naslovLabel.setText("jLabel2");
 
         podnaslovLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        podnaslovLabel.setText("jLabel4");
+        podnaslovLabel.setText("Prijava");
 
-        loginButton.setText("jButton1");
+        loginButton.setText("Login");
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                loginButtonMouseClicked(evt);
+            }
+        });
 
-        resetButton.setText("jButton2");
+        resetButton.setText("Reset");
+        resetButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                resetButtonMouseClicked(evt);
+            }
+        });
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetButtonActionPerformed(evt);
             }
         });
 
-        lozinkaField.setText("jPasswordField1");
+        korisnickoTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                korisnickoTextFieldActionPerformed(evt);
+            }
+        });
 
-        korisnickoTextField.setText("jTextField1");
+        korisnickoLabel.setText("Username");
 
-        korisnickoLabel.setText("jLabel1");
-
-        lozinkaLabel.setText("jLabel2");
+        lozinkaLabel.setText("Password");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -116,6 +158,13 @@ public class Pocetna extends javax.swing.JFrame {
                 .addGap(114, 114, 114))
         );
 
+        registracijaButton.setText("Registracija");
+        registracijaButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                registracijaButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -123,18 +172,25 @@ public class Pocetna extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(podnaslovLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(podnaslovLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
+                                .addComponent(naslovLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
-                        .addComponent(naslovLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(243, 243, 243)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(278, 278, 278))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(registracijaButton)
+                                .addGap(51, 51, 51))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,9 +203,11 @@ public class Pocetna extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(podnaslovLabel)
-                .addGap(67, 67, 67)
+                .addGap(62, 62, 62)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addComponent(registracijaButton)
+                .addGap(35, 35, 35))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -170,6 +228,70 @@ public class Pocetna extends javax.swing.JFrame {
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void resetButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetButtonMouseClicked
+        korisnickoTextField.setText(null);
+        lozinkaField.setText(null);
+    }//GEN-LAST:event_resetButtonMouseClicked
+
+    private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
+        try {
+            String username = korisnickoTextField.getText();
+            String password = lozinkaField.getText();
+            String test = "mentolsu147";
+            String generatedSecuredPasswordHash = BCrypt.hashpw(test, BCrypt.gensalt(12));
+          
+          
+            String sqlCheck = "SELECT * FROM login WHERE username = '"+username+"'";
+            PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheck);
+            ResultSet rsCheck = pstCheck.executeQuery();
+            String password2 = "";
+            if(rsCheck.next()){
+                password2 = rsCheck.getString("password");
+            }
+               
+              boolean matched = BCrypt.checkpw(password, password2);
+              if(matched){
+                  System.out.println("Hello");
+              }
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_loginButtonMouseClicked
+
+    private void korisnickoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_korisnickoTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_korisnickoTextFieldActionPerformed
+
+    private void registracijaButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registracijaButtonMouseClicked
+        try {
+            JPasswordField pwd = new JPasswordField();
+            int passwordFrame = JOptionPane.showConfirmDialog(null, pwd,"Unesite Lozinku",JOptionPane.OK_CANCEL_OPTION);
+            String password = "";
+            if(passwordFrame == 0){
+               password = new String(pwd.getPassword());
+            }
+            String sqlCheckAdmin = "SELECT * FROM login WHERE username = 'administrator'";
+            PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheckAdmin);
+            ResultSet rsCheck = pstCheck.executeQuery();
+            String password2 = "";
+            if(rsCheck.next()){
+                try {
+                    password2 = rsCheck.getString("password");
+                } catch (SQLException ex) {
+                    Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            boolean matched = BCrypt.checkpw(password, password2);
+            if(matched){
+               new Register().setVisible(true);
+               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_registracijaButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -218,6 +340,7 @@ public class Pocetna extends javax.swing.JFrame {
         return null;
     }
      }
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -230,6 +353,7 @@ public class Pocetna extends javax.swing.JFrame {
     private javax.swing.JLabel lozinkaLabel;
     private javax.swing.JLabel naslovLabel;
     private javax.swing.JLabel podnaslovLabel;
+    private javax.swing.JButton registracijaButton;
     private javax.swing.JButton resetButton;
     // End of variables declaration//GEN-END:variables
 }
