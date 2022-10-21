@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 22, 2022 at 12:01 PM
+-- Generation Time: Oct 21, 2022 at 01:40 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `it_inventar`
+-- Database: `it-inventar`
 --
 
 -- --------------------------------------------------------
@@ -42,6 +42,13 @@ CREATE TABLE `inventar` (
   `edit_ts` datetime DEFAULT NULL,
   `datum` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `inventar`
+--
+
+INSERT INTO `inventar` (`id_inventar`, `id_kategorija`, `id_lokacija`, `id_racunar`, `id_stampac`, `naziv`, `lokacija`, `kolicina`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`) VALUES
+(1, 2, 18, NULL, NULL, '', '', 0, '', NULL, '0000-00-00 00:00:00', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -69,6 +76,35 @@ INSERT INTO `kategorija` (`id_kategorija`, `naziv`) VALUES
 (8, 'Mrezna oprema'),
 (9, 'UPS'),
 (10, 'Serveri');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login`
+--
+
+CREATE TABLE `login` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `lastname` varchar(50) DEFAULT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `editedAt` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`id`, `username`, `password`, `email`, `name`, `lastname`, `createdAt`, `editedAt`) VALUES
+(1, 'milos', '$2a$12$/1AcxR/D6.Rknfweg6f55u8PydKuduUZX65NXmBOnlLThCwvgvXCW', 'milos.jelic@pionir.rs', NULL, NULL, '2022-10-20 06:51:03', NULL),
+(2, 'administrator', '$2a$12$0.typcQ.vAsDVinnIQG3ium0MGggvr6IxOd5BP.cbpPwYlE36x8Ha', 'milos.jelic@pionir.rs', 'Admin', 'Admin', '2022-10-20 08:15:44', NULL),
+(18, 'testt', '$2a$12$LgWi2Atp6.dslt9sK1zVj.Xlxj5q7NNCitdHC6FAOfcFTBQbd96RG', 'test@test.com', 'test', 'test', '2022-10-21 06:54:29', NULL),
+(19, 'ff', '$2a$12$ji3pwj.1kJZmDFQ7y0Ywfu1tZBZTb3OyaLx6Yi4Oy40oYlHCN6AvW', 'ff', 'ff', 'ff', '2022-10-21 07:01:37', NULL),
+(20, 'tt', '$2a$12$OfGbxo2y081w9.1/l6/vx.40cMoemsoXUOUa69Dls0F/oT8P/Hs5G', 'tt', 'test', 'tt', '2022-10-21 07:03:14', NULL),
+(21, 'testtt', '$2a$12$3gzvOwhsYEmhxz/hqfiX9uc1x9.wpCqwQTa6nfKs4R4aovL/yAu4C', 'test', 'asd', 'asd', '2022-10-21 11:35:10', NULL);
 
 -- --------------------------------------------------------
 
@@ -176,6 +212,13 @@ ALTER TABLE `kategorija`
   ADD PRIMARY KEY (`id_kategorija`);
 
 --
+-- Indexes for table `login`
+--
+ALTER TABLE `login`
+  ADD PRIMARY KEY (`id`) USING BTREE,
+  ADD UNIQUE KEY `Username` (`username`) USING BTREE;
+
+--
 -- Indexes for table `lokacija`
 --
 ALTER TABLE `lokacija`
@@ -204,13 +247,19 @@ ALTER TABLE `stampaci`
 -- AUTO_INCREMENT for table `inventar`
 --
 ALTER TABLE `inventar`
-  MODIFY `id_inventar` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_inventar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `kategorija`
 --
 ALTER TABLE `kategorija`
   MODIFY `id_kategorija` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `login`
+--
+ALTER TABLE `login`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `lokacija`
