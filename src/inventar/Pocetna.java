@@ -39,12 +39,7 @@ public class Pocetna extends javax.swing.JFrame {
      */
     public Pocetna() throws IOException {
         initComponents();
-        try {
-            Class.forName("org.mysql.Driver");
-        } catch (ClassNotFoundException e) {
-            System.out.println(e);
-
-        }
+        
         try {
             conSQL = DriverManager.getConnection(connectionUrlMySQL);
             conSQL.setAutoCommit(false);
@@ -83,10 +78,12 @@ public class Pocetna extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IT Inventar");
+        setResizable(false);
 
         logoLabel.setText("jLabel1");
 
-        naslovLabel.setText("jLabel2");
+        naslovLabel.setFont(new java.awt.Font("Tahoma", 3, 30)); // NOI18N
+        naslovLabel.setText("IT INVENTAR PIONIR D.O.O");
 
         podnaslovLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         podnaslovLabel.setText("Prijava");
@@ -205,7 +202,7 @@ public class Pocetna extends javax.swing.JFrame {
                 .addComponent(podnaslovLabel)
                 .addGap(62, 62, 62)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addComponent(registracijaButton)
                 .addGap(35, 35, 35))
         );
@@ -238,8 +235,8 @@ public class Pocetna extends javax.swing.JFrame {
         try {
             String username = korisnickoTextField.getText();
             String password = lozinkaField.getText();
-            String test = "mentolsu147";
-            String generatedSecuredPasswordHash = BCrypt.hashpw(test, BCrypt.gensalt(12));
+            
+           // String generatedSecuredPasswordHash = BCrypt.hashpw(test, BCrypt.gensalt(12));
           
           
             String sqlCheck = "SELECT * FROM login WHERE username = '"+username+"'";
@@ -249,12 +246,18 @@ public class Pocetna extends javax.swing.JFrame {
             if(rsCheck.next()){
                 password2 = rsCheck.getString("password");
             }
-               
+             
+              if(password2.isEmpty() || password2 == null){
+                  JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
+              }else{
               boolean matched = BCrypt.checkpw(password, password2);
               if(matched){
-                  System.out.println("Hello");
+                  new Evidencija(username).setVisible(true);
+                  this.dispose();
+              }else{
+                 JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
               }
-           
+              }
         } catch (SQLException ex) {
             Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -286,7 +289,7 @@ public class Pocetna extends javax.swing.JFrame {
             boolean matched = BCrypt.checkpw(password, password2);
             if(matched){
                new Register().setVisible(true);
-               
+               this.dispose();
             }
         } catch (SQLException ex) {
             Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);

@@ -5,17 +5,45 @@
  */
 package inventar;
 
+import java.awt.Image;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import static junit.framework.Assert.assertTrue;
+import org.apache.commons.validator.EmailValidator;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 /**
  *
  * @author milosjelic
  */
 public class Register extends javax.swing.JFrame {
 
+    private static Connection conSQL;
+    private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
+
     /**
      * Creates new form Register
      */
     public Register() {
+        try {
+            conSQL = DriverManager.getConnection(connectionUrlMySQL);
+            conSQL.setAutoCommit(false);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+
+        }
         initComponents();
+        Image logo = createImageIcon("/res/pionir-logo.png", "logo").getImage().getScaledInstance(90, 48, Image.SCALE_SMOOTH);
+        ImageIcon logoIcon = new ImageIcon(logo);
+        logoLabel.setIcon(logoIcon);
     }
 
     /**
@@ -28,18 +56,159 @@ public class Register extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        logoLabel = new javax.swing.JLabel();
+        naslovLabel = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        podnaslovLabel = new javax.swing.JLabel();
+        imeLabel = new javax.swing.JLabel();
+        prezimeLabel = new javax.swing.JLabel();
+        usernameLabel = new javax.swing.JLabel();
+        emailLabel = new javax.swing.JLabel();
+        passwordLabel = new javax.swing.JLabel();
+        confirmpasswordLabel = new javax.swing.JLabel();
+        imeTextField = new javax.swing.JTextField();
+        prezimeTextField = new javax.swing.JTextField();
+        usernameTextField = new javax.swing.JTextField();
+        emailTextField = new javax.swing.JTextField();
+        registerButton = new javax.swing.JButton();
+        resetButton = new javax.swing.JButton();
+        passwordTextField = new javax.swing.JPasswordField();
+        confirmpasswordTextField = new javax.swing.JPasswordField();
+        loginButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        naslovLabel.setFont(new java.awt.Font("Tahoma", 3, 30)); // NOI18N
+        naslovLabel.setText("IT INVENTAR PIONIR D.O.O");
+
+        podnaslovLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        podnaslovLabel.setText("REGISTRACIJA");
+
+        imeLabel.setText("Ime");
+
+        prezimeLabel.setText("Prezime");
+
+        usernameLabel.setText("Korisnicko ime");
+
+        emailLabel.setText("E mail");
+
+        passwordLabel.setText("Lozinka");
+
+        confirmpasswordLabel.setText("Potvrdi lozinku");
+
+        registerButton.setText("Registruj");
+        registerButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                registerButtonMouseClicked(evt);
+            }
+        });
+
+        resetButton.setText("Reset");
+        resetButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                resetButtonMouseClicked(evt);
+            }
+        });
+
+        loginButton.setText("Prijava");
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                loginButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(logoLabel)
+                        .addGap(170, 170, 170)
+                        .addComponent(naslovLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(294, 294, 294)
+                .addComponent(podnaslovLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(258, 258, 258)
+                        .addComponent(registerButton)
+                        .addGap(76, 76, 76)
+                        .addComponent(resetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(confirmpasswordLabel)
+                            .addComponent(passwordLabel)
+                            .addComponent(emailLabel)
+                            .addComponent(usernameLabel)
+                            .addComponent(prezimeLabel)
+                            .addComponent(imeLabel))
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(imeTextField)
+                            .addComponent(prezimeTextField)
+                            .addComponent(usernameTextField)
+                            .addComponent(emailTextField)
+                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                            .addComponent(confirmpasswordTextField))))
+                .addGap(309, 309, 309))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(loginButton)
+                .addGap(44, 44, 44))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(logoLabel)
+                    .addComponent(naslovLabel))
+                .addGap(36, 36, 36)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(podnaslovLabel)
+                .addGap(88, 88, 88)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(imeLabel)
+                    .addComponent(imeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(prezimeLabel)
+                    .addComponent(prezimeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(usernameLabel)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(emailLabel)
+                    .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(passwordLabel)
+                    .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(confirmpasswordLabel)
+                    .addComponent(confirmpasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(registerButton)
+                    .addComponent(resetButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(loginButton)
+                .addGap(30, 30, 30))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -54,7 +223,85 @@ public class Register extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void resetButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetButtonMouseClicked
+        imeTextField.setText(null);
+        prezimeTextField.setText(null);
+        usernameTextField.setText(null);
+        emailTextField.setText(null);
+        passwordTextField.setText(null);
+        confirmpasswordTextField.setText(null);
+    }//GEN-LAST:event_resetButtonMouseClicked
+
+    private void registerButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerButtonMouseClicked
+        try {
+            
+            //email field correct
+            String ime = imeTextField.getText();
+            String prezime = prezimeTextField.getText();
+            String username = usernameTextField.getText();
+            String email = emailTextField.getText();
+            String password = passwordTextField.getText();
+            String confirmpassword = confirmpasswordTextField.getText();
+            
+           
+            String sqlCheckUser = "SELECT username FROM login where username ='" + username + "'";
+            PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheckUser);
+            ResultSet rsCheck = pstCheck.executeQuery();
+            if (rsCheck.next()) {
+                JOptionPane.showMessageDialog(null, "Korisnik " + username + " je vec registrovan!");
+            } else {
+
+                if (ime.isEmpty() || prezime.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Morate popuniti sva polja!");
+                } else if (password == null ? confirmpassword != null : !password.equals(confirmpassword)) {
+                    JOptionPane.showMessageDialog(null, "Lozinke se ne podudaraju!");
+                } else {
+                    try {
+                        String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
+                        String sqlInsertUser = "INSERT INTO login (username,password,email,name,lastname) VALUES (?,?,?,?,?)";
+                        PreparedStatement pstInsertUser = conSQL.prepareStatement(sqlInsertUser);
+                        pstInsertUser.setString(1, username);
+                        pstInsertUser.setString(2, passwordHash);
+                        pstInsertUser.setString(3, email);
+                        pstInsertUser.setString(4, ime);
+                        pstInsertUser.setString(5, prezime);
+                        pstInsertUser.addBatch();
+                        int i = pstInsertUser.executeUpdate();
+                        if (i > 0) {
+                            JOptionPane.showMessageDialog(null, "Uspesno ste registrovali korisnika " + ime + " " + prezime);
+                            imeTextField.setText(null);
+                            prezimeTextField.setText(null);
+                            usernameTextField.setText(null);
+                            emailTextField.setText(null);
+                            passwordTextField.setText(null);
+                            confirmpasswordTextField.setText(null);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Doslo je do greske, pokusajte ponovo");
+                        }
+                        conSQL.commit();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_registerButtonMouseClicked
+
+    private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
+        try {
+            new Pocetna().setVisible(true);
+            this.dispose();
+        } catch (IOException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_loginButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -91,7 +338,36 @@ public class Register extends javax.swing.JFrame {
         });
     }
 
+    protected ImageIcon createImageIcon(String path, String description) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel confirmpasswordLabel;
+    private javax.swing.JPasswordField confirmpasswordTextField;
+    private javax.swing.JLabel emailLabel;
+    private javax.swing.JTextField emailTextField;
+    private javax.swing.JLabel imeLabel;
+    private javax.swing.JTextField imeTextField;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton loginButton;
+    private javax.swing.JLabel logoLabel;
+    private javax.swing.JLabel naslovLabel;
+    private javax.swing.JLabel passwordLabel;
+    private javax.swing.JPasswordField passwordTextField;
+    private javax.swing.JLabel podnaslovLabel;
+    private javax.swing.JLabel prezimeLabel;
+    private javax.swing.JTextField prezimeTextField;
+    private javax.swing.JButton registerButton;
+    private javax.swing.JButton resetButton;
+    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 }
