@@ -5,14 +5,8 @@
  */
 package inventar;
 
-
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,26 +14,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-
 
 /**
  *
  * @author milosjelic
  */
 public class Pocetna extends javax.swing.JFrame {
+
     private static Connection conSQL;
     private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
+
     /**
      * Creates new form Pocetna
      */
     public Pocetna() throws IOException {
         initComponents();
-        
+
         try {
             conSQL = DriverManager.getConnection(connectionUrlMySQL);
             conSQL.setAutoCommit(false);
@@ -47,10 +41,10 @@ public class Pocetna extends javax.swing.JFrame {
             System.out.println(ex);
 
         }
-        Image logo = createImageIcon("/res/pionir-logo.png","logo").getImage().getScaledInstance(90, 48, Image.SCALE_SMOOTH);
+        Image logo = createImageIcon("/res/pionir-logo.png", "logo").getImage().getScaledInstance(90, 48, Image.SCALE_SMOOTH);
         ImageIcon logoIcon = new ImageIcon(logo);
         logoLabel.setIcon(logoIcon);
-        
+
     }
 
     /**
@@ -235,29 +229,27 @@ public class Pocetna extends javax.swing.JFrame {
         try {
             String username = korisnickoTextField.getText();
             String password = lozinkaField.getText();
-            
-           // String generatedSecuredPasswordHash = BCrypt.hashpw(test, BCrypt.gensalt(12));
-          
-          
-            String sqlCheck = "SELECT * FROM login WHERE username = '"+username+"'";
+
+            // String generatedSecuredPasswordHash = BCrypt.hashpw(test, BCrypt.gensalt(12));
+            String sqlCheck = "SELECT * FROM login WHERE username = '" + username + "'";
             PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheck);
             ResultSet rsCheck = pstCheck.executeQuery();
             String password2 = "";
-            if(rsCheck.next()){
+            if (rsCheck.next()) {
                 password2 = rsCheck.getString("password");
             }
-             
-              if(password2.isEmpty() || password2 == null){
-                  JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
-              }else{
-              boolean matched = BCrypt.checkpw(password, password2);
-              if(matched){
-                  new Evidencija(username).setVisible(true);
-                  this.dispose();
-              }else{
-                 JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
-              }
-              }
+
+            if (password2.isEmpty() || password2 == null) {
+                JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
+            } else {
+                boolean matched = BCrypt.checkpw(password, password2);
+                if (matched) {
+                    new Evidencija(username).setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -270,16 +262,16 @@ public class Pocetna extends javax.swing.JFrame {
     private void registracijaButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registracijaButtonMouseClicked
         try {
             JPasswordField pwd = new JPasswordField();
-            int passwordFrame = JOptionPane.showConfirmDialog(null, pwd,"Unesite Lozinku",JOptionPane.OK_CANCEL_OPTION);
+            int passwordFrame = JOptionPane.showConfirmDialog(null, pwd, "Unesite Lozinku", JOptionPane.OK_CANCEL_OPTION);
             String password = "";
-            if(passwordFrame == 0){
-               password = new String(pwd.getPassword());
+            if (passwordFrame == 0) {
+                password = new String(pwd.getPassword());
             }
             String sqlCheckAdmin = "SELECT * FROM login WHERE username = 'administrator'";
             PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheckAdmin);
             ResultSet rsCheck = pstCheck.executeQuery();
             String password2 = "";
-            if(rsCheck.next()){
+            if (rsCheck.next()) {
                 try {
                     password2 = rsCheck.getString("password");
                 } catch (SQLException ex) {
@@ -287,9 +279,9 @@ public class Pocetna extends javax.swing.JFrame {
                 }
             }
             boolean matched = BCrypt.checkpw(password, password2);
-            if(matched){
-               new Register().setVisible(true);
-               this.dispose();
+            if (matched) {
+                new Register().setVisible(true);
+                this.dispose();
             }
         } catch (SQLException ex) {
             Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
@@ -334,16 +326,17 @@ public class Pocetna extends javax.swing.JFrame {
             }
         });
     }
-     protected   ImageIcon createImageIcon(String path, String description) {
-    java.net.URL imgURL = getClass().getResource(path);
-    if (imgURL != null) {
-        return new ImageIcon(imgURL, description);
-    } else {
-        System.err.println("Couldn't find file: " + path);
-        return null;
+
+    protected ImageIcon createImageIcon(String path, String description) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
     }
-     }
-   
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

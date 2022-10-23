@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import static junit.framework.Assert.assertTrue;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -237,7 +236,7 @@ public class Register extends javax.swing.JFrame {
 
     private void registerButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerButtonMouseClicked
         try {
-            
+
             //email field correct
             String ime = imeTextField.getText();
             String prezime = prezimeTextField.getText();
@@ -245,19 +244,19 @@ public class Register extends javax.swing.JFrame {
             String email = emailTextField.getText();
             String password = passwordTextField.getText();
             String confirmpassword = confirmpasswordTextField.getText();
-            
-           
-            String sqlCheckUser = "SELECT username FROM login where username ='" + username + "'";
-            PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheckUser);
-            ResultSet rsCheck = pstCheck.executeQuery();
-            if (rsCheck.next()) {
-                JOptionPane.showMessageDialog(null, "Korisnik " + username + " je vec registrovan!");
-            } else {
 
-                if (ime.isEmpty() || prezime.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Morate popuniti sva polja!");
-                } else if (password == null ? confirmpassword != null : !password.equals(confirmpassword)) {
-                    JOptionPane.showMessageDialog(null, "Lozinke se ne podudaraju!");
+            if (ime.isEmpty() || prezime.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Morate popuniti sva polja!");
+            } else if (password == null ? confirmpassword != null : !password.equals(confirmpassword)) {
+                JOptionPane.showMessageDialog(null, "Lozinke se ne podudaraju!");
+            } else if (!isValidEmail(email)) {
+                System.out.println("The Email address " + email + " is invalid");
+            } else {
+                String sqlCheckUser = "SELECT username FROM login where username ='" + username + "'";
+                PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheckUser);
+                ResultSet rsCheck = pstCheck.executeQuery();
+                if (rsCheck.next()) {
+                    JOptionPane.showMessageDialog(null, "Korisnik " + username + " je vec registrovan!");
                 } else {
                     try {
                         String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
@@ -331,11 +330,17 @@ public class Register extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Register().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Register().setVisible(true);
         });
+    }
+
+    public static boolean isValidEmail(String email) {
+        // create the EmailValidator instance
+        EmailValidator validator = EmailValidator.getInstance();
+
+        // check for valid email addresses using isValid method
+        return validator.isValid(email);
     }
 
     protected ImageIcon createImageIcon(String path, String description) {

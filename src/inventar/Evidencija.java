@@ -5,12 +5,20 @@
  */
 package inventar;
 
+import static java.lang.Integer.parseInt;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+
 /**
  *
  * @author milosjelic
  */
 public class Evidencija extends javax.swing.JFrame {
-
+private static int id;
     /**
      * Creates new form Interface
      */
@@ -18,9 +26,15 @@ public class Evidencija extends javax.swing.JFrame {
         initComponents();
     }
 
-    Evidencija(String username) {
+    Evidencija(String username) throws SQLException {
         initComponents();
-        System.out.println("Hello "+ username);
+        Kategorija kategorija = new Kategorija();
+        List<String> sveKategorije = new ArrayList();
+        sveKategorije = kategorija.getAll();
+        LocalDate today = LocalDate.now();
+        userInfoLabel.setText(username);
+        dateLabel.setText(today.toString());
+        kategorijeComboBox.setModel(new DefaultComboBoxModel<>(sveKategorije.toArray(new String[0])));
     }
 
     /**
@@ -32,66 +46,179 @@ public class Evidencija extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        jSeparator2 = new javax.swing.JSeparator();
+        userInfoLabel = new javax.swing.JLabel();
+        dateLabel = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        prijemPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        addKat = new javax.swing.JButton();
+        kategorijeComboBox = new javax.swing.JComboBox<>();
+        izdavanjePanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        otpisPanel = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        userInfoLabel.setText("jLabel1");
+
+        dateLabel.setText("2022-00-00");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(userInfoLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dateLabel)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 572, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(userInfoLabel)
+                    .addComponent(dateLabel)))
         );
 
-        jTabbedPane1.addTab("tab1", jPanel1);
+        jLabel1.setText("jLabel1");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
+        addKat.setText("jButton1");
+        addKat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addKatMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout prijemPanelLayout = new javax.swing.GroupLayout(prijemPanel);
+        prijemPanel.setLayout(prijemPanelLayout);
+        prijemPanelLayout.setHorizontalGroup(
+            prijemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(prijemPanelLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel1)
+                .addGap(60, 60, 60)
+                .addComponent(addKat)
+                .addGap(75, 75, 75)
+                .addComponent(kategorijeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(548, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 572, Short.MAX_VALUE)
+        prijemPanelLayout.setVerticalGroup(
+            prijemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(prijemPanelLayout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addGroup(prijemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(addKat)
+                    .addComponent(kategorijeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(471, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab2", jPanel2);
+        jTabbedPane1.addTab("Prijem", prijemPanel);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
+        jLabel2.setText("jLabel2");
+
+        javax.swing.GroupLayout izdavanjePanelLayout = new javax.swing.GroupLayout(izdavanjePanel);
+        izdavanjePanel.setLayout(izdavanjePanelLayout);
+        izdavanjePanelLayout.setHorizontalGroup(
+            izdavanjePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(izdavanjePanelLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel2)
+                .addContainerGap(787, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 572, Short.MAX_VALUE)
+        izdavanjePanelLayout.setVerticalGroup(
+            izdavanjePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(izdavanjePanelLayout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(jLabel2)
+                .addContainerGap(475, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab3", jPanel3);
+        jTabbedPane1.addTab("Izdavanje", izdavanjePanel);
+
+        otpisPanel.setPreferredSize(new java.awt.Dimension(820, 537));
+
+        jLabel3.setText("jLabel3");
+
+        javax.swing.GroupLayout otpisPanelLayout = new javax.swing.GroupLayout(otpisPanel);
+        otpisPanel.setLayout(otpisPanelLayout);
+        otpisPanelLayout.setHorizontalGroup(
+            otpisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(otpisPanelLayout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(jLabel3)
+                .addContainerGap(742, Short.MAX_VALUE))
+        );
+        otpisPanelLayout.setVerticalGroup(
+            otpisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(otpisPanelLayout.createSequentialGroup()
+                .addGap(72, 72, 72)
+                .addComponent(jLabel3)
+                .addContainerGap(451, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Otpis", otpisPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
+
+        jPanel1.getAccessibleContext().setAccessibleParent(this);
+        jTabbedPane1.getAccessibleContext().setAccessibleName("Prijem");
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+@SuppressWarnings("empty-statement")
+    private void addKatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addKatMouseClicked
+       Kategorija kategorija = new Kategorija();
+        try {
+            
+             id = parseInt(kategorija.getId("Test2"));
+           
+             System.out.println(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    try {
+          if(kategorija.edit(id, "Test22")){
+                System.out.println("Uspesno");
+            }else{
+                System.out.println("Neuspesno");
+            };
+    } catch (SQLException ex) {
+        Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        
+    }//GEN-LAST:event_addKatMouseClicked
 
     /**
      * @param args the command line arguments
@@ -128,11 +255,22 @@ public class Evidencija extends javax.swing.JFrame {
             }
         });
     }
+    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addKat;
+    private javax.swing.JLabel dateLabel;
+    private javax.swing.JPanel izdavanjePanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JComboBox<String> kategorijeComboBox;
+    private javax.swing.JPanel otpisPanel;
+    private javax.swing.JPanel prijemPanel;
+    private javax.swing.JLabel userInfoLabel;
     // End of variables declaration//GEN-END:variables
 }
