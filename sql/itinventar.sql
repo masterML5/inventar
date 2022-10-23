@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2022 at 01:40 PM
+-- Generation Time: Oct 23, 2022 at 11:45 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -66,16 +66,16 @@ CREATE TABLE `kategorija` (
 --
 
 INSERT INTO `kategorija` (`id_kategorija`, `naziv`) VALUES
-(1, 'Racunari'),
-(2, 'Toneri'),
-(3, 'Monitori'),
-(4, 'Kablovi'),
 (5, 'Adapteri'),
+(4, 'Kablovi'),
 (6, 'Komponente'),
-(7, 'Stampaci'),
+(3, 'Monitori'),
 (8, 'Mrezna oprema'),
-(9, 'UPS'),
-(10, 'Serveri');
+(1, 'Racunari'),
+(10, 'Serveri'),
+(7, 'Stampaci'),
+(2, 'Toneri'),
+(9, 'UPS');
 
 -- --------------------------------------------------------
 
@@ -209,7 +209,8 @@ ALTER TABLE `inventar`
 -- Indexes for table `kategorija`
 --
 ALTER TABLE `kategorija`
-  ADD PRIMARY KEY (`id_kategorija`);
+  ADD PRIMARY KEY (`id_kategorija`),
+  ADD UNIQUE KEY `naziv` (`naziv`);
 
 --
 -- Indexes for table `login`
@@ -253,7 +254,7 @@ ALTER TABLE `inventar`
 -- AUTO_INCREMENT for table `kategorija`
 --
 ALTER TABLE `kategorija`
-  MODIFY `id_kategorija` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_kategorija` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `login`
