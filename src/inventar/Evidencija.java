@@ -198,25 +198,8 @@ private static int id;
 
 @SuppressWarnings("empty-statement")
     private void addKatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addKatMouseClicked
-       Kategorija kategorija = new Kategorija();
-        try {
-            
-             id = parseInt(kategorija.getId("Test2"));
-           
-             System.out.println(id);
-        } catch (SQLException ex) {
-            Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    try {
-          if(kategorija.edit(id, "Test22")){
-                System.out.println("Uspesno");
-            }else{
-                System.out.println("Neuspesno");
-            };
-    } catch (SQLException ex) {
-        Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
-    }
+     
+  
         
     }//GEN-LAST:event_addKatMouseClicked
 

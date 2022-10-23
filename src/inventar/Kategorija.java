@@ -69,8 +69,28 @@ public class Kategorija {
         }
     }
 
-    void delete(int idKategorija) {
-        System.out.println(idKategorija + "delete");
+    boolean delete(int idKategorija) throws SQLException {
+        String sqlDeleteKategorija = "DELETE FROM kategorija WHERE id_kategorija ="+idKategorija;
+         PreparedStatement pstDeleteKategorija = conSQL.prepareStatement(sqlDeleteKategorija);
+        int i = pstDeleteKategorija.executeUpdate();
+        conSQL.commit();
+        if(i > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+     boolean delete(String kategorija) throws SQLException {
+        String sqlDeleteKategorija = "DELETE FROM kategorija WHERE id_kategorija ='"+kategorija+"'";
+         PreparedStatement pstDeleteKategorija = conSQL.prepareStatement(sqlDeleteKategorija);
+        int i = pstDeleteKategorija.executeUpdate();
+        conSQL.commit();
+        if(i > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     ArrayList<String> getAll() throws SQLException {
