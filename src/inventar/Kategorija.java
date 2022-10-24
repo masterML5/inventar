@@ -38,11 +38,7 @@ public class Kategorija {
         pstInsertKategorija.addBatch();
         int i = pstInsertKategorija.executeUpdate();
         conSQL.commit();
-        if(i > 0){
-            return true;
-        }else{
-            return false;
-        }
+        return i > 0;
     }
 
     boolean edit(int idKategorija,String noviNaziv) throws SQLException {
@@ -62,11 +58,7 @@ public class Kategorija {
         PreparedStatement pstUpdateKategorija = conSQL.prepareStatement(sqlEditKategorija);
         int i = pstUpdateKategorija.executeUpdate();
         conSQL.commit();
-        if(i > 0){
-            return true;
-        }else{
-            return false;
-        }
+        return i > 0;
     }
 
     boolean delete(int idKategorija) throws SQLException {
@@ -74,11 +66,7 @@ public class Kategorija {
          PreparedStatement pstDeleteKategorija = conSQL.prepareStatement(sqlDeleteKategorija);
         int i = pstDeleteKategorija.executeUpdate();
         conSQL.commit();
-        if(i > 0){
-            return true;
-        }else{
-            return false;
-        }
+        return i > 0;
     }
     
      boolean delete(String kategorija) throws SQLException {
@@ -86,11 +74,7 @@ public class Kategorija {
          PreparedStatement pstDeleteKategorija = conSQL.prepareStatement(sqlDeleteKategorija);
         int i = pstDeleteKategorija.executeUpdate();
         conSQL.commit();
-        if(i > 0){
-            return true;
-        }else{
-            return false;
-        }
+        return i > 0;
     }
 
     ArrayList<String> getAll() throws SQLException {
