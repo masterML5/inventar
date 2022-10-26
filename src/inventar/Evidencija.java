@@ -5,6 +5,7 @@
  */
 package inventar;
 
+import java.awt.Dimension;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,7 +22,12 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
  */
 public class Evidencija extends javax.swing.JFrame {
 private static int id;
-    /**
+private Prijem prijem; 
+private Izdavanje izdavanje;
+private Otpis otpis;
+private String korisnik;
+private String datum;
+/**
      * Creates new form Interface
      */
     public Evidencija() {
@@ -32,12 +38,22 @@ private static int id;
         initComponents();
         Kategorija kategorija = new Kategorija();
         List<String> sveKategorije = new ArrayList();
-        sveKategorije = kategorija.getAll();
+        sveKategorije = kategorija.getAll();        
         LocalDate today = LocalDate.now();
+        korisnik = username;
+        datum = today.toString();
         userInfoLabel.setText(username);
         dateLabel.setText(today.toString());
-        AutoCompleteDecorator.decorate(kategorijeComboBox);
-        kategorijeComboBox.setModel(new DefaultComboBoxModel<>(sveKategorije.toArray(new String[0])));
+       // AutoCompleteDecorator.decorate(kategorijeComboBox);
+       // kategorijeComboBox.setModel(new DefaultComboBoxModel<>(sveKategorije.toArray(new String[0])));
+        prijem = new Prijem(korisnik,datum);
+        izdavanje = new Izdavanje();
+        otpis = new Otpis();
+        jTabbedPane1.add(prijem, "Prijem");
+        jTabbedPane1.add(izdavanje,"Izdavanje");
+        jTabbedPane1.add(otpis,"Otpis");
+
+        
     }
 
     /**
@@ -53,15 +69,8 @@ private static int id;
         userInfoLabel = new javax.swing.JLabel();
         dateLabel = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        prijemPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        addKat = new javax.swing.JButton();
-        kategorijeComboBox = new javax.swing.JComboBox<>();
-        izdavanjePanel = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        otpisPanel = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        naslovLabel = new javax.swing.JLabel();
+        infoLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -71,7 +80,6 @@ private static int id;
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(847, 645));
         setResizable(false);
 
         userInfoLabel.setText("jLabel1");
@@ -96,90 +104,13 @@ private static int id;
                 .addGap(0, 19, Short.MAX_VALUE))
         );
 
-        jLabel1.setText("jLabel1");
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(842, 495));
 
-        addKat.setText("jButton1");
-        addKat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addKatMouseClicked(evt);
-            }
-        });
+        naslovLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        naslovLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        naslovLabel.setText("Prijem/Izdavanje/Otpis");
 
-        kategorijeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
-
-        javax.swing.GroupLayout prijemPanelLayout = new javax.swing.GroupLayout(prijemPanel);
-        prijemPanel.setLayout(prijemPanelLayout);
-        prijemPanelLayout.setHorizontalGroup(
-            prijemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(prijemPanelLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addGap(60, 60, 60)
-                .addComponent(addKat)
-                .addGap(75, 75, 75)
-                .addComponent(kategorijeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(548, Short.MAX_VALUE))
-        );
-        prijemPanelLayout.setVerticalGroup(
-            prijemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(prijemPanelLayout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(prijemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(addKat)
-                    .addComponent(kategorijeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(429, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Prijem", prijemPanel);
-
-        jLabel2.setText("jLabel2");
-
-        javax.swing.GroupLayout izdavanjePanelLayout = new javax.swing.GroupLayout(izdavanjePanel);
-        izdavanjePanel.setLayout(izdavanjePanelLayout);
-        izdavanjePanelLayout.setHorizontalGroup(
-            izdavanjePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(izdavanjePanelLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel2)
-                .addContainerGap(787, Short.MAX_VALUE))
-        );
-        izdavanjePanelLayout.setVerticalGroup(
-            izdavanjePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(izdavanjePanelLayout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jLabel2)
-                .addContainerGap(433, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Izdavanje", izdavanjePanel);
-
-        otpisPanel.setPreferredSize(new java.awt.Dimension(820, 537));
-
-        jLabel3.setText("jLabel3");
-
-        javax.swing.GroupLayout otpisPanelLayout = new javax.swing.GroupLayout(otpisPanel);
-        otpisPanel.setLayout(otpisPanelLayout);
-        otpisPanelLayout.setHorizontalGroup(
-            otpisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(otpisPanelLayout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addComponent(jLabel3)
-                .addContainerGap(742, Short.MAX_VALUE))
-        );
-        otpisPanelLayout.setVerticalGroup(
-            otpisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(otpisPanelLayout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(jLabel3)
-                .addContainerGap(409, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Otpis", otpisPanel);
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Prijem/Izdavanje/Otpis");
+        infoLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -206,24 +137,29 @@ private static int id;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(naslovLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(infoLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
+                .addComponent(naslovLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 523, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(infoLabel)
+                .addContainerGap())
         );
 
         jPanel1.getAccessibleContext().setAccessibleParent(this);
@@ -232,13 +168,6 @@ private static int id;
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-@SuppressWarnings("empty-statement")
-    private void addKatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addKatMouseClicked
-     
-  
-        
-    }//GEN-LAST:event_addKatMouseClicked
 
     /**
      * @param args the command line arguments
@@ -276,16 +205,21 @@ private static int id;
         });
     }
     
+   String getUser(){
+       String user = korisnik;
+       
+       return user;
+   }
    
+   String getDatum(){
+       String datum1 = datum;
+       
+       return datum1;
+   }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addKat;
     private javax.swing.JLabel dateLabel;
-    private javax.swing.JPanel izdavanjePanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel infoLabel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -295,9 +229,7 @@ private static int id;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JComboBox<String> kategorijeComboBox;
-    private javax.swing.JPanel otpisPanel;
-    private javax.swing.JPanel prijemPanel;
+    private javax.swing.JLabel naslovLabel;
     private javax.swing.JLabel userInfoLabel;
     // End of variables declaration//GEN-END:variables
 }
