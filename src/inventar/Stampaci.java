@@ -9,8 +9,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -224,5 +226,22 @@ public class Stampaci {
           return lokacijaDetail;   
       }
       
+      ArrayList<String> getAllInfo(int idStampac) throws SQLException{
+        String sqlAllStampaci = "SELECT * FROM stampaci WHERE id_stampaci="+idStampac;
+        PreparedStatement pstAllStampaci = conSQL.prepareStatement(sqlAllStampaci);
+        ResultSet rsAllStampaci = pstAllStampaci.executeQuery();
+        ArrayList<String> stampaci = new ArrayList();
+        ResultSetMetaData rsmd = rsAllStampaci.getMetaData(); 
+        int columnCount = rsmd.getColumnCount();
+        while(rsAllStampaci.next()){
+            int i = 1;
+                while(i <= columnCount) {
+                     stampaci.add(rsAllStampaci.getString(i++));
+   }
+        }
+
+        return stampaci;
+
+      }
       
 }

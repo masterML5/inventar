@@ -25,7 +25,7 @@ public class Prijem extends javax.swing.JPanel {
         Stampaci stampaci = new Stampaci();
         ArrayList<String> sviStampaci = stampaci.getAll();
         stampaciComboBox.setModel(new DefaultComboBoxModel<>(sviStampaci.toArray(new String[0])));
-     //   System.out.println(stampaci.add(2, 21321, "LBP351X", "Canon", "CRG039", "Monograf", "mrezni", "10.11.124.106", "Pozadi", korisnik, datum));
+        System.out.println(stampaci.add(2, 21321, "LBP351X", "Canon", "CRG039", "Monograf", "mrezni", "10.11.124.106", "Pozadi", korisnik, datum));
         System.out.println(stampaci.getAll());
         System.out.println(stampaci.getId("111","HP"));
         System.out.println(stampaci.getIpAdresa(1));
@@ -35,6 +35,7 @@ public class Prijem extends javax.swing.JPanel {
         System.out.println(stampaci.getModel(1));
         System.out.println(stampaci.getToner(1));
         System.out.println(stampaci.getVrsta(1));
+        System.out.println(stampaci.getAllInfo(2));
     }
 
     /**
