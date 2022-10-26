@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2022 at 11:45 PM
+-- Generation Time: Oct 26, 2022 at 03:03 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -183,13 +183,24 @@ CREATE TABLE `stampaci` (
   `vrsta` enum('Monograf','Fotokopir','Multifunkcijski') DEFAULT NULL,
   `mrezni` enum('mrezni','usb') DEFAULT NULL,
   `ip_adresa` varchar(50) DEFAULT NULL,
-  `lokacija` varchar(50) NOT NULL,
+  `lokacijaKorisnik` varchar(50) NOT NULL,
   `uneo` varchar(50) NOT NULL,
   `editovao` varchar(50) DEFAULT NULL,
-  `uneo_ts` datetime NOT NULL,
+  `uneo_ts` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `edit_ts` datetime DEFAULT NULL,
   `datum` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `stampaci`
+--
+
+INSERT INTO `stampaci` (`id_stampaci`, `id_lokacija`, `inv_broj`, `model`, `marka`, `toner`, `vrsta`, `mrezni`, `ip_adresa`, `lokacijaKorisnik`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`) VALUES
+(1, 6, 55555, '111', 'HP', 'CF259', 'Multifunkcijski', 'mrezni', '10.11.124.22', 'Danijela', '', NULL, '2022-10-26 11:06:33', NULL, NULL),
+(2, 2, 21321, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-26 11:05:24', NULL, '2022-10-26'),
+(3, 2, 21321, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-26 11:13:05', NULL, '2022-10-26'),
+(4, 2, 21321, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-26 11:13:23', NULL, '2022-10-26'),
+(5, 2, 21321, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-26 11:17:00', NULL, '2022-10-26');
 
 --
 -- Indexes for dumped tables
@@ -278,7 +289,7 @@ ALTER TABLE `racunari`
 -- AUTO_INCREMENT for table `stampaci`
 --
 ALTER TABLE `stampaci`
-  MODIFY `id_stampaci` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_stampaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
