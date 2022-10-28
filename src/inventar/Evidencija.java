@@ -97,11 +97,9 @@ private String datum;
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(userInfoLabel)
-                    .addComponent(dateLabel))
-                .addGap(0, 19, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(userInfoLabel)
+                .addComponent(dateLabel))
         );
 
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(842, 495));
