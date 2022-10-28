@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 28, 2022 at 02:38 PM
+-- Generation Time: Oct 28, 2022 at 02:52 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -41,15 +41,17 @@ CREATE TABLE `inventar` (
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
   `edit_ts` datetime DEFAULT NULL,
-  `datum` varchar(50) NOT NULL
+  `datum` varchar(50) NOT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `inventar`
 --
 
-INSERT INTO `inventar` (`id_inventar`, `id_kategorija`, `id_lokacija`, `id_racunar`, `id_stampac`, `naziv`, `lokacija`, `kolicina`, `napomena`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`) VALUES
-(1, 2, 18, NULL, NULL, '', '', 0, NULL, '', NULL, '0000-00-00 00:00:00', NULL, '');
+INSERT INTO `inventar` (`id_inventar`, `id_kategorija`, `id_lokacija`, `id_racunar`, `id_stampac`, `naziv`, `lokacija`, `kolicina`, `napomena`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 2, 18, NULL, NULL, '', '', 0, NULL, '', NULL, '0000-00-00 00:00:00', NULL, '', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -64,24 +66,26 @@ CREATE TABLE `kategorija` (
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
   `edit_ts` timestamp NULL DEFAULT NULL,
-  `datum` varchar(50) NOT NULL
+  `datum` varchar(50) NOT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `kategorija`
 --
 
-INSERT INTO `kategorija` (`id_kategorija`, `naziv`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`) VALUES
-(1, 'Racunari', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(2, 'Toneri', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(3, 'Monitori', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(4, 'Kablovi', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(5, 'Adapteri', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(6, 'Komponente', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(7, 'Stampaci', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(8, 'Mrezna oprema', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(9, 'UPS', '', NULL, '2022-10-28 12:37:32', NULL, ''),
-(10, 'Serveri', '', NULL, '2022-10-28 12:37:32', NULL, '');
+INSERT INTO `kategorija` (`id_kategorija`, `naziv`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 'Racunari', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(2, 'Toneri', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(3, 'Monitori', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(4, 'Kablovi', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(5, 'Adapteri', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(6, 'Komponente', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(7, 'Stampaci', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(8, 'Mrezna oprema', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(9, 'UPS', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(10, 'Serveri', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -97,20 +101,22 @@ CREATE TABLE `login` (
   `name` varchar(50) DEFAULT NULL,
   `lastname` varchar(50) DEFAULT NULL,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-  `editedAt` timestamp NULL DEFAULT NULL
+  `editedAt` timestamp NULL DEFAULT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`id`, `username`, `password`, `email`, `name`, `lastname`, `createdAt`, `editedAt`) VALUES
-(1, 'milos', '$2a$12$/1AcxR/D6.Rknfweg6f55u8PydKuduUZX65NXmBOnlLThCwvgvXCW', 'milos.jelic@pionir.rs', NULL, NULL, '2022-10-20 06:51:03', NULL),
-(2, 'administrator', '$2a$12$0.typcQ.vAsDVinnIQG3ium0MGggvr6IxOd5BP.cbpPwYlE36x8Ha', 'milos.jelic@pionir.rs', 'Admin', 'Admin', '2022-10-20 08:15:44', NULL),
-(18, 'testt', '$2a$12$LgWi2Atp6.dslt9sK1zVj.Xlxj5q7NNCitdHC6FAOfcFTBQbd96RG', 'test@test.com', 'test', 'test', '2022-10-21 06:54:29', NULL),
-(19, 'ff', '$2a$12$ji3pwj.1kJZmDFQ7y0Ywfu1tZBZTb3OyaLx6Yi4Oy40oYlHCN6AvW', 'ff', 'ff', 'ff', '2022-10-21 07:01:37', NULL),
-(20, 'tt', '$2a$12$OfGbxo2y081w9.1/l6/vx.40cMoemsoXUOUa69Dls0F/oT8P/Hs5G', 'tt', 'test', 'tt', '2022-10-21 07:03:14', NULL),
-(21, 'testtt', '$2a$12$3gzvOwhsYEmhxz/hqfiX9uc1x9.wpCqwQTa6nfKs4R4aovL/yAu4C', 'test', 'asd', 'asd', '2022-10-21 11:35:10', NULL);
+INSERT INTO `login` (`id`, `username`, `password`, `email`, `name`, `lastname`, `createdAt`, `editedAt`, `aktivan`, `vazeci`) VALUES
+(1, 'milos', '$2a$12$/1AcxR/D6.Rknfweg6f55u8PydKuduUZX65NXmBOnlLThCwvgvXCW', 'milos.jelic@pionir.rs', NULL, NULL, '2022-10-20 06:51:03', NULL, 1, 1),
+(2, 'administrator', '$2a$12$0.typcQ.vAsDVinnIQG3ium0MGggvr6IxOd5BP.cbpPwYlE36x8Ha', 'milos.jelic@pionir.rs', 'Admin', 'Admin', '2022-10-20 08:15:44', NULL, 1, 1),
+(18, 'testt', '$2a$12$LgWi2Atp6.dslt9sK1zVj.Xlxj5q7NNCitdHC6FAOfcFTBQbd96RG', 'test@test.com', 'test', 'test', '2022-10-21 06:54:29', NULL, 1, 1),
+(19, 'ff', '$2a$12$ji3pwj.1kJZmDFQ7y0Ywfu1tZBZTb3OyaLx6Yi4Oy40oYlHCN6AvW', 'ff', 'ff', 'ff', '2022-10-21 07:01:37', NULL, 1, 1),
+(20, 'tt', '$2a$12$OfGbxo2y081w9.1/l6/vx.40cMoemsoXUOUa69Dls0F/oT8P/Hs5G', 'tt', 'test', 'tt', '2022-10-21 07:03:14', NULL, 1, 1),
+(21, 'testtt', '$2a$12$3gzvOwhsYEmhxz/hqfiX9uc1x9.wpCqwQTa6nfKs4R4aovL/yAu4C', 'test', 'asd', 'asd', '2022-10-21 11:35:10', NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -125,32 +131,34 @@ CREATE TABLE `lokacija` (
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
   `edit_ts` timestamp NULL DEFAULT NULL,
-  `datum` varchar(50) NOT NULL
+  `datum` varchar(50) NOT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `lokacija`
 --
 
-INSERT INTO `lokacija` (`id_lokacija`, `naziv`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`) VALUES
-(1, 'Prodaja', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(2, 'Finansije', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(3, 'MGR', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(4, 'Opsti sektor', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(5, 'Magacin sirovina', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(6, 'Restoran', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(7, 'Tehnolozi', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(8, 'PJ Bombon', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(9, 'PJ Pecivo', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(10, 'IT Sektor', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(11, 'PJ Cokolada', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(12, 'Tehnicki magacin', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(13, 'Prodavnice', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(14, 'Porta', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(15, 'Transport', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(16, 'Energetika', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(17, 'Radionica', '', NULL, '2022-10-28 12:35:21', NULL, ''),
-(18, 'IT Sektor rezervna oprema', '', NULL, '2022-10-28 12:35:21', NULL, '');
+INSERT INTO `lokacija` (`id_lokacija`, `naziv`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 'Prodaja', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(2, 'Finansije', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(3, 'MGR', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(4, 'Opsti sektor', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(5, 'Magacin sirovina', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(6, 'Restoran', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(7, 'Tehnolozi', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(8, 'PJ Bombon', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(9, 'PJ Pecivo', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(10, 'IT Sektor', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(11, 'PJ Cokolada', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(12, 'Tehnicki magacin', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(13, 'Prodavnice', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(14, 'Porta', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(15, 'Transport', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(16, 'Energetika', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(17, 'Radionica', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1),
+(18, 'IT Sektor rezervna oprema', '', NULL, '2022-10-28 12:35:21', NULL, '', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -166,7 +174,9 @@ CREATE TABLE `podkategorija` (
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` datetime NOT NULL DEFAULT current_timestamp(),
   `edit_ts` datetime DEFAULT NULL,
-  `datum` varchar(50) NOT NULL
+  `datum` varchar(50) NOT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -190,7 +200,9 @@ CREATE TABLE `prijem` (
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
   `edit_ts` timestamp NULL DEFAULT NULL,
-  `datum` varchar(50) NOT NULL
+  `datum` varchar(50) NOT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -216,15 +228,17 @@ CREATE TABLE `racunari` (
   `uneo` varchar(50) NOT NULL DEFAULT '',
   `editovao` varchar(50) NOT NULL DEFAULT '',
   `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
-  `edit_ts` timestamp NULL DEFAULT NULL
+  `edit_ts` timestamp NULL DEFAULT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `racunari`
 --
 
-INSERT INTO `racunari` (`id_racunar`, `id_kategorija`, `id_lokacija`, `inv_broj`, `specifikacija`, `os`, `office`, `korisnik`, `ip_adresa`, `mac_adresa`, `os_key`, `office_key`, `datum`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`) VALUES
-(1, 1, 7, 12321, 'test', 'Windows 10', 'Office 2019', 'test', '10.11.124.22', 'AE:A3:A2:A2:A1', 'asdasd--asdasdas-asdasd', 'asdas-asd-asda', 'ff', '2022-10-28', '', '2022-10-28 08:46:20', NULL);
+INSERT INTO `racunari` (`id_racunar`, `id_kategorija`, `id_lokacija`, `inv_broj`, `specifikacija`, `os`, `office`, `korisnik`, `ip_adresa`, `mac_adresa`, `os_key`, `office_key`, `datum`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `aktivan`, `vazeci`) VALUES
+(1, 1, 7, 12321, 'test', 'Windows 10', 'Office 2019', 'test', '10.11.124.22', 'AE:A3:A2:A2:A1', 'asdasd--asdasdas-asdasd', 'asdas-asd-asda', 'ff', '2022-10-28', '', '2022-10-28 08:46:20', NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -248,17 +262,19 @@ CREATE TABLE `stampaci` (
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` datetime NOT NULL DEFAULT current_timestamp(),
   `edit_ts` datetime DEFAULT NULL,
-  `datum` varchar(50) DEFAULT NULL
+  `datum` varchar(50) DEFAULT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stampaci`
 --
 
-INSERT INTO `stampaci` (`id_stampaci`, `id_kategorija`, `id_lokacija`, `inv_broj`, `model`, `marka`, `toner`, `vrsta`, `mrezni`, `ip_adresa`, `lokacijaKorisnik`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`) VALUES
-(1, 7, 6, 55555, '111', 'HP', 'CF259', 'Multifunkcijski', 'mrezni', '10.11.124.22', 'Danijela', '', NULL, '2022-10-27 09:00:19', NULL, NULL),
-(2, 7, 2, 21321, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:00:20', NULL, '2022-10-26'),
-(7, 7, 2, 213221, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:06:20', NULL, '2022-10-27');
+INSERT INTO `stampaci` (`id_stampaci`, `id_kategorija`, `id_lokacija`, `inv_broj`, `model`, `marka`, `toner`, `vrsta`, `mrezni`, `ip_adresa`, `lokacijaKorisnik`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 7, 6, 55555, '111', 'HP', 'CF259', 'Multifunkcijski', 'mrezni', '10.11.124.22', 'Danijela', '', NULL, '2022-10-27 09:00:19', NULL, NULL, 1, 1),
+(2, 7, 2, 21321, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:00:20', NULL, '2022-10-26', 1, 1),
+(7, 7, 2, 213221, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:06:20', NULL, '2022-10-27', 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -391,10 +407,10 @@ ALTER TABLE `stampaci`
 -- Constraints for table `inventar`
 --
 ALTER TABLE `inventar`
-  ADD CONSTRAINT `FK_kategorija_inventar` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_lokacija_inventar` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_racunar_inventar` FOREIGN KEY (`id_racunar`) REFERENCES `racunari` (`id_racunar`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_stampac_inventar` FOREIGN KEY (`id_stampac`) REFERENCES `stampaci` (`id_stampaci`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_kategorija_inventar` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_lokacija_inventar` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_racunar_inventar` FOREIGN KEY (`id_racunar`) REFERENCES `racunari` (`id_racunar`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_stampac_inventar` FOREIGN KEY (`id_stampac`) REFERENCES `stampaci` (`id_stampaci`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `podkategorija`
@@ -416,15 +432,15 @@ ALTER TABLE `prijem`
 -- Constraints for table `racunari`
 --
 ALTER TABLE `racunari`
-  ADD CONSTRAINT `FK_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_lokacija_racunari` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_lokacija_racunari` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `stampaci`
 --
 ALTER TABLE `stampaci`
-  ADD CONSTRAINT `FK_kategorija_stampaci` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_lokacija_stampaci` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_kategorija_stampaci` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_lokacija_stampaci` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
