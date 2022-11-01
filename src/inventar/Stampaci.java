@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
+
 
 /**
  *
@@ -37,7 +37,7 @@ public class Stampaci {
 
     String getId(String modelStampac, String markaStampac) throws SQLException {
         String id = null;
-        String sqlIdStampac = "SELECT id_stampaci from stampaci WHERE model ='" + modelStampac + "' AND marka = '" + markaStampac + "'";
+        String sqlIdStampac = "SELECT id_stampaci from stampaci WHERE aktivan AND vazeci AND model ='" + modelStampac + "' AND marka = '" + markaStampac + "'";
         PreparedStatement pstIdStampac = conSQL.prepareStatement(sqlIdStampac);
         ResultSet rsIdStampac = pstIdStampac.executeQuery();
 
@@ -53,7 +53,7 @@ public class Stampaci {
 
     String getId(int inventarskiBroj) throws SQLException {
         String id = null;
-        String sqlIdStampac = "SELECT id_stampaci from stampaci WHERE inv_broj=" + inventarskiBroj;
+        String sqlIdStampac = "SELECT id_stampaci from stampaci WHERE aktivan AND vazeci AND  inv_broj=" + inventarskiBroj;
         PreparedStatement pstIdStampac = conSQL.prepareStatement(sqlIdStampac);
         ResultSet rsIdStampac = pstIdStampac.executeQuery();
 
@@ -70,7 +70,7 @@ public class Stampaci {
     
     
     ArrayList<String> getAllIds()  throws  SQLException{
-        String getAllIds = "SELECT id_stampaci FROM stampaci";
+        String getAllIds = "SELECT id_stampaci FROM stampaci WHERE  aktivan AND vazeci AND ";
         PreparedStatement pstAllStampaci = conSQL.prepareStatement(getAllIds);
         ResultSet rsAllStampaci = pstAllStampaci.executeQuery();
         ArrayList<String> stampaci = new ArrayList();
@@ -82,7 +82,7 @@ public class Stampaci {
     }
 
     ArrayList<String> getAll() throws SQLException {
-        String sqlAllStampaci = "SELECT stmp.model, stmp.marka, stmp.inv_broj, lok.naziv FROM stampaci as stmp JOIN lokacija as lok WHERE stmp.id_lokacija = lok.id_lokacija";
+        String sqlAllStampaci = "SELECT stmp.model, stmp.marka, stmp.inv_broj, lok.naziv FROM stampaci as stmp JOIN lokacija as lok WHERE stmp.aktivan AND stmp.vazeci AND  stmp.id_lokacija = lok.id_lokacija";
         PreparedStatement pstAllStampaci = conSQL.prepareStatement(sqlAllStampaci);
         ResultSet rsAllStampaci = pstAllStampaci.executeQuery();
         ArrayList<String> stampaci = new ArrayList();
@@ -131,7 +131,7 @@ public class Stampaci {
     }
 
     boolean delete(int idStampac) throws SQLException {
-        String sqlDeleteStampaci = "DELETE FROM stampaci WHERE id_stampaci =" + idStampac;
+        String sqlDeleteStampaci = "DELETE FROM stampaci WHERE  aktivan AND vazeci AND id_stampaci =" + idStampac;
         PreparedStatement pstDeleteStampaci = conSQL.prepareStatement(sqlDeleteStampaci);
         int i = pstDeleteStampaci.executeUpdate();
         conSQL.commit();
@@ -139,7 +139,7 @@ public class Stampaci {
     }
 
     boolean delete(String model, String marka) throws SQLException {
-        String sqlDeleteStampaci = "DELETE FROM stampaci WHERE marka ='" + marka + "' AND model = '" + model + "'";
+        String sqlDeleteStampaci = "DELETE FROM stampaci WHERE  aktivan AND vazeci AND marka ='" + marka + "' AND model = '" + model + "'";
         PreparedStatement pstDeleteStampaci = conSQL.prepareStatement(sqlDeleteStampaci);
         int i = pstDeleteStampaci.executeUpdate();
         conSQL.commit();
@@ -147,7 +147,7 @@ public class Stampaci {
     }
 
     String getModel(int idStampac) throws SQLException {
-        String sqlModelStampaci = "SELECT model FROM stampaci WHERE id_stampaci =" + idStampac;
+        String sqlModelStampaci = "SELECT model FROM stampaci WHERE  aktivan AND vazeci AND id_stampaci =" + idStampac;
         PreparedStatement pstModel = conSQL.prepareStatement(sqlModelStampaci);
         String model;
         ResultSet rsIdStampac = pstModel.executeQuery();
@@ -163,7 +163,7 @@ public class Stampaci {
     }
 
     String getMarka(int idStampac) throws SQLException {
-        String sqlModelStampaci = "SELECT marka FROM stampaci WHERE id_stampaci =" + idStampac;
+        String sqlModelStampaci = "SELECT marka FROM stampaci WHERE  aktivan AND vazeci AND id_stampaci =" + idStampac;
         PreparedStatement pstMarka = conSQL.prepareStatement(sqlModelStampaci);
         String marka;
         ResultSet rsIdStampac = pstMarka.executeQuery();
@@ -179,7 +179,7 @@ public class Stampaci {
     }
 
     String getLokacija(int idStampac) throws SQLException {
-        String sqlLokacijaStampaci = "SELECT naziv FROM lokacija as lok JOIN stampaci as stmp WHERE lok.id_lokacija = stmp.id_lokacija AND stmp.id_stampaci =" + idStampac;
+        String sqlLokacijaStampaci = "SELECT naziv FROM lokacija as lok JOIN stampaci as stmp WHERE lok.aktivan AND lok.vazeci AND  lok.id_lokacija = stmp.id_lokacija AND stmp.id_stampaci =" + idStampac;
         PreparedStatement pstLokacija = conSQL.prepareStatement(sqlLokacijaStampaci);
         String lokacija;
         ResultSet rsIdStampac = pstLokacija.executeQuery();
@@ -195,7 +195,7 @@ public class Stampaci {
     }
 
     String getToner(int idStampac) throws SQLException {
-        String sqlTonerStampaci = "SELECT toner FROM stampaci WHERE id_stampaci =" + idStampac;
+        String sqlTonerStampaci = "SELECT toner FROM stampaci WHERE aktivan AND vazeci AND  id_stampaci =" + idStampac;
         PreparedStatement pstToner = conSQL.prepareStatement(sqlTonerStampaci);
         String toner;
         ResultSet rsTonerStampac = pstToner.executeQuery();
@@ -209,7 +209,7 @@ public class Stampaci {
     }
 
     String getVrsta(int idStampac) throws SQLException {
-        String sqlVrstaStampaci = "SELECT vrsta FROM stampaci WHERE id_stampaci =" + idStampac;
+        String sqlVrstaStampaci = "SELECT vrsta FROM stampaci WHERE aktivan AND vazeci AND  id_stampaci =" + idStampac;
         PreparedStatement pstVrsta = conSQL.prepareStatement(sqlVrstaStampaci);
         String vrsta;
         ResultSet rsTonerStampac = pstVrsta.executeQuery();
@@ -223,7 +223,7 @@ public class Stampaci {
     }
 
     String getIpAdresa(int idStampac) throws SQLException {
-        String sqlIpAdresaStampaci = "SELECT ip_adresa FROM stampaci WHERE id_stampaci=" + idStampac;
+        String sqlIpAdresaStampaci = "SELECT ip_adresa FROM stampaci WHERE aktivan AND vazeci AND  id_stampaci=" + idStampac;
         PreparedStatement pstIpAdresa = conSQL.prepareStatement(sqlIpAdresaStampaci);
         String ipAdresa;
         ResultSet rsIpAdresaStampac = pstIpAdresa.executeQuery();
@@ -238,7 +238,7 @@ public class Stampaci {
 
     String getLokacijaDetail(int idStampac) throws SQLException {
         String sqlLokacijaDetailStampaci = "SELECT stmp.lokacijaKorisnik, lok.naziv FROM stampaci AS stmp "
-                + " JOIN lokacija as lok WHERE stmp.id_stampaci = " + idStampac + " AND stmp.id_lokacija = lok.id_lokacija";
+                + " JOIN lokacija as lok WHERE stmp.aktivan AND stmp.vazeci AND lok.aktivan AND lok.vazeci  AND  stmp.id_stampaci = " + idStampac + " AND stmp.id_lokacija = lok.id_lokacija";
         PreparedStatement pstLokacijaDetail = conSQL.prepareStatement(sqlLokacijaDetailStampaci);
         String lokacijaDetail;
         ResultSet rsLokacijaDetailStampac = pstLokacijaDetail.executeQuery();
@@ -252,7 +252,7 @@ public class Stampaci {
     }
 
     ArrayList<String> getAllInfo(int idStampac) throws SQLException {
-        String sqlAllStampaci = "SELECT * FROM stampaci WHERE id_stampaci=" + idStampac;
+        String sqlAllStampaci = "SELECT * FROM stampaci WHERE aktivan AND vazeci AND  id_stampaci=" + idStampac;
         PreparedStatement pstAllStampaci = conSQL.prepareStatement(sqlAllStampaci);
         ResultSet rsAllStampaci = pstAllStampaci.executeQuery();
         ArrayList<String> stampaci = new ArrayList();

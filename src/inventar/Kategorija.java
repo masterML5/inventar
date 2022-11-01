@@ -70,7 +70,7 @@ public class Kategorija {
     }
     
      boolean delete(String kategorija) throws SQLException {
-        String sqlDeleteKategorija = "DELETE FROM kategorija WHERE id_kategorija ='"+kategorija+"'";
+        String sqlDeleteKategorija = "DELETE FROM kategorija WHERE naziv ='"+kategorija+"'";
          PreparedStatement pstDeleteKategorija = conSQL.prepareStatement(sqlDeleteKategorija);
         int i = pstDeleteKategorija.executeUpdate();
         conSQL.commit();
@@ -105,7 +105,7 @@ public class Kategorija {
         return id;
     }
     String getKategorija(int idKategorije) throws SQLException{
-        String sqlKategorija = "SELECT naziv FROM kategorija WHERE id ="+idKategorije;
+        String sqlKategorija = "SELECT naziv FROM kategorija WHERE id_kategorija ="+idKategorije;
         PreparedStatement pstKategorija = conSQL.prepareStatement(sqlKategorija);
         ResultSet rsKategorija = pstKategorija.executeQuery();
         String naziv;

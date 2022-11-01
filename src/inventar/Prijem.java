@@ -1,60 +1,123 @@
 package inventar;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.String.valueOf;
+import java.net.URI;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.TreeMap;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.text.NumberFormatter;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author milosjelic
  */
 public class Prijem extends javax.swing.JPanel {
+    private static Connection conSQL;
+    private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
+    Stampaci stampaci = new Stampaci();
+    Racunari racunari = new Racunari();
+    Kategorija kategorija = new Kategorija();
+    Lokacija lokacija = new Lokacija();
+    Podkategorija podkat = new Podkategorija();
+    ArrayList<String> sviStampaci = stampaci.getAll();
+    String korisnikG;
+    String datumG;
+    ArrayList<String> sveKategorije = kategorija.getAll();
 
+    ArrayList<String> sveLokacije = lokacija.getAll();
+   
     /**
      * Creates new form Prijem
+     *
+     * @param korisnik
+     * @param datum
+     * @throws java.sql.SQLException
      */
     public Prijem(String korisnik, String datum) throws SQLException {
         initComponents();
+          try {
+            conSQL = DriverManager.getConnection(connectionUrlMySQL);
+            conSQL.setAutoCommit(false);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+
+        }
         Evidencija ev = new Evidencija();
-        
-        Stampaci stampaci = new Stampaci();
-        Racunari racunari = new Racunari();
-        Kategorija kategorija = new Kategorija();
-        Lokacija lokacija = new Lokacija();
-        
-        ArrayList<String> sviStampaci = stampaci.getAll();
         sviStampaci.add(0, null);
-        ArrayList<String> sveKategorije = kategorija.getAll();
         sveKategorije.add(0, null);
-        ArrayList<String> sveLokacije = lokacija.getAll();
         sveLokacije.add(0, null);
-        stampaciComboBox.setModel(new DefaultComboBoxModel<>(sviStampaci.toArray(new String[0])));
+        datumG=datum;
+        korisnikG=korisnik;
+        JFormattedTextField txt = ((JSpinner.NumberEditor) jSpinner1.getEditor()).getTextField();
+        ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
+
+        // stampaciComboBox.setModel(new DefaultComboBoxModel<>(sviStampaci.toArray(new String[0])));
         kategorijaComboBox.setModel(new DefaultComboBoxModel<>(sveKategorije.toArray(new String[0])));
         OJComboBox.setModel(new DefaultComboBoxModel<>(sveLokacije.toArray(new String[0])));
-//        System.out.println(stampaci.add(7,2, 213221, "LBP351X", "Canon", "CRG039", "Monograf", "mrezni", "10.11.124.106", "Pozadi", korisnik, datum));
-//        System.out.println(stampaci.getAll());
-//        System.out.println(stampaci.getId("111","HP"));
-//        System.out.println(stampaci.getIpAdresa(1));
-//        System.out.println(stampaci.getLokacija(1));
-//        System.out.println(stampaci.getLokacijaDetail(1));
-//        System.out.println(stampaci.getMarka(1));
-//        System.out.println(stampaci.getModel(1));
-//        System.out.println(stampaci.getToner(1));
-//        System.out.println(stampaci.getVrsta(1));
-//        System.out.println(stampaci.getAllInfo(2));
+        podkatComboBox.setEnabled(false);
+
+        AutoCompleteDecorator.decorate(kategorijaComboBox);
+        AutoCompleteDecorator.decorate(OJComboBox);
+
+    }
+    
+   
+    boolean add(String brPrijem,String naziv, int idKategorija,int podkategorija, int idLokacija,int kolicina,String faktura, String uneo, String datum, String napomena, String korisnikLokacija) throws SQLException{
+        String sqlAddPrijem = "INSERT INTO prijem (broj_prijem,id_kategorija,id_podkategorija,id_lokacija,naziv,kolicina,faktura,napomena,korisnikLokacija,uneo,datum) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement pstInsertPrijem = conSQL.prepareStatement(sqlAddPrijem);
+        pstInsertPrijem.setString(1, brPrijem);
+        pstInsertPrijem.setInt(2, idKategorija);
+        pstInsertPrijem.setInt(3, podkategorija);
+        pstInsertPrijem.setInt(4, idLokacija);
+        pstInsertPrijem.setString(5, naziv);
+        pstInsertPrijem.setInt(6,kolicina);
+        pstInsertPrijem.setString(7,faktura);
+        pstInsertPrijem.setString(8,napomena);
+        pstInsertPrijem.setString(9,korisnikLokacija);
+        pstInsertPrijem.setString(10,uneo);
+        pstInsertPrijem.setString(11,datum);
+        pstInsertPrijem.addBatch();
+        int i = pstInsertPrijem.executeUpdate();
+        conSQL.commit();
+        return i > 0;    
+    }
+    
+    
+    private String brojPrijema(String datum,int idKategorija, int idLokacija) throws SQLException {
+        String datumDok = datum.replace("-", "");
+        String id;
+        String sqlPrijem = "SELECT broj_prijem FROM prijem WHERE id_prijem = (SELECT MAX(id_prijem) FROM prijem)";
+        PreparedStatement pstIdStampac = conSQL.prepareStatement(sqlPrijem);
+        ResultSet rsIdStampac = pstIdStampac.executeQuery();
+
+        if (rsIdStampac.next()) {
+
+            id = rsIdStampac.getString("id_prijem");
+
+        } else {
+            id = "0";
+        }
+        String brojPrijema = datumDok+"-"+"PRIJEM-"+valueOf(idKategorija)+"-"+ valueOf(idLokacija)+id;
         
-       
-        
-      
-        
-        
+        return brojPrijema;
     }
 
     /**
@@ -78,11 +141,18 @@ public class Prijem extends javax.swing.JPanel {
         jTextField1 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        stampaciComboBox = new javax.swing.JComboBox<>();
-        racunariComboBox = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        napomenaField = new javax.swing.JTextArea();
+        podkatComboBox = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        korisnikLokacijaField = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        fakturaLabel = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(842, 495));
 
@@ -93,28 +163,54 @@ public class Prijem extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Novi prijem"));
 
         kategorijaComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        kategorijaComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                kategorijaComboBoxItemStateChanged(evt);
+            }
+        });
+        kategorijaComboBox.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                kategorijaComboBoxFocusLost(evt);
+            }
+        });
 
         OJComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
-        jLabel2.setText("Kategorija");
+        jLabel2.setText("* Kategorija");
 
-        jLabel3.setText("OJ/Lokacija");
+        jLabel3.setText("* OJ/Lokacija");
 
         jButton1.setText("Dodaj");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jButton1MouseReleased(evt);
+            }
+        });
 
-        jButton2.setText("Ponisti");
+        jButton2.setText("Poništi");
 
-        jLabel4.setText("Naziv");
+        jLabel4.setText("* Naziv");
 
-        jLabel5.setText("Kolicina");
+        jLabel5.setText("* Količina");
 
         jLabel6.setText("Napomena");
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
+        napomenaField.setColumns(20);
+        napomenaField.setLineWrap(true);
+        napomenaField.setRows(5);
+        jScrollPane1.setViewportView(napomenaField);
+
+        podkatComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
+        jLabel7.setText("Podkategorija");
+
+        jLabel8.setText("Korisnik/Pod-lokacija");
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+
+        jLabel9.setText("Polja sa * su obavezna!");
+
+        jLabel10.setText("* Broj fakture / Zavodni broj");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -123,83 +219,116 @@ public class Prijem extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(kategorijaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(OJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jLabel3))
-                            .addGap(84, 84, 84)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton1)
-                            .addGap(84, 84, 84)
-                            .addComponent(jButton2)))
-                    .addComponent(jLabel2))
-                .addGap(35, 35, 35)
+                            .addComponent(jLabel2)
+                            .addGap(215, 215, 215))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(OJComboBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(podkatComboBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(kategorijaComboBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jButton1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2))
+                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(korisnikLokacijaField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(55, 55, 55)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel10))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(fakturaLabel))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(kategorijaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fakturaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)))
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(kategorijaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(podkatComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
+                            .addComponent(jLabel8)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(OJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(0, 10, Short.MAX_VALUE))
+                            .addComponent(korisnikLokacijaField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(OJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton2)
+                        .addComponent(jButton1))
+                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
-        stampaciComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        stampaciComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                stampaciComboBoxActionPerformed(evt);
-            }
-        });
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Pregled"));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 810, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 123, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(137, 137, 137)
-                .addComponent(stampaciComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
-                .addComponent(racunariComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator1)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -211,40 +340,103 @@ public class Prijem extends javax.swing.JPanel {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(356, 356, 356)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(stampaciComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(racunariComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void stampaciComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stampaciComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_stampaciComboBoxActionPerformed
+    private void kategorijaComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_kategorijaComboBoxItemStateChanged
+        try {
+            String kat = String.valueOf(kategorijaComboBox.getSelectedItem());
+            ArrayList<String> podkateg = podkat.getAllByCategory(kat);
+            if (podkateg.size() > 0) {
+                podkatComboBox.setEnabled(true);
+            } else {
+                podkatComboBox.setEnabled(false);
+            }
+            podkatComboBox.setModel(new DefaultComboBoxModel<>(podkateg.toArray(new String[0])));
+            AutoCompleteDecorator.decorate(podkatComboBox);
+            
+            if(kat.equals("Racunari")){
+                korisnikLokacijaField.setText("unosi se posle");
+                korisnikLokacijaField.setEnabled(false);
+            }else{
+                korisnikLokacijaField.setText("");
+                korisnikLokacijaField.setEnabled(true);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Prijem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_kategorijaComboBoxItemStateChanged
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    private void kategorijaComboBoxFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_kategorijaComboBoxFocusLost
+
+
+    }//GEN-LAST:event_kategorijaComboBoxFocusLost
+
+    private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
+            
+        try {
+            int kolicina2 = parseInt(jSpinner1.getValue().toString());
+            
+            int kategorija2 = parseInt(kategorija.getId(kategorijaComboBox.getSelectedItem().toString()));
+            int podkategorija = podkat.getId(podkatComboBox.getSelectedItem().toString());
+            int OJ2 = parseInt(lokacija.getId(OJComboBox.getSelectedItem().toString()));
+            String naziv2 = jTextField1.getText();
+            String brfakture = fakturaLabel.getText();
+            String napomena = napomenaField.getText();
+            String korisnikLokacija = korisnikLokacijaField.getText();
+            String brPrijema = brojPrijema(datumG, kategorija2, OJ2);
+            switch (kategorijaComboBox.getSelectedItem().toString()) {
+                case "Racunari":
+                    new RacunariFrame(kategorija2, OJ2,kolicina2, brfakture, naziv2, korisnikG, datumG).setVisible(true);
+                    break;
+                case "Stampaci":
+                    new StampaciFrame().setVisible(true);
+                    break;
+                default:
+                    if(add(brPrijema,naziv2, kategorija2,podkategorija, OJ2, kolicina2, brfakture, korisnikG, datumG, napomena, korisnikLokacija)){
+                        JOptionPane.showMessageDialog(null,"Uspešno ste uneli novi prijem " + brPrijema);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Došlo je do greške pokušajte ponovo");
+                    }      ;
+                    break;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Prijem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1MouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> OJComboBox;
+    private javax.swing.JTextField fakturaLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JComboBox<String> kategorijaComboBox;
-    private javax.swing.JComboBox<String> racunariComboBox;
-    private javax.swing.JComboBox<String> stampaciComboBox;
+    private javax.swing.JTextField korisnikLokacijaField;
+    private javax.swing.JTextArea napomenaField;
+    private javax.swing.JComboBox<String> podkatComboBox;
     // End of variables declaration//GEN-END:variables
+
+    
 }

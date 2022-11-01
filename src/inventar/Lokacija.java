@@ -70,7 +70,7 @@ public class Lokacija {
     }
     
      boolean delete(String lokacija) throws SQLException {
-        String sqlDeletelokacija = "DELETE FROM lokacija WHERE id_lokacija ='"+lokacija+"'";
+        String sqlDeletelokacija = "DELETE FROM lokacija WHERE naziv ='"+lokacija+"'";
          PreparedStatement pstDeletelokacija = conSQL.prepareStatement(sqlDeletelokacija);
         int i = pstDeletelokacija.executeUpdate();
         conSQL.commit();
@@ -105,7 +105,7 @@ public class Lokacija {
         return id;
     }
     String getlokacija(int idlokacija) throws SQLException{
-        String sqllokacija = "SELECT naziv FROM lokacija WHERE id ="+idlokacija;
+        String sqllokacija = "SELECT naziv FROM lokacija WHERE id_lokacija ="+idlokacija;
         PreparedStatement pstlokacija = conSQL.prepareStatement(sqllokacija);
         ResultSet rslokacija = pstlokacija.executeQuery();
         String naziv;
