@@ -17,8 +17,8 @@ import java.util.ArrayList;
  * @author milosjelic
  */
 public class Lokacija {
-    
-        private static Connection conSQL;
+
+    private static Connection conSQL;
     private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
 
     public Lokacija() {
@@ -41,20 +41,20 @@ public class Lokacija {
         return i > 0;
     }
 
-    boolean edit(int idlokacija,String noviNaziv) throws SQLException {
-        String sqlEditlokacija = "UPDATE lokacija SET naziv='"+noviNaziv+"' WHERE id_lokacija="+idlokacija;
+    boolean edit(int idlokacija, String noviNaziv) throws SQLException {
+        String sqlEditlokacija = "UPDATE lokacija SET naziv='" + noviNaziv + "' WHERE aktivan AND vazeci AND id_lokacija=" + idlokacija;
         PreparedStatement pstUpdatelokacija = conSQL.prepareStatement(sqlEditlokacija);
         int i = pstUpdatelokacija.executeUpdate();
         conSQL.commit();
-        if(i > 0){
+        if (i > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    
-    boolean edit(String stariNaziv, String noviNaziv) throws SQLException{
-        String sqlEditlokacija = "UPDATE lokacija SET naziv='"+noviNaziv+"' WHERE naziv='"+stariNaziv+"'";
+
+    boolean edit(String stariNaziv, String noviNaziv) throws SQLException {
+        String sqlEditlokacija = "UPDATE lokacija SET naziv='" + noviNaziv + "' WHERE aktivan AND vazeci AND naziv='" + stariNaziv + "'";
         PreparedStatement pstUpdatelokacija = conSQL.prepareStatement(sqlEditlokacija);
         int i = pstUpdatelokacija.executeUpdate();
         conSQL.commit();
@@ -62,23 +62,23 @@ public class Lokacija {
     }
 
     boolean delete(int idlokacija) throws SQLException {
-        String sqlDeletelokacija = "DELETE FROM lokacija WHERE id_lokacija ="+idlokacija;
-         PreparedStatement pstDeletelokacija = conSQL.prepareStatement(sqlDeletelokacija);
+        String sqlDeletelokacija = "DELETE FROM lokacija WHERE aktivan AND vazeci AND id_lokacija =" + idlokacija;
+        PreparedStatement pstDeletelokacija = conSQL.prepareStatement(sqlDeletelokacija);
         int i = pstDeletelokacija.executeUpdate();
         conSQL.commit();
         return i > 0;
     }
-    
-     boolean delete(String lokacija) throws SQLException {
-        String sqlDeletelokacija = "DELETE FROM lokacija WHERE naziv ='"+lokacija+"'";
-         PreparedStatement pstDeletelokacija = conSQL.prepareStatement(sqlDeletelokacija);
+
+    boolean delete(String lokacija) throws SQLException {
+        String sqlDeletelokacija = "DELETE FROM lokacija WHERE aktivan AND vazeci AND naziv ='" + lokacija + "'";
+        PreparedStatement pstDeletelokacija = conSQL.prepareStatement(sqlDeletelokacija);
         int i = pstDeletelokacija.executeUpdate();
         conSQL.commit();
         return i > 0;
     }
 
     ArrayList<String> getAll() throws SQLException {
-        String sqlAlllokacija = "SELECT * FROM lokacija";
+        String sqlAlllokacija = "SELECT * FROM lokacija WHERE aktivan AND vazeci";
         PreparedStatement pstAlllokacija = conSQL.prepareStatement(sqlAlllokacija);
         ResultSet rsAlllokacija = pstAlllokacija.executeQuery();
         ArrayList<String> lokacija = new ArrayList();
@@ -89,36 +89,33 @@ public class Lokacija {
         return lokacija;
 
     }
-    
-    String getId(String nazivlokacija) throws SQLException{
-        String sqlIdlokacija = "SELECT id_lokacija FROM lokacija WHERE naziv ='"+nazivlokacija+"'";
+
+    String getId(String nazivlokacija) throws SQLException {
+        String sqlIdlokacija = "SELECT id_lokacija FROM lokacija WHERE aktivan AND vazeci AND naziv ='" + nazivlokacija + "'";
         PreparedStatement pstIdlokacija = conSQL.prepareStatement(sqlIdlokacija);
         ResultSet rsIdlokacija = pstIdlokacija.executeQuery();
         String id = null;
-        if(rsIdlokacija.next()){
-            
-         id = rsIdlokacija.getString("id_lokacija");
-        
-        }else{
+        if (rsIdlokacija.next()) {
+
+            id = rsIdlokacija.getString("id_lokacija");
+
+        } else {
             id = "0";
         }
         return id;
     }
-    String getlokacija(int idlokacija) throws SQLException{
-        String sqllokacija = "SELECT naziv FROM lokacija WHERE id_lokacija ="+idlokacija;
+
+    String getlokacija(int idlokacija) throws SQLException {
+        String sqllokacija = "SELECT naziv FROM lokacija WHERE aktivan AND vazeci AND id_lokacija =" + idlokacija;
         PreparedStatement pstlokacija = conSQL.prepareStatement(sqllokacija);
         ResultSet rslokacija = pstlokacija.executeQuery();
         String naziv;
-        if(rslokacija.next()){
+        if (rslokacija.next()) {
             naziv = rslokacija.getString("naziv");
-        }else{
+        } else {
             naziv = null;
         }
         return naziv;
     }
 
-
-    
-    
-    
 }

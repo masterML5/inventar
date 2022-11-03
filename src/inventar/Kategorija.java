@@ -29,6 +29,8 @@ public class Kategorija {
             System.out.println(ex);
 
         }
+        
+       
     }
 
     boolean add(String kategorija) throws SQLException {
@@ -100,7 +102,7 @@ public class Kategorija {
          id = rsIdKategorija.getString("id_kategorija");
         
         }else{
-            id = "0";
+            id = null;
         }
         return id;
     }

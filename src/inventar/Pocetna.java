@@ -231,7 +231,7 @@ public class Pocetna extends javax.swing.JFrame {
             String password = lozinkaField.getText();
 
             // String generatedSecuredPasswordHash = BCrypt.hashpw(test, BCrypt.gensalt(12));
-            String sqlCheck = "SELECT * FROM login WHERE username = '" + username + "'";
+            String sqlCheck = "SELECT * FROM login WHERE aktivan AND vazeci AND username = '" + username + "'";
             PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheck);
             ResultSet rsCheck = pstCheck.executeQuery();
             String password2 = "";
@@ -267,7 +267,7 @@ public class Pocetna extends javax.swing.JFrame {
             if (passwordFrame == 0) {
                 password = new String(pwd.getPassword());
             }
-            String sqlCheckAdmin = "SELECT * FROM login WHERE username = 'administrator'";
+            String sqlCheckAdmin = "SELECT * FROM login WHERE aktivan AND vazeci AND username = 'administrator'";
             PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheckAdmin);
             ResultSet rsCheck = pstCheck.executeQuery();
             String password2 = "";

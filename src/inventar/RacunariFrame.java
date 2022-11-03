@@ -5,8 +5,13 @@
  */
 package inventar;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.String.valueOf;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,22 +19,46 @@ import java.sql.SQLException;
  */
 public class RacunariFrame extends javax.swing.JFrame {
 
+    Racunari racunar;
+    Kategorija kategorija;
+    Lokacija lokacija;
+    Prijem prijem;
+    int idKat;
+    int idLok;
+    int kol;
+    String brfak;
+    String naziv;
+    String uneo;
+    String datum;
+    String napomena;
 
     /**
      * Creates new form RacunariPanel
+     *
      * @param idKategorija
      * @param idLokacija
      * @param kolicina
+     * @param brfakture
      * @param naziv
      * @param uneo
      * @param datum
      * @throws java.sql.SQLException
      */
-    public RacunariFrame(int idKategorija, int idLokacija, int kolicina,String brfakture, String naziv, String uneo, String datum) throws SQLException {
+    public RacunariFrame(int idKategorija, int idLokacija, int kolicina, String brfakture, String naziv, String napomena, String uneo, String datum) throws SQLException {
         initComponents();
-        Racunari racunar = new Racunari();
-        Kategorija kategorija = new Kategorija();
-        Lokacija lokacija = new Lokacija();
+        racunar = new Racunari();
+        kategorija = new Kategorija();
+        lokacija = new Lokacija();
+        prijem = new Prijem(uneo, datum);
+        idKat = idKategorija;
+        idLok = idLokacija;
+        kol = kolicina;
+        brfak = brfakture;
+        this.napomena = napomena;
+        this.naziv = naziv;
+        this.uneo = uneo;
+        this.datum = datum;
+
         kategorijaLabel.setText(kategorija.getKategorija(idKategorija));
         ojLabel.setText(lokacija.getlokacija(idLokacija));
         kolicinaLabel.setText(valueOf(kolicina));
@@ -43,10 +72,66 @@ public class RacunariFrame extends javax.swing.JFrame {
         System.out.println(naziv);
         System.out.println(uneo);
         System.out.println(datum);
+
     }
 
-    private RacunariFrame() {
-        
+    public RacunariFrame() {
+
+    }
+
+    class Data {
+
+        String korisnik;
+        String invBroj;
+        String ipAdresa;
+        String macAdresa;
+        String os;
+        String osKey;
+        String office;
+        String officeKey;
+        String procesor;
+        String ram;
+        String hdd;
+        String gpu;
+        String napajanje;
+        String specifikacija;
+
+        public Data(String korisnik, String invBroj, String ipAdresa, String macAdresa, String os, String osKey, String office, String officeKey, String procesor, String ram, String hdd, String gpu, String napajanje, String specifikacija) {
+            this.korisnik = korisnik;
+            this.invBroj = invBroj;
+            this.ipAdresa = ipAdresa;
+            this.macAdresa = macAdresa;
+            this.os = os;
+            this.osKey = osKey;
+            this.office = office;
+            this.officeKey = officeKey;
+            this.procesor = procesor;
+            this.ram = ram;
+            this.hdd = hdd;
+            this.gpu = gpu;
+            this.napajanje = napajanje;
+            this.specifikacija = specifikacija;
+        }
+    }
+
+    public Data getData() {
+        // return person details from the method
+        String procesor = procesorInput.getText();
+        String ram = RAMInput.getText();
+        String hdd = HDDInput.getText();
+        String gpu = GPUInput.getText();
+        String napajanje = PSUInput.getText();
+        String specifikacija = racunar.specifikacija(procesor, ram, hdd, gpu, napajanje);
+        String korisnik = korisnikInput.getText();
+        String invBroj = invBrojInput.getText();
+        String ipAdresa = ipAdresaInput.getText();
+        String macAdresa = macAdresaInput.getText();
+        String os = osComboBox.getSelectedItem().toString();
+        String osKey = osKeyInput.getText();
+        String office = officeComboBox.getSelectedItem().toString();
+        String officeKey = officeKeyInput.getText();
+
+        return new Data(korisnik, invBroj, ipAdresa, macAdresa, os, osKey, office, officeKey, procesor, ram, hdd, gpu, napajanje, specifikacija);
     }
 
     /**
@@ -83,9 +168,9 @@ public class RacunariFrame extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        invbrojInput = new javax.swing.JTextField();
-        ipaddrInput = new javax.swing.JTextField();
-        macInput = new javax.swing.JTextField();
+        invBrojInput = new javax.swing.JTextField();
+        ipAdresaInput = new javax.swing.JTextField();
+        macAdresaInput = new javax.swing.JTextField();
         osComboBox = new javax.swing.JComboBox<>();
         osKeyInput = new javax.swing.JTextField();
         officeKeyInput = new javax.swing.JTextField();
@@ -334,8 +419,18 @@ public class RacunariFrame extends javax.swing.JFrame {
         );
 
         jButton1.setText("Unesi");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jButton1MouseReleased(evt);
+            }
+        });
 
         jButton2.setText("Poništi");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jButton2MouseReleased(evt);
+            }
+        });
 
         jLabel18.setText("Polja sa * su obavezna!");
 
@@ -359,9 +454,9 @@ public class RacunariFrame extends javax.swing.JFrame {
                         .addGap(33, 33, 33)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(korisnikInput)
-                            .addComponent(invbrojInput)
-                            .addComponent(ipaddrInput)
-                            .addComponent(macInput)
+                            .addComponent(invBrojInput)
+                            .addComponent(ipAdresaInput)
+                            .addComponent(macAdresaInput)
                             .addComponent(osComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(osKeyInput)
                             .addComponent(officeComboBox, 0, 150, Short.MAX_VALUE)
@@ -394,15 +489,15 @@ public class RacunariFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(invbrojInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(invBrojInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(ipaddrInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ipAdresaInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
-                            .addComponent(macInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(macAdresaInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
@@ -464,18 +559,18 @@ public class RacunariFrame extends javax.swing.JFrame {
 
     private void osComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_osComboBoxItemStateChanged
         String os = osComboBox.getSelectedItem().toString();
-        if(os.equals("Ostalo") || os.equals("Linux")){
+        if (os.equals("Ostalo") || os.equals("Linux")) {
             osKeyInput.setEnabled(false);
-        }else{
+        } else {
             osKeyInput.setEnabled(true);
         }
     }//GEN-LAST:event_osComboBoxItemStateChanged
 
     private void officeComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_officeComboBoxItemStateChanged
         String office = officeComboBox.getSelectedItem().toString();
-        if(office.equals("LibreOffice") || office.equals("Ostalo")){
+        if (office.equals("LibreOffice") || office.equals("Ostalo")) {
             officeKeyInput.setEnabled(false);
-        }else{
+        } else {
             officeKeyInput.setEnabled(true);
         }
     }//GEN-LAST:event_officeComboBoxItemStateChanged
@@ -484,7 +579,72 @@ public class RacunariFrame extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton3MouseReleased
 
-    /**
+    private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
+        try {
+            Data data = getData();
+            boolean osKeyCheck;
+            boolean officeKeyCheck;
+            if (osKeyInput.isEnabled()) {
+                osKeyCheck = data.osKey.isEmpty();
+            } else {
+                osKeyCheck = false;
+            }
+            if (officeKeyInput.isEnabled()) {
+                officeKeyCheck = data.officeKey.isEmpty();
+            } else {
+                officeKeyCheck = false;
+            }
+            if (data.os.isEmpty() || data.os.equals(" ") || data.office.isEmpty() || data.ipAdresa.isEmpty() || data.macAdresa.isEmpty() || data.office.equals(" ") || osKeyCheck || officeKeyCheck) {
+                JOptionPane.showMessageDialog(null, "Morate popuniti sva obavezna polja", "Greška", JOptionPane.ERROR_MESSAGE);
+            } else if (racunar.checkInventarski(data.invBroj)) {
+                JOptionPane.showMessageDialog(null, "Inventarski mora biti jedinstveni za svaki računar", "Greška", JOptionPane.ERROR_MESSAGE);
+            } else if (racunar.checkIp(data.ipAdresa)) {
+                JOptionPane.showMessageDialog(null, "IP Adresa mora biti jedinstvena za svaki računar", "Greška", JOptionPane.ERROR_MESSAGE);
+            } else if (racunar.checkMAC(data.macAdresa)) {
+                JOptionPane.showMessageDialog(null, "MAC Adresa mora biti jedinstvena za svaki računar", "Greška", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Long idKey = racunar.add(idKat, idLok, data.invBroj, data.specifikacija, data.os, data.office, data.korisnik, data.ipAdresa, data.macAdresa, data.osKey, data.officeKey, uneo, datum);
+                if (idKey != null) {
+                    Integer idRacunar = idKey.intValue();
+                    String brprijema = prijem.brojPrijema(datum, idKat, idLok);
+                    if (prijem.addRacunar(brprijema, naziv, idKat, idLok, kol, idRacunar, brfak, uneo, datum, napomena, data.korisnik)) {
+                        JOptionPane.showMessageDialog(null, "Uspešno ste uneli prijem računara!" + "\n" + brprijema, "Uspešno", JOptionPane.INFORMATION_MESSAGE);
+                        new Prijem(uneo, datum).setVisible(true);
+                        this.dispose();
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Došlo je do greške, podaci nisu uneti!", "Greška", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Došlo je do greške, podaci nisu uneti!", "Greška", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RacunariFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButton1MouseReleased
+
+    private void jButton2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseReleased
+        procesorInput.setText(null);
+        RAMInput.setText(null);
+        HDDInput.setText(null);
+        GPUInput.setText(null);
+        PSUInput.setText(null);
+        korisnikInput.setText(null);
+        invBrojInput.setText(null);
+        ipAdresaInput.setText(null);
+        macAdresaInput.setText(null);
+        osComboBox.setSelectedIndex(0);
+        osKeyInput.setText(null);
+        officeComboBox.setSelectedIndex(0);
+        officeKeyInput.setText(null);
+
+    }//GEN-LAST:event_jButton2MouseReleased
+
+
+    /*
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -527,8 +687,8 @@ public class RacunariFrame extends javax.swing.JFrame {
     private javax.swing.JTextField RAMInput;
     private javax.swing.JLabel datumLabel;
     private javax.swing.JLabel fakturaLabel;
-    private javax.swing.JTextField invbrojInput;
-    private javax.swing.JTextField ipaddrInput;
+    private javax.swing.JTextField invBrojInput;
+    private javax.swing.JTextField ipAdresaInput;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -559,7 +719,7 @@ public class RacunariFrame extends javax.swing.JFrame {
     private javax.swing.JLabel kategorijaLabel;
     private javax.swing.JLabel kolicinaLabel;
     private javax.swing.JTextField korisnikInput;
-    private javax.swing.JTextField macInput;
+    private javax.swing.JTextField macAdresaInput;
     private javax.swing.JLabel nazivLabel;
     private javax.swing.JComboBox<String> officeComboBox;
     private javax.swing.JTextField officeKeyInput;
@@ -569,4 +729,5 @@ public class RacunariFrame extends javax.swing.JFrame {
     private javax.swing.JTextField procesorInput;
     private javax.swing.JLabel uneoLabel;
     // End of variables declaration//GEN-END:variables
+
 }

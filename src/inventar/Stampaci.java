@@ -70,7 +70,7 @@ public class Stampaci {
     
     
     ArrayList<String> getAllIds()  throws  SQLException{
-        String getAllIds = "SELECT id_stampaci FROM stampaci WHERE  aktivan AND vazeci AND ";
+        String getAllIds = "SELECT id_stampaci FROM stampaci WHERE  aktivan AND vazeci";
         PreparedStatement pstAllStampaci = conSQL.prepareStatement(getAllIds);
         ResultSet rsAllStampaci = pstAllStampaci.executeQuery();
         ArrayList<String> stampaci = new ArrayList();

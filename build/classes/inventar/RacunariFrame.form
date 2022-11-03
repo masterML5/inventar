@@ -284,9 +284,9 @@
                           <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="korisnikInput" max="32767" attributes="0"/>
-                              <Component id="invbrojInput" alignment="0" max="32767" attributes="0"/>
-                              <Component id="ipaddrInput" alignment="0" max="32767" attributes="0"/>
-                              <Component id="macInput" alignment="0" max="32767" attributes="0"/>
+                              <Component id="invBrojInput" alignment="0" max="32767" attributes="0"/>
+                              <Component id="ipAdresaInput" alignment="0" max="32767" attributes="0"/>
+                              <Component id="macAdresaInput" alignment="0" max="32767" attributes="0"/>
                               <Component id="osComboBox" alignment="0" max="32767" attributes="0"/>
                               <Component id="osKeyInput" alignment="0" max="32767" attributes="0"/>
                               <Component id="officeComboBox" alignment="0" pref="150" max="32767" attributes="0"/>
@@ -330,17 +330,17 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="invbrojInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="invBrojInput" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="ipaddrInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="ipAdresaInput" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="macInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="macAdresaInput" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -414,11 +414,11 @@
             <Property name="text" type="java.lang.String" value="* Office Key"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="invbrojInput">
+        <Component class="javax.swing.JTextField" name="invBrojInput">
         </Component>
-        <Component class="javax.swing.JTextField" name="ipaddrInput">
+        <Component class="javax.swing.JTextField" name="ipAdresaInput">
         </Component>
-        <Component class="javax.swing.JTextField" name="macInput">
+        <Component class="javax.swing.JTextField" name="macAdresaInput">
         </Component>
         <Component class="javax.swing.JComboBox" name="osComboBox">
           <Properties>
@@ -588,11 +588,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Unesi"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton1MouseReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Poni&#x161;ti"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton2MouseReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel18">
           <Properties>

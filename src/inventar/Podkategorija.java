@@ -54,23 +54,23 @@ public class Podkategorija {
 
         return podkat;
     }
-    
-    int getId(String naziv) throws SQLException{
+
+    int getId(String naziv) throws SQLException {
         int id;
-        String sqlId = "SELECT id_podkategorija FROM podkategorija WHERE naziv = '"+naziv+"'";
+        String sqlId = "SELECT id_podkategorija FROM podkategorija WHERE aktivan AND vazeci AND naziv = '" + naziv + "'";
         PreparedStatement pstId = conSQL.prepareStatement(sqlId);
         ResultSet rsId = pstId.executeQuery();
-        if(rsId.next()){
+        if (rsId.next()) {
             id = rsId.getInt("id_podkategorija");
-        }else{
-            id=0;
+        } else {
+            id = 0;
         }
-        
+
         return id;
     }
 
     ArrayList<String> getAllByCategory(String kategorija) throws SQLException {
-        String sqlByCategory = "SELECT * FROM podkategorija as pk JOIN kategorija as kat WHERE kat.id_kategorija = pk.id_kategorija AND pk.aktivan AND pk.vazeci AND kat.naziv='" + kategorija+"'";
+        String sqlByCategory = "SELECT * FROM podkategorija as pk JOIN kategorija as kat WHERE kat.id_kategorija = pk.id_kategorija AND pk.aktivan AND pk.vazeci AND kat.naziv='" + kategorija + "'";
         PreparedStatement pstAllPodkat = conSQL.prepareStatement(sqlByCategory);
         ResultSet rsAllPodKat = pstAllPodkat.executeQuery();
         ArrayList<String> podkat = new ArrayList();
@@ -79,7 +79,7 @@ public class Podkategorija {
         }
 
         return podkat;
-    
+
     }
 
     String getOne(int idPodkategorija) throws SQLException {
@@ -87,11 +87,11 @@ public class Podkategorija {
         PreparedStatement pstPodkat = conSQL.prepareStatement(sqlGetOne);
         ResultSet rsPodkat = pstPodkat.executeQuery();
         String naziv = null;
-        if(rsPodkat.next()){
-            
-         naziv = rsPodkat.getString("naziv");
-        
-        }else{
+        if (rsPodkat.next()) {
+
+            naziv = rsPodkat.getString("naziv");
+
+        } else {
             naziv = "Nema kategorija sa tim id-jem";
         }
         return naziv;
@@ -137,7 +137,5 @@ public class Podkategorija {
         conSQL.commit();
         return i > 0;
     }
-    
-    
 
 }

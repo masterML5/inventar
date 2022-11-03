@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +23,7 @@ public class Racunari {
     private static Connection conSQL;
     private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
     Stampaci stm = new Stampaci();
-
+    
     public Racunari() throws SQLException {
 
         try {
@@ -51,13 +52,14 @@ public class Racunari {
     }
     
 
-    boolean add(int idKategorija, int idLokacija, int invBroj, String specifikacija, String os, String office, String korisnik, String ipAdresa, String macAdresa, String os_key, String office_key, String uneo, String datum) throws SQLException {
+    Long add(int idKategorija, int idLokacija, String invBroj, String specifikacija, String os, String office, String korisnik, String ipAdresa, String macAdresa, String os_key, String office_key, String uneo, String datum) throws SQLException {
+        Long key = null;
         String sqlAddRacunar = "INSERT INTO racunari (id_kategorija,id_lokacija,inv_broj,specifikacija,os,office,"
                 + "korisnik,ip_adresa,mac_adresa,os_key,office_key,datum,uneo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement pstInsertRacunar = conSQL.prepareStatement(sqlAddRacunar);
+        PreparedStatement pstInsertRacunar = conSQL.prepareStatement(sqlAddRacunar,Statement.RETURN_GENERATED_KEYS);
         pstInsertRacunar.setInt(1, idKategorija);
         pstInsertRacunar.setInt(2, idLokacija);
-        pstInsertRacunar.setInt(3, invBroj);
+        pstInsertRacunar.setString(3, invBroj);
         pstInsertRacunar.setString(4, specifikacija);
         pstInsertRacunar.setString(5, os);
         pstInsertRacunar.setString(6, office);
@@ -66,13 +68,17 @@ public class Racunari {
         pstInsertRacunar.setString(9, macAdresa);
         pstInsertRacunar.setString(10, os_key);
         pstInsertRacunar.setString(11, office_key);
-        pstInsertRacunar.setString(12, uneo);
-        pstInsertRacunar.setString(13, datum);
-
+        pstInsertRacunar.setString(12, datum);
+        pstInsertRacunar.setString(13, uneo);
         pstInsertRacunar.addBatch();
         int i = pstInsertRacunar.executeUpdate();
+        ResultSet generatedKey = pstInsertRacunar.getGeneratedKeys();        
+        if(generatedKey.next()){
+            key = generatedKey.getLong(1);
+            
+        }
         conSQL.commit();
-        return i > 0;
+        return key;
     }
 
     boolean edit(int idRacunar, int idKategorija, int idLokacija, int invBroj, String specifikacija, String os, String office, String korisnik, String ipAdresa, String macAdresa, String os_key, String office_key, String editovao, String datum) throws SQLException {
@@ -359,5 +365,68 @@ public class Racunari {
         }
         return korisnik;
     }
+    String specifikacija(String procesor, String ram, String hdd, String gpu, String napajanje) {
+         String specifikacija = "{procesor:"+procesor+",ram:"+ram+", hdd:"+hdd+",gpu:"+gpu+",napajanje:"+napajanje+"}";
+         
+         return specifikacija;
+    }
+    
+    
+    ArrayList<String> sviInventarski() throws SQLException{
+        String sqlInv = "SELECT inv_broj FROM racunari WHERE aktivan and vazeci";
+        PreparedStatement pstInv = conSQL.prepareStatement(sqlInv);
+        ResultSet rsInv = pstInv.executeQuery();
+        ArrayList inventarskiBrojevi = new ArrayList<>();
+        while(rsInv.next()){
+            inventarskiBrojevi.add(rsInv.getString("inv_broj"));
+        }
+        return inventarskiBrojevi;
+    }
+     ArrayList<String> sveIpAdrese() throws SQLException{
+        String sqlInv = "SELECT ip_adresa FROM racunari WHERE aktivan and vazeci";
+        PreparedStatement pstIp = conSQL.prepareStatement(sqlInv);
+        ResultSet rsIp = pstIp.executeQuery();
+        ArrayList ipAdrese = new ArrayList<>();
+        while(rsIp.next()){
+            ipAdrese.add(rsIp.getString("ip_adresa"));
+        }
+        return ipAdrese;
+    }
+      ArrayList<String> sveMacAdrese() throws SQLException{
+        String sqlInv = "SELECT mac_adresa FROM racunari WHERE aktivan AND vazeci";
+        PreparedStatement pstMac = conSQL.prepareStatement(sqlInv);
+        ResultSet rsMac = pstMac.executeQuery();
+        ArrayList macAdrese = new ArrayList<>();
+        while(rsMac.next()){
+            macAdrese.add(rsMac.getString("mac_adresa"));
+        }
+        return macAdrese;
+    }
+      
+      boolean checkInventarski(String invBroj) throws SQLException{
+          boolean result;
+          String sqlInv = "SELECT inv_broj FROM racunari WHERE aktivan AND vazeci AND inv_broj ='"+invBroj+"'";
+          PreparedStatement pstInv = conSQL.prepareStatement(sqlInv);
+          ResultSet rsInv = pstInv.executeQuery();
+          result = rsInv.next();
+          return result;
+      }
+      boolean checkIp(String ipAdresa) throws SQLException{
+          boolean result;
+          String sqlIp = "SELECT ip_adresa FROM racunari WHERE aktivan AND vazeci AND inv_broj ='"+ipAdresa+"'";
+          PreparedStatement pstIp = conSQL.prepareStatement(sqlIp);
+          ResultSet rsIp = pstIp.executeQuery();
+          result = rsIp.next();
+          return result;
+      }
+      boolean checkMAC(String macAdresa) throws SQLException{
+          boolean result;
+          String sqlMac = "SELECT mac_adresa FROM racunari WHERE aktivan AND vazeci AND inv_broj ='"+macAdresa+"'";
+          PreparedStatement pstMac = conSQL.prepareStatement(sqlMac);
+          ResultSet rsMac = pstMac.executeQuery();
+          result = rsMac.next();
+          return result;
+      }
+      
     
 }
