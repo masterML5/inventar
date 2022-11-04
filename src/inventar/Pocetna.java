@@ -6,6 +6,7 @@
 package inventar;
 
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -86,6 +87,14 @@ public class Pocetna extends javax.swing.JFrame {
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 loginButtonMouseClicked(evt);
+            }
+        });
+        loginButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                loginButtonKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                loginButtonKeyReleased(evt);
             }
         });
 
@@ -254,7 +263,7 @@ public class Pocetna extends javax.swing.JFrame {
             Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_loginButtonMouseClicked
-
+  
     private void korisnickoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_korisnickoTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_korisnickoTextFieldActionPerformed
@@ -287,6 +296,42 @@ public class Pocetna extends javax.swing.JFrame {
             Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_registracijaButtonMouseClicked
+
+    private void loginButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginButtonKeyReleased
+        
+    }//GEN-LAST:event_loginButtonKeyReleased
+
+    private void loginButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginButtonKeyPressed
+      if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+             try {
+            String username = korisnickoTextField.getText();
+            String password = lozinkaField.getText();
+
+            // String generatedSecuredPasswordHash = BCrypt.hashpw(test, BCrypt.gensalt(12));
+            String sqlCheck = "SELECT * FROM login WHERE aktivan AND vazeci AND username = '" + username + "'";
+            PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheck);
+            ResultSet rsCheck = pstCheck.executeQuery();
+            String password2 = "";
+            if (rsCheck.next()) {
+                password2 = rsCheck.getString("password");
+            }
+
+            if (password2.isEmpty() || password2 == null) {
+                JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
+            } else {
+                boolean matched = BCrypt.checkpw(password, password2);
+                if (matched) {
+                    new Evidencija(username).setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+    }//GEN-LAST:event_loginButtonKeyPressed
 
     /**
      * @param args the command line arguments
@@ -336,6 +381,7 @@ public class Pocetna extends javax.swing.JFrame {
             return null;
         }
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
