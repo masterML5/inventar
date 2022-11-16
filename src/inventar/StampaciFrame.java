@@ -49,6 +49,7 @@ public class StampaciFrame extends javax.swing.JFrame {
         idKat = idKategorija;
         idLok = idLokacija;
         kol = kolicina;
+        brfak = brojfak;
         kategorija = new Kategorija();
         lokacija = new Lokacija();
         prijem = new Prijem(uneo, datum);

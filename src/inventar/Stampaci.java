@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -94,7 +95,7 @@ public class Stampaci {
     Long add(int idKategorija, int idLokacija, int idToner, String invBroj, String model, String marka, String toner, String vrsta, String mrezni, String ipAdresa, String lokacija, String uneo, String datum) throws SQLException {
         Long key = null;
         String sqlAddStampac = "INSERT INTO stampaci (id_kategorija,id_lokacija,id_toner,inv_broj,model,marka,toner,vrsta,mrezni,ip_adresa,lokacijaKorisnik,uneo,datum) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement pstInsertStampac = conSQL.prepareStatement(sqlAddStampac);
+        PreparedStatement pstInsertStampac = conSQL.prepareStatement(sqlAddStampac,Statement.RETURN_GENERATED_KEYS);
         pstInsertStampac.setInt(1, idKategorija);
         pstInsertStampac.setInt(2, idLokacija);
         pstInsertStampac.setInt(3, idToner);
@@ -335,21 +336,31 @@ public class Stampaci {
     }
 
     boolean checkInventarski(String invBroj) throws SQLException {
+        if(invBroj != null && !"".equals(invBroj)){
+            
+        
         boolean result;
         String sqlInv = "SELECT inv_broj FROM stampaci WHERE aktivan AND vazeci AND inv_broj ='" + invBroj + "'";
         PreparedStatement pstInv = conSQL.prepareStatement(sqlInv);
         ResultSet rsInv = pstInv.executeQuery();
         result = rsInv.next();
         return result;
+        }else
+            return false;
+        
     }
 
     boolean checkIp(String ipAdresa) throws SQLException {
+        if(ipAdresa != null && !"".equals(ipAdresa)){
         boolean result;
         String sqlIp = "SELECT ip_adresa FROM stampaci WHERE aktivan AND vazeci AND ip_adresa ='" + ipAdresa + "'";
         PreparedStatement pstIp = conSQL.prepareStatement(sqlIp);
         ResultSet rsIp = pstIp.executeQuery();
         result = rsIp.next();
         return result;
+        }else{
+            return false;
+        }
     }
 
 }
