@@ -13,7 +13,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 /**
  *
  * @author milosjelic
@@ -66,10 +65,8 @@ public class Stampaci {
         }
         return id;
     }
-    
-    
-    
-    ArrayList<String> getAllIds()  throws  SQLException{
+
+    ArrayList<String> getAllIds() throws SQLException {
         String getAllIds = "SELECT id_stampaci FROM stampaci WHERE  aktivan AND vazeci";
         PreparedStatement pstAllStampaci = conSQL.prepareStatement(getAllIds);
         ResultSet rsAllStampaci = pstAllStampaci.executeQuery();
@@ -87,33 +84,40 @@ public class Stampaci {
         ResultSet rsAllStampaci = pstAllStampaci.executeQuery();
         ArrayList<String> stampaci = new ArrayList();
         while (rsAllStampaci.next()) {
-            stampaci.add(rsAllStampaci.getString("stmp.inv_broj")+BULLET_SEPARATOR+rsAllStampaci.getString("stmp.marka") + " " + rsAllStampaci.getString("stmp.model") + BULLET_SEPARATOR+rsAllStampaci.getString("lok.naziv"));
+            stampaci.add(rsAllStampaci.getString("stmp.inv_broj") + BULLET_SEPARATOR + rsAllStampaci.getString("stmp.marka") + " " + rsAllStampaci.getString("stmp.model") + BULLET_SEPARATOR + rsAllStampaci.getString("lok.naziv"));
         }
 
         return stampaci;
 
     }
 
-    boolean add(int idKategorija, int idLokacija, int invBroj, String model, String marka, String toner, String vrsta, String mrezni, String ipAdresa, String lokacija, String uneo, String datum) throws SQLException {
-        String sqlAddStampac = "INSERT INTO stampaci (id_kategorija,id_lokacija,inv_broj,model,marka,toner,vrsta,mrezni,ip_adresa,lokacijaKorisnik,uneo,datum) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    Long add(int idKategorija, int idLokacija, int idToner, String invBroj, String model, String marka, String toner, String vrsta, String mrezni, String ipAdresa, String lokacija, String uneo, String datum) throws SQLException {
+        Long key = null;
+        String sqlAddStampac = "INSERT INTO stampaci (id_kategorija,id_lokacija,id_toner,inv_broj,model,marka,toner,vrsta,mrezni,ip_adresa,lokacijaKorisnik,uneo,datum) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstInsertStampac = conSQL.prepareStatement(sqlAddStampac);
         pstInsertStampac.setInt(1, idKategorija);
         pstInsertStampac.setInt(2, idLokacija);
-        pstInsertStampac.setInt(3, invBroj);
-        pstInsertStampac.setString(4, model);
-        pstInsertStampac.setString(5, marka);
-        pstInsertStampac.setString(6, toner);
-        pstInsertStampac.setString(7, vrsta);
-        pstInsertStampac.setString(8, mrezni);
-        pstInsertStampac.setString(9, ipAdresa);
-        pstInsertStampac.setString(10, lokacija);
-        pstInsertStampac.setString(11, uneo);
-        pstInsertStampac.setString(12, datum);
+        pstInsertStampac.setInt(3, idToner);
+        pstInsertStampac.setString(4, invBroj);
+        pstInsertStampac.setString(5, model);
+        pstInsertStampac.setString(6, marka);
+        pstInsertStampac.setString(7, toner);
+        pstInsertStampac.setString(8, vrsta);
+        pstInsertStampac.setString(9, mrezni);
+        pstInsertStampac.setString(10, ipAdresa);
+        pstInsertStampac.setString(11, lokacija);
+        pstInsertStampac.setString(12, uneo);
+        pstInsertStampac.setString(13, datum);
 
         pstInsertStampac.addBatch();
         int i = pstInsertStampac.executeUpdate();
+        ResultSet generatedKey = pstInsertStampac.getGeneratedKeys();        
+        if(generatedKey.next()){
+            key = generatedKey.getLong(1);
+            
+        }
         conSQL.commit();
-        return i > 0;
+        return key;
     }
 
     boolean edit(int idStampac, int idLokacija, int invBroj, String model, String marka, String toner, String vrsta, String mrezni, String ipAdresa, String lokacija, String editovao, String datum) throws SQLException {
@@ -139,7 +143,7 @@ public class Stampaci {
     }
 
     boolean delete(String model, String marka) throws SQLException {
-        String sqlDeleteStampaci = "DELETE FROM stampaci WHERE  aktivan AND vazeci AND marka ='" + marka + "' AND model = '" + model + "'";
+        String sqlDeleteStampaci = String.format("DELETE FROM stampaci WHERE  aktivan AND vazeci AND marka ='%s' AND model = '%s'",marka,model);
         PreparedStatement pstDeleteStampaci = conSQL.prepareStatement(sqlDeleteStampaci);
         int i = pstDeleteStampaci.executeUpdate();
         conSQL.commit();
@@ -195,7 +199,8 @@ public class Stampaci {
     }
 
     String getToner(int idStampac) throws SQLException {
-        String sqlTonerStampaci = "SELECT toner FROM stampaci WHERE aktivan AND vazeci AND  id_stampaci =" + idStampac;
+        String sqlTonerStampaci = "SELECT naziv FROM toneri as ton JOIN stampaci as stmp WHERE stmp.id_toner = ton.id_toner AND"
+                + " stmp.aktivan AND stmp.vazeci AND ton.aktivan AND ton.vazeci AND stmp.id_stampaci =" + idStampac;
         PreparedStatement pstToner = conSQL.prepareStatement(sqlTonerStampaci);
         String toner;
         ResultSet rsTonerStampac = pstToner.executeQuery();
@@ -206,6 +211,34 @@ public class Stampaci {
         }
 
         return toner;
+    }
+    
+    String getTonerInv(int invBroj) throws SQLException {
+        String sqlTonerStampaci = "SELECT naziv FROM toneri as ton JOIN stampaci as stmp WHERE stmp.id_toner = ton.id_toner AND"
+                + " stmp.aktivan AND stmp.vazeci AND ton.aktivan AND ton.vazeci AND stmp.inv_broj =" + invBroj;
+        PreparedStatement pstToner = conSQL.prepareStatement(sqlTonerStampaci);
+        String toner;
+        ResultSet rsTonerStampac = pstToner.executeQuery();
+        if (rsTonerStampac.next()) {
+            toner = rsTonerStampac.getString("toner");
+        } else {
+            toner = "Stampac nema unesen toner!";
+        }
+
+        return toner;
+    }
+    int getTonerId(String naziv) throws SQLException{
+        String sqlGetTonerId = "SELECT id_toner from toneri WHERE aktivan AND vazeci AND naziv ='"+naziv+"'";
+        PreparedStatement pstTonerId = conSQL.prepareStatement(sqlGetTonerId);
+        int tonerid =0;
+        ResultSet rsTonerId = pstTonerId.executeQuery();
+        if(rsTonerId.next()){
+            tonerid = rsTonerId.getInt("id_toner");
+           
+        }
+        
+        return tonerid;
+        
     }
 
     String getVrsta(int idStampac) throws SQLException {
@@ -237,8 +270,8 @@ public class Stampaci {
     }
 
     String getLokacijaDetail(int idStampac) throws SQLException {
-        String sqlLokacijaDetailStampaci = "SELECT stmp.lokacijaKorisnik, lok.naziv FROM stampaci AS stmp "
-                + " JOIN lokacija as lok WHERE stmp.aktivan AND stmp.vazeci AND lok.aktivan AND lok.vazeci  AND  stmp.id_stampaci = " + idStampac + " AND stmp.id_lokacija = lok.id_lokacija";
+        String sqlLokacijaDetailStampaci = String.format("SELECT stmp.lokacijaKorisnik, lok.naziv FROM stampaci AS stmp "
+                + " JOIN lokacija as lok WHERE stmp.aktivan AND stmp.vazeci AND lok.aktivan AND lok.vazeci  AND  stmp.id_stampaci = %d AND stmp.id_lokacija = lok.id_lokacija",idStampac);
         PreparedStatement pstLokacijaDetail = conSQL.prepareStatement(sqlLokacijaDetailStampaci);
         String lokacijaDetail;
         ResultSet rsLokacijaDetailStampac = pstLokacijaDetail.executeQuery();
@@ -267,6 +300,56 @@ public class Stampaci {
 
         return stampaci;
 
+    }
+
+    ArrayList<String> sviInventarski() throws SQLException {
+        String sqlInv = "SELECT inv_broj FROM stampaci WHERE aktivan and vazeci";
+        PreparedStatement pstInv = conSQL.prepareStatement(sqlInv);
+        ResultSet rsInv = pstInv.executeQuery();
+        ArrayList inventarskiBrojevi = new ArrayList<>();
+        while (rsInv.next()) {
+            inventarskiBrojevi.add(rsInv.getString("inv_broj"));
+        }
+        return inventarskiBrojevi;
+    }
+
+    ArrayList<String> sveIpAdrese() throws SQLException {
+        String sqlInv = "SELECT ip_adresa FROM stampaci WHERE aktivan and vazeci";
+        PreparedStatement pstIp = conSQL.prepareStatement(sqlInv);
+        ResultSet rsIp = pstIp.executeQuery();
+        ArrayList ipAdrese = new ArrayList<>();
+        while (rsIp.next()) {
+            ipAdrese.add(rsIp.getString("ip_adresa"));
+        }
+        return ipAdrese;
+    }
+    ArrayList<String> sviToneri() throws SQLException {
+        String sqlToner = "SELECT naziv FROM toneri WHERE aktivan and vazeci";
+        PreparedStatement pstToner = conSQL.prepareStatement(sqlToner);
+        ResultSet rsToner = pstToner.executeQuery();
+        ArrayList toneri = new ArrayList<>();
+        while (rsToner.next()) {
+            toneri.add(rsToner.getString("naziv"));
+        }
+        return toneri;
+    }
+
+    boolean checkInventarski(String invBroj) throws SQLException {
+        boolean result;
+        String sqlInv = "SELECT inv_broj FROM stampaci WHERE aktivan AND vazeci AND inv_broj ='" + invBroj + "'";
+        PreparedStatement pstInv = conSQL.prepareStatement(sqlInv);
+        ResultSet rsInv = pstInv.executeQuery();
+        result = rsInv.next();
+        return result;
+    }
+
+    boolean checkIp(String ipAdresa) throws SQLException {
+        boolean result;
+        String sqlIp = "SELECT ip_adresa FROM stampaci WHERE aktivan AND vazeci AND ip_adresa ='" + ipAdresa + "'";
+        PreparedStatement pstIp = conSQL.prepareStatement(sqlIp);
+        ResultSet rsIp = pstIp.executeQuery();
+        result = rsIp.next();
+        return result;
     }
 
 }

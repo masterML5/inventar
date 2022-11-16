@@ -1,5 +1,6 @@
 package inventar;
 
+import inventar.StampaciFrame.Data;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.valueOf;
 import java.sql.Connection;
@@ -60,7 +61,7 @@ public class Prijem extends javax.swing.JPanel {
             System.out.println(ex);
 
         }
-        
+
         sviStampaci.add(0, null);
         sveKategorije.add(0, null);
         sveLokacije.add(0, null);
@@ -98,7 +99,8 @@ public class Prijem extends javax.swing.JPanel {
         conSQL.commit();
         return i > 0;
     }
-     boolean add(String brPrijem, String naziv, int idKategorija,  int idLokacija, int kolicina, String faktura, String uneo, String datum, String napomena, String korisnikLokacija) throws SQLException {
+
+    boolean add(String brPrijem, String naziv, int idKategorija, int idLokacija, int kolicina, String faktura, String uneo, String datum, String napomena, String korisnikLokacija) throws SQLException {
         String sqlAddPrijem = "INSERT INTO prijem (broj_prijem,id_kategorija,id_lokacija,naziv,kolicina,faktura,napomena,korisnikLokacija,uneo,datum) VALUES(?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstInsertPrijem = conSQL.prepareStatement(sqlAddPrijem);
         pstInsertPrijem.setString(1, brPrijem);
@@ -116,7 +118,8 @@ public class Prijem extends javax.swing.JPanel {
         conSQL.commit();
         return i > 0;
     }
-     boolean addRacunar(String brPrijem, String naziv, int idKategorija,  int idLokacija, int kolicina, int idRacunar, String faktura, String uneo, String datum, String napomena, String korisnikLokacija) throws SQLException {
+
+    boolean addRacunar(String brPrijem, String naziv, int idKategorija, int idLokacija, int kolicina, int idRacunar, String faktura, String uneo, String datum, String napomena, String korisnikLokacija) throws SQLException {
         String sqlAddPrijem = "INSERT INTO prijem (broj_prijem,id_kategorija,id_lokacija,id_racunar,naziv,kolicina,faktura,napomena,korisnikLokacija,uneo,datum) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstInsertPrijem = conSQL.prepareStatement(sqlAddPrijem);
         pstInsertPrijem.setString(1, brPrijem);
@@ -135,7 +138,26 @@ public class Prijem extends javax.swing.JPanel {
         conSQL.commit();
         return i > 0;
     }
-
+    
+    boolean addStampac(String brPrijem, String naziv, int idKategorija, int idLokacija, int kolicina, int idStampac, String faktura, String uneo, String datum, String napomena, String korisnikLokacija) throws SQLException {
+        String sqlAddPrijem = "INSERT INTO prijem (broj_prijem,id_kategorija,id_lokacija,id_stampac,naziv,kolicina,faktura,napomena,korisnikLokacija,uneo,datum) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement pstInsertPrijem = conSQL.prepareStatement(sqlAddPrijem);
+        pstInsertPrijem.setString(1, brPrijem);
+        pstInsertPrijem.setInt(2, idKategorija);
+        pstInsertPrijem.setInt(3, idLokacija);
+        pstInsertPrijem.setInt(4, idStampac);
+        pstInsertPrijem.setString(5, naziv);
+        pstInsertPrijem.setInt(6, kolicina);
+        pstInsertPrijem.setString(7, faktura);
+        pstInsertPrijem.setString(8, napomena);
+        pstInsertPrijem.setString(9, korisnikLokacija);
+        pstInsertPrijem.setString(10, uneo);
+        pstInsertPrijem.setString(11, datum);
+        pstInsertPrijem.addBatch();
+        int i = pstInsertPrijem.executeUpdate();
+        conSQL.commit();
+        return i > 0;
+    }
 
     public String brojPrijema(String datum, int idKategorija, int idLokacija) throws SQLException {
         String datumDok = datum.replace("-", "");
@@ -151,14 +173,13 @@ public class Prijem extends javax.swing.JPanel {
         } else {
             id = "0";
         }
-        String brojPrijema = datumDok + "-" + "PRIJEM-" + valueOf(idKategorija) + valueOf(idLokacija) + "-" +id;
-                
+        String brojPrijema = datumDok + "-" + "PRIJEM-" + valueOf(idKategorija) + valueOf(idLokacija) + "-" + id;
 
         return brojPrijema;
     }
-    
-    private void resetData(){
-        kategorijaComboBox.setSelectedIndex(0);   
+
+    private void resetData() {
+        kategorijaComboBox.setSelectedIndex(0);
         OJComboBox.setSelectedIndex(0);
         nazivField.setText(null);
         jSpinner1.setValue(Integer.valueOf(0));
@@ -404,6 +425,7 @@ public class Prijem extends javax.swing.JPanel {
         try {
             String kat = String.valueOf(kategorijaComboBox.getSelectedItem());
             ArrayList<String> podkateg = podkat.getAllByCategory(kat);
+           
             if (podkateg.size() > 0) {
                 podkatComboBox.setEnabled(true);
             } else {
@@ -411,16 +433,30 @@ public class Prijem extends javax.swing.JPanel {
             }
             podkatComboBox.setModel(new DefaultComboBoxModel<>(podkateg.toArray(new String[0])));
             AutoCompleteDecorator.decorate(podkatComboBox);
-
+            
             if (kat.equals("Racunari")) {
+                nazivField.setEnabled(true);
+                nazivField.setText(null);
                 korisnikLokacijaField.setText("unosi se posle");
                 jSpinner1.setValue(1);
                 jSpinner1.setEnabled(false);
                 korisnikLokacijaField.setEnabled(false);
-            } else {
+            }else if(kat.equals("Stampaci")){
+                korisnikLokacijaField.setText("unosi se posle");
+                jSpinner1.setValue(1);
+                jSpinner1.setEnabled(false);
+                korisnikLokacijaField.setEnabled(false);
+                nazivField.setEnabled(false);
+                nazivField.setText("unosi se posle");
+            }else {
                 korisnikLokacijaField.setText("");
                 korisnikLokacijaField.setEnabled(true);
+                nazivField.setEnabled(true);
+                nazivField.setText(null);
+                jSpinner1.setEnabled(true);
             }
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(Prijem.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -435,8 +471,16 @@ public class Prijem extends javax.swing.JPanel {
 
     private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
         int podkategorija;
+         String naziv = nazivField.getText();
+         String faktura = fakturaField.getText();
+         String kat = String.valueOf(kategorijaComboBox.getSelectedItem());
+         int kolicina2 = parseInt(jSpinner1.getValue().toString());
+          if(naziv == null || naziv.equals("") || faktura == null || faktura.equals("") || kat.equals("") || kolicina2 == 0){
+                JOptionPane.showMessageDialog(null,"Morate popuniti sva obavezna polja!","validator",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         try {
-            int kolicina2 = parseInt(jSpinner1.getValue().toString());
+            
 
             int kategorija2 = parseInt(kategorija.getId(kategorijaComboBox.getSelectedItem().toString()));
             if (podkatComboBox.getSelectedItem() != null) {
@@ -450,12 +494,16 @@ public class Prijem extends javax.swing.JPanel {
             String napomena = napomenaField.getText();
             String korisnikLokacija = korisnikLokacijaField.getText();
             String brPrijema = brojPrijema(datumG, kategorija2, OJ2);
+            
             switch (kategorijaComboBox.getSelectedItem().toString()) {
                 case "Racunari":
                     new RacunariFrame(kategorija2, OJ2, kolicina2, brfakture, naziv2, napomena, korisnikG, datumG).setVisible(true);
                     break;
                 case "Stampaci":
-                    new StampaciFrame().setVisible(true);
+                    new StampaciFrame(kategorija2, OJ2, kolicina2, brfakture,napomena,korisnikG, datumG).setVisible(true);
+                    StampaciFrame sf = new StampaciFrame();
+                    Data dat = sf.getData();
+                    naziv2 = dat.marka+" "+dat.model;
                     break;
                 default:
                     if (add(brPrijema, naziv2, kategorija2, podkategorija, OJ2, kolicina2, brfakture, korisnikG, datumG, napomena, korisnikLokacija)) {

@@ -413,7 +413,7 @@ public class Racunari {
       }
       boolean checkIp(String ipAdresa) throws SQLException{
           boolean result;
-          String sqlIp = "SELECT ip_adresa FROM racunari WHERE aktivan AND vazeci AND inv_broj ='"+ipAdresa+"'";
+          String sqlIp = "SELECT ip_adresa FROM racunari WHERE aktivan AND vazeci AND ip_adresa ='"+ipAdresa+"'";
           PreparedStatement pstIp = conSQL.prepareStatement(sqlIp);
           ResultSet rsIp = pstIp.executeQuery();
           result = rsIp.next();
@@ -421,7 +421,7 @@ public class Racunari {
       }
       boolean checkMAC(String macAdresa) throws SQLException{
           boolean result;
-          String sqlMac = "SELECT mac_adresa FROM racunari WHERE aktivan AND vazeci AND inv_broj ='"+macAdresa+"'";
+          String sqlMac = "SELECT mac_adresa FROM racunari WHERE aktivan AND vazeci AND mac_adresa ='"+macAdresa+"'";
           PreparedStatement pstMac = conSQL.prepareStatement(sqlMac);
           ResultSet rsMac = pstMac.executeQuery();
           result = rsMac.next();
