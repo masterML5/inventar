@@ -69,6 +69,7 @@ public class Pocetna extends javax.swing.JFrame {
         korisnickoTextField = new javax.swing.JTextField();
         korisnickoLabel = new javax.swing.JLabel();
         lozinkaLabel = new javax.swing.JLabel();
+        showPassword = new javax.swing.JCheckBox();
         registracijaButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -120,6 +121,13 @@ public class Pocetna extends javax.swing.JFrame {
 
         lozinkaLabel.setText("Password");
 
+        showPassword.setText("Show password");
+        showPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showPasswordActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -127,11 +135,11 @@ public class Pocetna extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addComponent(korisnickoTextField)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(loginButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(resetButton))
-                    .addComponent(korisnickoTextField)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lozinkaField, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,6 +147,10 @@ public class Pocetna extends javax.swing.JFrame {
                             .addComponent(lozinkaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addComponent(showPassword)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,11 +163,13 @@ public class Pocetna extends javax.swing.JFrame {
                 .addComponent(lozinkaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addComponent(lozinkaField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGap(14, 14, 14)
+                .addComponent(showPassword)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(resetButton)
-                    .addComponent(loginButton))
-                .addGap(114, 114, 114))
+                    .addComponent(loginButton)
+                    .addComponent(resetButton))
+                .addGap(79, 79, 79))
         );
 
         registracijaButton.setText("Registracija");
@@ -333,6 +347,14 @@ public class Pocetna extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_loginButtonKeyPressed
 
+    private void showPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPasswordActionPerformed
+       if(showPassword.isSelected()){
+           lozinkaField.setEchoChar((char) 0);
+       }else{
+           lozinkaField.setEchoChar('*');
+       }
+    }//GEN-LAST:event_showPasswordActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -361,13 +383,11 @@ public class Pocetna extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new Pocetna().setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new Pocetna().setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -397,5 +417,6 @@ public class Pocetna extends javax.swing.JFrame {
     private javax.swing.JLabel podnaslovLabel;
     private javax.swing.JButton registracijaButton;
     private javax.swing.JButton resetButton;
+    private javax.swing.JCheckBox showPassword;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,9 @@
 package inventar;
 
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -13,6 +16,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
@@ -21,13 +28,19 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
  * @author milosjelic
  */
 public class Evidencija extends javax.swing.JFrame {
-private static int id;
-private Prijem prijem; 
-private Izdavanje izdavanje;
-private Otpis otpis;
-private String korisnik;
-private String datum;
-/**
+
+    private static int id;
+    private RacunariPregled rp;
+    private Prijem prijem;
+    private Izdavanje izdavanje;
+    private Otpis otpis;
+    private String korisnik;
+    private String datum;
+    private String username;
+    private int tabbedCount;
+   
+
+    /**
      * Creates new form Interface
      */
     public Evidencija() {
@@ -36,24 +49,40 @@ private String datum;
 
     Evidencija(String username) throws SQLException {
         initComponents();
+
+       
+        this.username = username;
         Kategorija kategorija = new Kategorija();
         List<String> sveKategorije = new ArrayList();
-        sveKategorije = kategorija.getAll();        
+        sveKategorije = kategorija.getAll();
         LocalDate today = LocalDate.now();
         korisnik = username;
         datum = today.toString();
         userInfoLabel.setText(username);
         dateLabel.setText(today.toString());
-       // AutoCompleteDecorator.decorate(kategorijeComboBox);
-       // kategorijeComboBox.setModel(new DefaultComboBoxModel<>(sveKategorije.toArray(new String[0])));
-        prijem = new Prijem(korisnik,datum);
+        // AutoCompleteDecorator.decorate(kategorijeComboBox);
+        // kategorijeComboBox.setModel(new DefaultComboBoxModel<>(sveKategorije.toArray(new String[0])));
+        prijem = new Prijem(korisnik, datum);
         izdavanje = new Izdavanje();
         otpis = new Otpis();
-        jTabbedPane1.add(prijem, "Prijem");
-        jTabbedPane1.add(izdavanje,"Izdavanje");
-        jTabbedPane1.add(otpis,"Otpis");
 
+//        jTabbedPane1.addTab("Prijem", icon, prijem);
+//        jTabbedPane1.addTab("Izdavanje", icon, izdavanje);
+//        jTabbedPane1.addTab("Otpis", icon, otpis);
+
+         
+         jTabbedPane1.add(prijem, "Prijem");
+         initTabComponent(0);
+         jTabbedPane1.add(izdavanje, "Izdavanje");
+         initTabComponent(1);
+         jTabbedPane1.add(otpis, "Otpis");
+         initTabComponent(2);
+         
         
+         
+         
+     
+
     }
 
     /**
@@ -74,12 +103,21 @@ private String datum;
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -104,6 +142,8 @@ private String datum;
                 .addComponent(dateLabel))
         );
 
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(842, 495));
 
         naslovLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -115,8 +155,78 @@ private String datum;
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Prijem/Otpis");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenu2MouseReleased(evt);
+            }
+        });
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem10.setText("Prijem");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem10);
+
+        jMenuItem11.setText("Otpis");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem11);
+
+        jMenuItem9.setText("Izdavanje");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem9);
+
         jMenuBar1.add(jMenu2);
+
+        jMenu4.setText("Toneri");
+
+        jMenuItem3.setText("Pretraga");
+        jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenuItem3MouseReleased(evt);
+            }
+        });
+        jMenu4.add(jMenuItem3);
+
+        jMenuItem4.setText("Izmena");
+        jMenu4.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu4);
+
+        jMenu5.setText("Računari");
+
+        jMenuItem5.setText("Pretraga");
+        jMenu5.add(jMenuItem5);
+
+        jMenuItem7.setText("Izmena");
+        jMenu5.add(jMenuItem7);
+
+        jMenuBar1.add(jMenu5);
+
+        jMenu6.setText("Štampači");
+
+        jMenuItem6.setText("Pretraga");
+        jMenu6.add(jMenuItem6);
+
+        jMenuItem8.setText("Izmena");
+        jMenu6.add(jMenuItem8);
+
+        jMenuBar1.add(jMenu6);
 
         jMenu3.setText("Profil");
 
@@ -127,16 +237,6 @@ private String datum;
         jMenu3.add(jMenuItem2);
 
         jMenuBar1.add(jMenu3);
-
-        jMenu4.setText("Toneri");
-
-        jMenuItem3.setText("jMenuItem3");
-        jMenu4.add(jMenuItem3);
-
-        jMenuItem4.setText("jMenuItem4");
-        jMenu4.add(jMenuItem4);
-
-        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -176,6 +276,50 @@ private String datum;
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
+    private void jMenu2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseReleased
+        
+        
+    }//GEN-LAST:event_jMenu2MouseReleased
+
+    private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
+        rp = new RacunariPregled();
+        jTabbedPane1.add(rp, "RacunariPregled");
+        tabbedCount = jTabbedPane1.getTabCount();
+        initTabComponent(tabbedCount-1);
+
+    }//GEN-LAST:event_jMenuItem3MouseReleased
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        otpis = new Otpis();
+        jTabbedPane1.add(otpis, "Otpis");
+        tabbedCount = jTabbedPane1.getTabCount();
+        initTabComponent(tabbedCount-1);
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        izdavanje = new Izdavanje();
+        jTabbedPane1.add(izdavanje, "Izdavanje");
+        tabbedCount = jTabbedPane1.getTabCount();
+        initTabComponent(tabbedCount-1);
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        try {
+            prijem = new Prijem(username, datum);
+            jTabbedPane1.add(prijem ,"Prijem");
+            tabbedCount = jTabbedPane1.getTabCount();
+            initTabComponent(tabbedCount - 1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -211,19 +355,21 @@ private String datum;
             }
         });
     }
-    
-   String getUser(){
-       String user = korisnik;
-       
-       return user;
-   }
-   
-   String getDatum(){
-       String datum1 = datum;
-       
-       return datum1;
-   }
 
+    String getUser() {
+        String user = korisnik;
+
+        return user;
+    }
+
+    String getDatum() {
+        String datum1 = datum;
+
+        return datum1;
+    }
+     private void initTabComponent(int i) {
+        jTabbedPane1.setTabComponentAt(i,new ButtonTabComponent(jTabbedPane1));
+    } 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel infoLabel;
@@ -231,14 +377,34 @@ private String datum;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel naslovLabel;
     private javax.swing.JLabel userInfoLabel;
     // End of variables declaration//GEN-END:variables
+
+    protected ImageIcon createImageIcon(String path, String description) {
+        java.net.URL imgURL = getClass().getResource(path);
+
+        if (imgURL != null) {
+            return new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
 }
