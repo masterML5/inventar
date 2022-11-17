@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 28, 2022 at 02:52 PM
+-- Generation Time: Nov 17, 2022 at 09:02 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -85,7 +85,8 @@ INSERT INTO `kategorija` (`id_kategorija`, `naziv`, `uneo`, `editovao`, `uneo_ts
 (7, 'Stampaci', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
 (8, 'Mrezna oprema', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
 (9, 'UPS', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
-(10, 'Serveri', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1);
+(10, 'Serveri', '', NULL, '2022-10-28 12:37:32', NULL, '', 1, 1),
+(11, 'Softver', '', NULL, '2022-10-31 09:13:43', NULL, '', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -169,7 +170,7 @@ INSERT INTO `lokacija` (`id_lokacija`, `naziv`, `uneo`, `editovao`, `uneo_ts`, `
 CREATE TABLE `podkategorija` (
   `id_podkategorija` int(11) NOT NULL,
   `id_kategorija` int(11) NOT NULL,
-  `naziv` varchar(50) DEFAULT NULL,
+  `naziv` varchar(50) NOT NULL,
   `uneo` varchar(50) NOT NULL,
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` datetime NOT NULL DEFAULT current_timestamp(),
@@ -179,6 +180,14 @@ CREATE TABLE `podkategorija` (
   `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `podkategorija`
+--
+
+INSERT INTO `podkategorija` (`id_podkategorija`, `id_kategorija`, `naziv`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 8, 'Switch', 'Milos', NULL, '2022-10-31 08:13:55', NULL, '2022-10-31', 1, 1),
+(2, 4, 'VGA', 'ff', NULL, '2022-10-31 08:30:30', NULL, '2022-10-31', 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -187,7 +196,7 @@ CREATE TABLE `podkategorija` (
 
 CREATE TABLE `prijem` (
   `id_prijem` int(11) NOT NULL,
-  `broj_prijem` int(11) NOT NULL,
+  `broj_prijem` varchar(50) NOT NULL DEFAULT '',
   `id_kategorija` int(11) NOT NULL,
   `id_podkategorija` int(11) DEFAULT NULL,
   `id_lokacija` int(11) NOT NULL,
@@ -195,7 +204,9 @@ CREATE TABLE `prijem` (
   `id_stampac` int(11) DEFAULT NULL,
   `naziv` varchar(100) NOT NULL DEFAULT '',
   `kolicina` int(11) NOT NULL,
+  `faktura` varchar(100) NOT NULL DEFAULT '',
   `napomena` longtext DEFAULT NULL,
+  `korisnikLokacija` varchar(255) DEFAULT NULL,
   `uneo` varchar(50) NOT NULL,
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -204,6 +215,22 @@ CREATE TABLE `prijem` (
   `aktivan` tinyint(1) NOT NULL DEFAULT 1,
   `vazeci` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `prijem`
+--
+
+INSERT INTO `prijem` (`id_prijem`, `broj_prijem`, `id_kategorija`, `id_podkategorija`, `id_lokacija`, `id_racunar`, `id_stampac`, `naziv`, `kolicina`, `faktura`, `napomena`, `korisnikLokacija`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, '20221103-PRIJEM-1-30', 1, NULL, 3, NULL, NULL, 'a', 1, 'a', '', 'a', 'ff', NULL, '2022-11-03 07:56:56', NULL, '2022-11-03', 1, 1),
+(2, '20221103-PRIJEM-1-311', 1, NULL, 3, 14, NULL, 'test', 1, 'test', '', 'ateste', 'ff', NULL, '2022-11-03 08:12:44', NULL, '2022-11-03', 1, 1),
+(3, '20221103-PRIJEM-1-221', 1, NULL, 2, 15, NULL, '11', 1, '1', '', '1', 'ff', NULL, '2022-11-03 08:14:45', NULL, '2022-11-03', 1, 1),
+(4, '20221103-PRIJEM-1-231', 1, NULL, 2, 17, NULL, 'a', 1, 'a', '', '1', 'ff', NULL, '2022-11-03 10:22:03', NULL, '2022-11-03', 1, 1),
+(5, '20221103-PRIJEM-1-141', 1, NULL, 1, 18, NULL, 'Altos', 1, 'R-PSU-25615/22', '', 'ksenija', 'ff', NULL, '2022-11-03 10:26:16', NULL, '2022-11-03', 1, 1),
+(10, '20221103-PRIJEM-12-5', 1, NULL, 2, 19, NULL, 'aa', 1, 'aa', '', 'sasda', 'ff', NULL, '2022-11-03 11:20:11', NULL, '2022-11-03', 1, 1),
+(11, '20221103-PRIJEM-11-10', 1, NULL, 1, 20, NULL, '213', 1, '123', '', '1', 'ff', NULL, '2022-11-03 12:03:34', NULL, '2022-11-03', 1, 1),
+(12, '20221103-PRIJEM-13-11', 1, NULL, 3, 21, NULL, 'test', 1, 'test', '', 'test', 'ff', NULL, '2022-11-03 12:08:03', NULL, '2022-11-03', 1, 1),
+(13, '20221103-PRIJEM-12-12', 1, NULL, 2, 22, NULL, 'asd', 1, 'asd', 'zasd', 'ad', 'ff', NULL, '2022-11-03 12:51:46', NULL, '2022-11-03', 1, 1),
+(16, '20221116-PRIJEM-72-13', 7, NULL, 2, NULL, 16, 'Canon LBP 351x', 1, 'test', NULL, 'test', 'ff', NULL, '2022-11-16 10:37:19', NULL, '2022-11-16', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -215,15 +242,15 @@ CREATE TABLE `racunari` (
   `id_racunar` int(11) NOT NULL,
   `id_kategorija` int(11) NOT NULL,
   `id_lokacija` int(11) NOT NULL DEFAULT 0,
-  `inv_broj` int(11) DEFAULT NULL,
+  `inv_broj` varchar(50) DEFAULT NULL,
   `specifikacija` longtext DEFAULT NULL,
   `os` enum('Windows 98','Windows XP','Windows 7','Windows 8','Windows 10','Windows 11','Linux') NOT NULL,
   `office` varchar(50) NOT NULL DEFAULT '',
   `korisnik` varchar(50) NOT NULL DEFAULT '',
   `ip_adresa` varchar(50) NOT NULL DEFAULT '',
   `mac_adresa` varchar(50) NOT NULL,
-  `os_key` varchar(50) NOT NULL DEFAULT '',
-  `office_key` varchar(50) NOT NULL DEFAULT '',
+  `os_key` varchar(50) DEFAULT '',
+  `office_key` varchar(50) DEFAULT '',
   `datum` varchar(50) NOT NULL DEFAULT '',
   `uneo` varchar(50) NOT NULL DEFAULT '',
   `editovao` varchar(50) NOT NULL DEFAULT '',
@@ -238,7 +265,22 @@ CREATE TABLE `racunari` (
 --
 
 INSERT INTO `racunari` (`id_racunar`, `id_kategorija`, `id_lokacija`, `inv_broj`, `specifikacija`, `os`, `office`, `korisnik`, `ip_adresa`, `mac_adresa`, `os_key`, `office_key`, `datum`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `aktivan`, `vazeci`) VALUES
-(1, 1, 7, 12321, 'test', 'Windows 10', 'Office 2019', 'test', '10.11.124.22', 'AE:A3:A2:A2:A1', 'asdasd--asdasdas-asdasd', 'asdas-asd-asda', 'ff', '2022-10-28', '', '2022-10-28 08:46:20', NULL, 1, 1);
+(1, 1, 7, '12321', 'test', 'Windows 10', 'Office 2019', 'test', '10.11.124.22', 'AE:A3:A2:A2:A1', 'asdasd--asdasdas-asdasd', 'asdas-asd-asda', 'ff', '2022-10-28', '', '2022-10-28 08:46:20', NULL, 1, 1),
+(3, 1, 2, '123213', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500W}', 'Windows 10', 'MS Office 2021', 'Melinda', '10.11.125.222', 'A5:F3:F1:23:32:12', 'asda-aadssa-asdas-asdad', 'asda-asdasd-asda-asd', 'ff', '2022-11-03', '', '2022-11-03 06:44:28', NULL, 1, 1),
+(5, 1, 1, '1232132', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.198', 'AF:AD:DA:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:25:28', NULL, 1, 1),
+(6, 1, 1, '34534', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.195', 'AF:AD:DA:E2:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:27:17', NULL, 1, 1),
+(8, 1, 1, '345343', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.190', 'AF:AD:D2:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:28:03', NULL, 1, 1),
+(9, 1, 1, '3453432', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.191', 'AF:AD:DA:EF:A3:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:28:53', NULL, 1, 1),
+(10, 1, 1, '345343211', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.192', 'AF:A8:DA:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:47:54', NULL, 1, 1),
+(13, 1, 3, 'a', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Linux', 'LibreOffice', 'a', 'a', 'a', '', '', 'ff', '2022-11-03', '', '2022-11-03 07:56:56', NULL, 1, 1),
+(14, 1, 3, 'atest', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 8', 'MS Office 2010', 'ateste', 'atest', 'atest', 'test', 'test', 'ff', '2022-11-03', '', '2022-11-03 08:12:44', NULL, 1, 1),
+(15, 1, 2, '1', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 98', 'MS Office 2007', '2', '2', '2', '1', '1', 'ff', '2022-11-03', '', '2022-11-03 08:14:45', NULL, 1, 1),
+(17, 1, 2, '12', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 98', 'MS Office 2003', '1', '1', '1', '1', '1', 'ff', '2022-11-03', '', '2022-11-03 10:22:03', NULL, 1, 1),
+(18, 1, 1, '111', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 10', 'MS Office 2021', 'ksenija', '10.11.125.163', '2A:3A:ED:D2:F7:A2', 'sadas-asdasda-asdas', 'asda-asdasd-asdas', 'ff', '2022-11-03', '', '2022-11-03 10:26:16', NULL, 1, 1),
+(19, 1, 2, '234234324242', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows XP', 'MS Office 2003', 'sasda', '13213213213123', '213121', 'adas', 'asdasd', '2022-11-03', 'ff', '', '2022-11-03 11:20:11', NULL, 1, 1),
+(20, 1, 1, '', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows XP', 'MS Office 2003', '1', '13213', '1222', '1', '1', '2022-11-03', 'ff', '', '2022-11-03 12:03:34', NULL, 1, 1),
+(21, 1, 3, '12313213123213', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 7', 'MS Office 2007', 'test', '32132132131', '12321313213231', 'test', 'test', '2022-11-03', 'ff', '', '2022-11-03 12:08:02', NULL, 1, 1),
+(22, 1, 2, 'as', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Linux', 'LibreOffice', 'ad', 'sda', 'das', '', 'dasads', '2022-11-03', 'ff', '', '2022-11-03 12:51:46', NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -250,14 +292,15 @@ CREATE TABLE `stampaci` (
   `id_stampaci` int(11) NOT NULL,
   `id_kategorija` int(11) NOT NULL,
   `id_lokacija` int(11) NOT NULL,
-  `inv_broj` int(11) DEFAULT NULL,
+  `id_toner` int(11) NOT NULL,
+  `inv_broj` varchar(50) DEFAULT NULL,
   `model` varchar(50) NOT NULL,
   `marka` varchar(50) NOT NULL,
   `toner` varchar(50) NOT NULL,
-  `vrsta` enum('Monograf','Fotokopir','Multifunkcijski') DEFAULT NULL,
-  `mrezni` enum('mrezni','usb') DEFAULT NULL,
+  `vrsta` enum('Monograf','Fotokopir','Multifunkcijski','Domino') NOT NULL,
+  `mrezni` enum('Mrežni','USB','Ostalo') NOT NULL,
   `ip_adresa` varchar(50) DEFAULT NULL,
-  `lokacijaKorisnik` varchar(50) NOT NULL,
+  `lokacijaKorisnik` varchar(50) DEFAULT NULL,
   `uneo` varchar(50) NOT NULL,
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` datetime NOT NULL DEFAULT current_timestamp(),
@@ -271,10 +314,42 @@ CREATE TABLE `stampaci` (
 -- Dumping data for table `stampaci`
 --
 
-INSERT INTO `stampaci` (`id_stampaci`, `id_kategorija`, `id_lokacija`, `inv_broj`, `model`, `marka`, `toner`, `vrsta`, `mrezni`, `ip_adresa`, `lokacijaKorisnik`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
-(1, 7, 6, 55555, '111', 'HP', 'CF259', 'Multifunkcijski', 'mrezni', '10.11.124.22', 'Danijela', '', NULL, '2022-10-27 09:00:19', NULL, NULL, 1, 1),
-(2, 7, 2, 21321, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:00:20', NULL, '2022-10-26', 1, 1),
-(7, 7, 2, 213221, 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'mrezni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:06:20', NULL, '2022-10-27', 1, 1);
+INSERT INTO `stampaci` (`id_stampaci`, `id_kategorija`, `id_lokacija`, `id_toner`, `inv_broj`, `model`, `marka`, `toner`, `vrsta`, `mrezni`, `ip_adresa`, `lokacijaKorisnik`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 7, 6, 1, '55555', '111', 'HP', 'CF259', 'Multifunkcijski', 'Mrežni', '10.11.124.22', 'Danijela', '', NULL, '2022-10-27 09:00:19', NULL, NULL, 1, 1),
+(2, 7, 2, 1, '21321', 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:00:20', NULL, '2022-10-26', 1, 1),
+(7, 7, 2, 1, '213221', 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:06:20', NULL, '2022-10-27', 1, 1),
+(11, 7, 2, 2, '', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '12.13', 'pozadi', 'ff', NULL, '2022-11-16 10:52:44', NULL, '2022-11-16', 1, 1),
+(12, 7, 2, 2, 'uu', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '12.13r', 'pozadi', 'ff', NULL, '2022-11-16 10:54:40', NULL, '2022-11-16', 1, 1),
+(13, 7, 2, 2, 'uu2', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '12.13r6', 'pozadi', 'ff', NULL, '2022-11-16 10:55:08', NULL, '2022-11-16', 1, 1),
+(15, 7, 2, 2, '', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', 'test', 'test', 'ff', NULL, '2022-11-16 11:35:53', NULL, '2022-11-16', 1, 1),
+(16, 7, 2, 2, '', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', 'test2', 'test', 'ff', NULL, '2022-11-16 11:37:19', NULL, '2022-11-16', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `toneri`
+--
+
+CREATE TABLE `toneri` (
+  `id_toner` int(11) NOT NULL,
+  `naziv` varchar(50) NOT NULL DEFAULT '',
+  `kolicina` int(11) DEFAULT NULL,
+  `uneo` varchar(50) NOT NULL,
+  `editovao` varchar(50) DEFAULT NULL,
+  `uneo_ts` datetime NOT NULL DEFAULT current_timestamp(),
+  `edit_ts` datetime DEFAULT NULL,
+  `datum` varchar(50) DEFAULT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `toneri`
+--
+
+INSERT INTO `toneri` (`id_toner`, `naziv`, `kolicina`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 'CF259A', 1, '', NULL, '2022-11-15 13:50:49', NULL, NULL, 1, 1),
+(2, 'CRG039', 5, '', NULL, '2022-11-16 09:31:37', NULL, NULL, 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -315,7 +390,7 @@ ALTER TABLE `lokacija`
 --
 ALTER TABLE `podkategorija`
   ADD PRIMARY KEY (`id_podkategorija`),
-  ADD KEY `FK_podkategorija` (`id_kategorija`);
+  ADD UNIQUE KEY `id_kategorija_naziv` (`id_kategorija`,`naziv`);
 
 --
 -- Indexes for table `prijem`
@@ -334,7 +409,9 @@ ALTER TABLE `prijem`
 --
 ALTER TABLE `racunari`
   ADD PRIMARY KEY (`id_racunar`),
-  ADD UNIQUE KEY `inv_broj` (`inv_broj`),
+  ADD UNIQUE KEY `ip_adresa_aktivan_vazeci` (`ip_adresa`,`aktivan`,`vazeci`),
+  ADD UNIQUE KEY `mac_adresa_aktivan_vazeci` (`mac_adresa`,`aktivan`,`vazeci`),
+  ADD UNIQUE KEY `inv_broj_aktivan_vazeci` (`inv_broj`,`aktivan`,`vazeci`),
   ADD KEY `FK_kategorija` (`id_kategorija`),
   ADD KEY `FK_lokacija_racunari` (`id_lokacija`);
 
@@ -343,9 +420,16 @@ ALTER TABLE `racunari`
 --
 ALTER TABLE `stampaci`
   ADD PRIMARY KEY (`id_stampaci`),
-  ADD UNIQUE KEY `inv_broj` (`inv_broj`),
+  ADD UNIQUE KEY `id_stampaci_inv_broj_aktivan_vazeci` (`id_stampaci`,`inv_broj`,`aktivan`,`vazeci`),
   ADD KEY `FK_lokacija_stampaci` (`id_lokacija`),
-  ADD KEY `FK_kategorija_stampaci` (`id_kategorija`);
+  ADD KEY `FK_kategorija_stampaci` (`id_kategorija`),
+  ADD KEY `FK_toner_stampaci` (`id_toner`);
+
+--
+-- Indexes for table `toneri`
+--
+ALTER TABLE `toneri`
+  ADD PRIMARY KEY (`id_toner`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -361,7 +445,7 @@ ALTER TABLE `inventar`
 -- AUTO_INCREMENT for table `kategorija`
 --
 ALTER TABLE `kategorija`
-  MODIFY `id_kategorija` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_kategorija` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `login`
@@ -379,25 +463,31 @@ ALTER TABLE `lokacija`
 -- AUTO_INCREMENT for table `podkategorija`
 --
 ALTER TABLE `podkategorija`
-  MODIFY `id_podkategorija` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_podkategorija` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `prijem`
 --
 ALTER TABLE `prijem`
-  MODIFY `id_prijem` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_prijem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `racunari`
 --
 ALTER TABLE `racunari`
-  MODIFY `id_racunar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_racunar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `stampaci`
 --
 ALTER TABLE `stampaci`
-  MODIFY `id_stampaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_stampaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `toneri`
+--
+ALTER TABLE `toneri`
+  MODIFY `id_toner` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -416,7 +506,7 @@ ALTER TABLE `inventar`
 -- Constraints for table `podkategorija`
 --
 ALTER TABLE `podkategorija`
-  ADD CONSTRAINT `FK_podkategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_podkategorija_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `prijem`
@@ -432,15 +522,16 @@ ALTER TABLE `prijem`
 -- Constraints for table `racunari`
 --
 ALTER TABLE `racunari`
-  ADD CONSTRAINT `FK_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_lokacija_racunari` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_lokacija_racunari` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `stampaci`
 --
 ALTER TABLE `stampaci`
-  ADD CONSTRAINT `FK_kategorija_stampaci` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_lokacija_stampaci` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_kategorija_stampaci` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_lokacija_stampaci` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_toner_stampaci` FOREIGN KEY (`id_toner`) REFERENCES `toneri` (`id_toner`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
