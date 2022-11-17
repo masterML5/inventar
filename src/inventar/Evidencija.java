@@ -290,7 +290,7 @@ public class Evidencija extends javax.swing.JFrame {
         jTabbedPane1.add(rp, "RacunariPregled");
         tabbedCount = jTabbedPane1.getTabCount();
         initTabComponent(tabbedCount-1);
-
+        jTabbedPane1.setSelectedIndex(tabbedCount -1);
     }//GEN-LAST:event_jMenuItem3MouseReleased
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
@@ -298,6 +298,7 @@ public class Evidencija extends javax.swing.JFrame {
         jTabbedPane1.add(otpis, "Otpis");
         tabbedCount = jTabbedPane1.getTabCount();
         initTabComponent(tabbedCount-1);
+        jTabbedPane1.setSelectedIndex(tabbedCount -1);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
@@ -305,6 +306,7 @@ public class Evidencija extends javax.swing.JFrame {
         jTabbedPane1.add(izdavanje, "Izdavanje");
         tabbedCount = jTabbedPane1.getTabCount();
         initTabComponent(tabbedCount-1);
+        jTabbedPane1.setSelectedIndex(tabbedCount -1);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
@@ -313,6 +315,7 @@ public class Evidencija extends javax.swing.JFrame {
             jTabbedPane1.add(prijem ,"Prijem");
             tabbedCount = jTabbedPane1.getTabCount();
             initTabComponent(tabbedCount - 1);
+            jTabbedPane1.setSelectedIndex(tabbedCount -1);
         } catch (SQLException ex) {
             Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
         }
