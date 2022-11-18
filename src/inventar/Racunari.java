@@ -93,9 +93,34 @@ public class Racunari {
         conSQL.commit();
         return i > 0;
     }
+    String getIdByIp (String ipAddr) throws SQLException{
+        String sqlInvBroj = "SELECT id_racunar FROM racunari WHERE ip_adresa='"+ipAddr+"'";
+        PreparedStatement pstId = conSQL.prepareStatement(sqlInvBroj);
+        String id;
+        ResultSet rsId = pstId.executeQuery();
+        if (rsId.next()) {
+            id = rsId.getString("id_racunar");
+        } else {
+            id = "Racunar nema unesenu ip adresu!";
+        }
 
+        return id;
+    }
+     String getInventarskiBroj(int idRacunar) throws SQLException {
+        String sqlInvBroj = "SELECT inv_broj FROM racunari WHERE id_racunar=" + idRacunar;
+        PreparedStatement pstInvBroj = conSQL.prepareStatement(sqlInvBroj);
+        String invBroj;
+        ResultSet rsInvBroj = pstInvBroj.executeQuery();
+        if (rsInvBroj.next()) {
+            invBroj = rsInvBroj.getString("inv_broj");
+        } else {
+            invBroj = "Racunar nema unesen inventarski broj";
+        }
+
+        return invBroj;
+    }
     String getIpAdresa(int idRacunar) throws SQLException {
-        String sqlIpAdresaRacunar = "SELECT ip_adresa FROM stampaci WHERE id_racunar=" + idRacunar;
+        String sqlIpAdresaRacunar = "SELECT ip_adresa FROM racunari WHERE id_racunar=" + idRacunar;
         PreparedStatement pstIpAdresa = conSQL.prepareStatement(sqlIpAdresaRacunar);
         String ipAdresa;
         ResultSet rsIpAdresaRacunar = pstIpAdresa.executeQuery();
@@ -109,7 +134,7 @@ public class Racunari {
     }
 
     String getIpAdresaInv(int invBroj) throws SQLException {
-        String sqlIpAdresaRacunar = "SELECT ip_adresa FROM stampaci WHERE inv_broj=" + invBroj;
+        String sqlIpAdresaRacunar = "SELECT ip_adresa FROM racunari WHERE inv_broj=" + invBroj;
         PreparedStatement pstIpAdresa = conSQL.prepareStatement(sqlIpAdresaRacunar);
         String ipAdresa;
         ResultSet rsIpAdresaRacunar = pstIpAdresa.executeQuery();
@@ -123,7 +148,7 @@ public class Racunari {
     }
 
     String getMacAdresa(int idRacunar) throws SQLException {
-        String sqlMacAdresaRacunar = "SELECT mac_adresa FROM stampaci WHERE id_racunar=" + idRacunar;
+        String sqlMacAdresaRacunar = "SELECT mac_adresa FROM racunari WHERE id_racunar=" + idRacunar;
         PreparedStatement pstMacAdresa = conSQL.prepareStatement(sqlMacAdresaRacunar);
         String ipAdresa;
         ResultSet rsMacAdresaRacunar = pstMacAdresa.executeQuery();
@@ -137,7 +162,7 @@ public class Racunari {
     }
 
     String getMacAdresaInv(int invBroj) throws SQLException {
-        String sqlMacAdresaRacunar = "SELECT mac_adresa FROM stampaci WHERE inv_broj=" + invBroj;
+        String sqlMacAdresaRacunar = "SELECT mac_adresa FROM racunari WHERE inv_broj=" + invBroj;
         PreparedStatement pstMacAdresa = conSQL.prepareStatement(sqlMacAdresaRacunar);
         String ipAdresa;
         ResultSet rsMacAdresaRacunar = pstMacAdresa.executeQuery();
@@ -181,7 +206,36 @@ public class Racunari {
         }
         return lokacija;
     }
+    String getSpec(int idRacunar) throws SQLException{
+        String sqlSpec = "SELECT specifikacija FROM racunari where id_racunar =" + idRacunar;
+        PreparedStatement pstSpec = conSQL.prepareStatement(sqlSpec);
+        String spec;
+        ResultSet rsSpec = pstSpec.executeQuery();
 
+        if (rsSpec.next()) {
+
+            spec = rsSpec.getString("specifikacija");
+
+        } else {
+            spec = "Nije uneta specifikacija za racunar!";
+        }
+        return spec;
+    }
+    String getSpecInv(int invBroj) throws SQLException{
+        String sqlSpec = "SELECT specifikacija FROM racunari where inv_broj =" + invBroj;
+        PreparedStatement pstSpec = conSQL.prepareStatement(sqlSpec);
+        String spec;
+        ResultSet rsSpec = pstSpec.executeQuery();
+
+        if (rsSpec.next()) {
+
+            spec = rsSpec.getString("specifikacija");
+
+        } else {
+            spec = "Nije uneta specifikacija za racunar!";
+        }
+        return spec;
+    }
     String getOs(int idRacunar) throws SQLException {
         String sqlOs = "SELECT os FROM racunari where id_racunar =" + idRacunar;
         PreparedStatement pstOs = conSQL.prepareStatement(sqlOs);
@@ -222,7 +276,7 @@ public class Racunari {
 
         if (rsOsKey.next()) {
 
-            osKey = rsOsKey.getString("os");
+            osKey = rsOsKey.getString("os_key");
 
         } else {
             osKey = "Nije unet os key za racunar!";
@@ -238,7 +292,7 @@ public class Racunari {
 
         if (rsOsKey.next()) {
 
-            osKey = rsOsKey.getString("os");
+            osKey = rsOsKey.getString("os_key");
 
         } else {
             osKey = "Nije unet os key za racunar!";
@@ -278,8 +332,40 @@ public class Racunari {
         return office;
     }
 
+    String getDatum(int idRacunar) throws SQLException{
+        String sqlDatum = "SELECT datum FROM racunari where id_racunar =" + idRacunar;
+        PreparedStatement pstDatum = conSQL.prepareStatement(sqlDatum);
+        String datum;
+        ResultSet rsDatum = pstDatum.executeQuery();
+
+        if (rsDatum.next()) {
+
+            datum = rsDatum.getString("datum");
+
+        } else {
+            datum = "Nije unet datum za racunar!";
+        }
+        
+        return datum;
+    }
+    String getDatumInv(int invBroj) throws SQLException{
+        String sqlDatum = "SELECT datum FROM racunari where inv_broj =" + invBroj;
+        PreparedStatement pstDatum = conSQL.prepareStatement(sqlDatum);
+        String datum;
+        ResultSet rsDatum = pstDatum.executeQuery();
+
+        if (rsDatum.next()) {
+
+            datum = rsDatum.getString("datum");
+
+        } else {
+            datum = "Nije unet datum za racunar!";
+        }
+        
+        return datum;
+    }
     String getOfficeKey(int idRacunar) throws SQLException {
-        String sqlOfficeKey = "SELECT os_key FROM racunari where id_racunar =" + idRacunar;
+        String sqlOfficeKey = "SELECT office_key FROM racunari where id_racunar =" + idRacunar;
         PreparedStatement pstOfficeKey = conSQL.prepareStatement(sqlOfficeKey);
         String officeKey;
         ResultSet rsOfficeKey = pstOfficeKey.executeQuery();
@@ -295,7 +381,7 @@ public class Racunari {
     }
 
     String getOfficeKeyInv(int invBroj) throws SQLException {
-        String sqlOfficeKey = "SELECT os_key FROM racunari where inv_broj =" + invBroj;
+        String sqlOfficeKey = "SELECT office_key FROM racunari where inv_broj =" + invBroj;
         PreparedStatement pstOfficeKey = conSQL.prepareStatement(sqlOfficeKey);
         String officeKey;
         ResultSet rsOfficeKey = pstOfficeKey.executeQuery();
@@ -377,7 +463,7 @@ public class Racunari {
     }
 
     String specifikacija(String procesor, String ram, String hdd, String gpu, String napajanje) {
-        String specifikacija = "{procesor:" + procesor + ",ram:" + ram + ", hdd:" + hdd + ",gpu:" + gpu + ",napajanje:" + napajanje + "}";
+        String specifikacija = "{\"procesor\":\""+procesor+"\",\"ram\":\""+ram+"\",\"hdd\":\""+hdd+"\",\"gpu\":\""+gpu+"\",\"napajanje\":\""+napajanje+"\"}";
 
         return specifikacija;
     }

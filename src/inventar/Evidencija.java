@@ -5,23 +5,14 @@
  */
 package inventar;
 
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import static java.lang.Integer.parseInt;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
+
 
 /**
  *
@@ -109,6 +100,7 @@ public class Evidencija extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
@@ -155,7 +147,7 @@ public class Evidencija extends javax.swing.JFrame {
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Prijem/Otpis");
+        jMenu2.setText("Prijem/Otpis/Izdavanje");
         jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jMenu2MouseReleased(evt);
@@ -206,11 +198,19 @@ public class Evidencija extends javax.swing.JFrame {
         jMenuItem4.setText("Izmena");
         jMenu4.add(jMenuItem4);
 
+        jMenuItem12.setText("Poručivanje");
+        jMenu4.add(jMenuItem12);
+
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Računari");
 
         jMenuItem5.setText("Pretraga");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem5);
 
         jMenuItem7.setText("Izmena");
@@ -286,11 +286,7 @@ public class Evidencija extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu2MouseReleased
 
     private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
-        rp = new RacunariPregled();
-        jTabbedPane1.add(rp, "RacunariPregled");
-        tabbedCount = jTabbedPane1.getTabCount();
-        initTabComponent(tabbedCount-1);
-        jTabbedPane1.setSelectedIndex(tabbedCount -1);
+       
     }//GEN-LAST:event_jMenuItem3MouseReleased
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
@@ -322,6 +318,18 @@ public class Evidencija extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        try {
+            rp = new RacunariPregled();
+            jTabbedPane1.add(rp, "RacunariPregled");
+            tabbedCount = jTabbedPane1.getTabCount();
+            initTabComponent(tabbedCount-1);
+            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -386,6 +394,7 @@ public class Evidencija extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

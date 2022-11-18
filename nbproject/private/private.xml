@@ -3,16 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Inventar/src/inventar/Evidencija.java</file>
             <file>file:/D:/Inventar/src/inventar/Podkategorija.java</file>
+            <file>file:/D:/Inventar/src/inventar/Evidencija.java</file>
             <file>file:/D:/Inventar/src/inventar/Racunari.java</file>
-            <file>file:/D:/Inventar/src/inventar/Lokacija.java</file>
-            <file>file:/D:/Inventar/src/inventar/Inventar.java</file>
+            <file>file:/D:/Inventar/src/inventar/RacunariPregled.java</file>
             <file>file:/D:/Inventar/src/inventar/Prijem.java</file>
             <file>file:/D:/Inventar/src/inventar/Pocetna.java</file>
-            <file>file:/D:/Inventar/src/inventar/Kategorija.java</file>
-            <file>file:/D:/Inventar/src/inventar/Stampaci.java</file>
+            <file>file:/D:/Inventar/src/inventar/StampaciFrame.java</file>
             <file>file:/D:/Inventar/src/inventar/RacunariFrame.java</file>
+            <file>file:/D:/Inventar/src/inventar/Stampaci.java</file>
         </group>
     </open-files>
 </project-private>
