@@ -31,6 +31,7 @@ public class Pocetna extends javax.swing.JFrame {
 
     /**
      * Creates new form Pocetna
+     * @throws java.io.IOException
      */
     public Pocetna() throws IOException {
         initComponents();

@@ -182,7 +182,7 @@ public class Prijem extends javax.swing.JPanel {
         kategorijaComboBox.setSelectedIndex(0);
         OJComboBox.setSelectedIndex(0);
         nazivField.setText(null);
-        jSpinner1.setValue(Integer.valueOf(0));
+        jSpinner1.setValue(0);
         korisnikLokacijaField.setText(null);
         fakturaField.setText(null);
         napomenaField.setText(null);
@@ -431,26 +431,30 @@ public class Prijem extends javax.swing.JPanel {
             podkatComboBox.setModel(new DefaultComboBoxModel<>(podkateg.toArray(new String[0])));
             AutoCompleteDecorator.decorate(podkatComboBox);
             
-            if (kat.equals("Racunari")) {
-                nazivField.setEnabled(true);
-                nazivField.setText(null);
-                korisnikLokacijaField.setText("unosi se posle");
-                jSpinner1.setValue(1);
-                jSpinner1.setEnabled(false);
-                korisnikLokacijaField.setEnabled(false);
-            }else if(kat.equals("Stampaci")){
-                korisnikLokacijaField.setText("unosi se posle");
-                jSpinner1.setValue(1);
-                jSpinner1.setEnabled(false);
-                korisnikLokacijaField.setEnabled(false);
-                nazivField.setEnabled(false);
-                nazivField.setText("unosi se posle");
-            }else {
-                korisnikLokacijaField.setText("");
-                korisnikLokacijaField.setEnabled(true);
-                nazivField.setEnabled(true);
-                nazivField.setText(null);
-                jSpinner1.setEnabled(true);
+            switch (kat) {
+                case "Racunari":
+                    nazivField.setEnabled(true);
+                    nazivField.setText(null);
+                    korisnikLokacijaField.setText("unosi se posle");
+                    jSpinner1.setValue(1);
+                    jSpinner1.setEnabled(false);
+                    korisnikLokacijaField.setEnabled(false);
+                    break;
+                case "Stampaci":
+                    korisnikLokacijaField.setText("unosi se posle");
+                    jSpinner1.setValue(1);
+                    jSpinner1.setEnabled(false);
+                    korisnikLokacijaField.setEnabled(false);
+                    nazivField.setEnabled(false);
+                    nazivField.setText("unosi se posle");
+                    break;
+                default:
+                    korisnikLokacijaField.setText("");
+                    korisnikLokacijaField.setEnabled(true);
+                    nazivField.setEnabled(true);
+                    nazivField.setText(null);
+                    jSpinner1.setEnabled(true);
+                    break;
             }
             
             

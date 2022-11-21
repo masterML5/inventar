@@ -32,7 +32,6 @@
 package inventar;
 
 import javax.swing.*;
-import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.*;
@@ -56,6 +55,7 @@ public class ButtonTabComponent extends JPanel {
         
         //make JLabel read titles from JTabbedPane
         JLabel label = new JLabel() {
+            @Override
             public String getText() {
                 int i = pane.indexOfTabComponent(ButtonTabComponent.this);
                 if (i != -1) {
@@ -131,6 +131,7 @@ public class ButtonTabComponent extends JPanel {
     }
 
     private final static MouseListener buttonMouseListener = new MouseAdapter() {
+        @Override
         public void mouseEntered(MouseEvent e) {
             Component component = e.getComponent();
             if (component instanceof AbstractButton) {
@@ -139,6 +140,7 @@ public class ButtonTabComponent extends JPanel {
             }
         }
 
+        @Override
         public void mouseExited(MouseEvent e) {
             Component component = e.getComponent();
             if (component instanceof AbstractButton) {

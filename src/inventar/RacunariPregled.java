@@ -519,7 +519,8 @@ public class RacunariPregled extends javax.swing.JPanel {
                 psuLabel.setText(obj.getString("napajanje"));
             }else if(korisnikRadio.isSelected())
             {
-                
+                String search = searchField.getText();
+                System.out.println(racunari.getAllInfoByUser(search));
             }
             else{
                 JOptionPane.showMessageDialog(null, "Morate izabrati kriterujem za pretragu","Greška",  JOptionPane.ERROR_MESSAGE);

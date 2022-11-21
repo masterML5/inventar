@@ -11,7 +11,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Prijem/Otpis/Izdavanje"/>
+            <Property name="text" type="java.lang.String" value="Prijem/Otipis/Izdavanje"/>
           </Properties>
           <Events>
             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jMenu2MouseReleased"/>

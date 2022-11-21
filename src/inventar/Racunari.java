@@ -5,6 +5,7 @@
  */
 package inventar;
 
+import com.google.common.collect.Lists;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -410,6 +412,29 @@ public class Racunari {
             }
         }
 
+        return racunari;
+    }
+    
+    ArrayList<String> getAllInfoByUser(String user) throws SQLException{
+        String sqlGetAllInfoByUser = "SELECT *, count(*) over () total_rows FROM racunari WHERE korisnik like '%"+user+"%'";
+        PreparedStatement pstAllRacunari = conSQL.prepareStatement(sqlGetAllInfoByUser, ResultSet.TYPE_SCROLL_INSENSITIVE, 
+  ResultSet.CONCUR_READ_ONLY);
+        ResultSet rsAllRacunari = pstAllRacunari.executeQuery();
+       
+        ResultSetMetaData rsmd = rsAllRacunari.getMetaData();
+        int columnCount = rsmd.getColumnCount();
+        ArrayList<String> racunari = null;
+        List<List<String>> listOfLists = Lists.newArrayList();
+        while (rsAllRacunari.next()) {
+            int i = 1;
+           racunari = new ArrayList();
+            while (i <= columnCount) {
+                racunari.add(rsAllRacunari.getString(i++));
+            }
+            listOfLists.add(Lists.newArrayList(racunari));
+        }
+        System.out.println(listOfLists);
+            
         return racunari;
     }
 
