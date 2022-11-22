@@ -5,7 +5,6 @@
  */
 package inventar;
 
-import com.google.common.collect.Lists;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,7 +13,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -416,27 +414,18 @@ public class Racunari {
     }
     
     ArrayList<String> getAllInfoByUser(String user) throws SQLException{
-        String sqlGetAllInfoByUser = "SELECT *, count(*) over () total_rows FROM racunari WHERE korisnik like '%"+user+"%'";
-        PreparedStatement pstAllRacunari = conSQL.prepareStatement(sqlGetAllInfoByUser, ResultSet.TYPE_SCROLL_INSENSITIVE, 
-  ResultSet.CONCUR_READ_ONLY);
+        String sqlGetAllInfoByUser = "SELECT id_racunar,inv_broj,korisnik, ip_adresa FROM racunari WHERE aktivan and vazeci and korisnik like '%"+user+"%'";
+        PreparedStatement pstAllRacunari = conSQL.prepareStatement(sqlGetAllInfoByUser);
         ResultSet rsAllRacunari = pstAllRacunari.executeQuery();
-       
-        ResultSetMetaData rsmd = rsAllRacunari.getMetaData();
-        int columnCount = rsmd.getColumnCount();
-        ArrayList<String> racunari = null;
-        List<List<String>> listOfLists = Lists.newArrayList();
-        while (rsAllRacunari.next()) {
-            int i = 1;
-           racunari = new ArrayList();
-            while (i <= columnCount) {
-                racunari.add(rsAllRacunari.getString(i++));
-            }
-            listOfLists.add(Lists.newArrayList(racunari));
+        ArrayList racunari = new ArrayList();
+        while(rsAllRacunari.next()){
+            racunari.add((Integer)rsAllRacunari.getObject("id_racunar")+" • "+rsAllRacunari.getString("inv_broj")+ " • "+ rsAllRacunari.getString("korisnik")+ " • "+ rsAllRacunari.getString("ip_adresa"));         
         }
-        System.out.println(listOfLists);
-            
+    
         return racunari;
     }
+    
+    
 
     ArrayList<String> getAllInfoInv(int invBroj) throws SQLException {
         String sqlGetAllInfo = "SELECT * FROM racunari WHERE inv_broj =" + invBroj;
