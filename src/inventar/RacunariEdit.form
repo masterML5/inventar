@@ -96,9 +96,9 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel3" min="-2" pref="226" max="-2" attributes="0"/>
-                  <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -110,7 +110,7 @@
           <Font name="Tahoma" size="18" style="3"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Ra&#x10d;unari Pregled"/>
+        <Property name="text" type="java.lang.String" value="Ra&#x10d;unari Izmena"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="searchField">
@@ -142,23 +142,23 @@
                   <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel13" min="-2" pref="101" max="-2" attributes="0"/>
-                              <Component id="jLabel18" alignment="0" min="-2" pref="101" max="-2" attributes="0"/>
+                              <Component id="jLabel18" min="-2" pref="101" max="-2" attributes="0"/>
+                              <Component id="jLabel13" alignment="0" min="-2" pref="101" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="datumLabel" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="fakturaLabel" min="-2" pref="74" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
+                      <Component id="jPanel2" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -166,23 +166,22 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jLabel13" max="32767" attributes="0"/>
+                      <Component id="datumLabel" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jLabel13" max="32767" attributes="0"/>
-                              <Component id="datumLabel" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="fakturaLabel" alignment="0" min="-2" pref="14" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
+                      <Component id="fakturaLabel" alignment="0" min="-2" pref="14" max="-2" attributes="0"/>
+                      <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -211,11 +210,31 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="ramLabel" alignment="1" max="32767" attributes="0"/>
-                          <Component id="psuLabel" pref="69" max="32767" attributes="0"/>
-                          <Component id="gpuLabel" max="32767" attributes="0"/>
-                          <Component id="hddLabel" max="32767" attributes="0"/>
-                          <Component id="cpuLabel" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="ramLabel" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="hddLabel" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="psuField" max="32767" attributes="0"/>
+                                  <Component id="gpuField" max="32767" attributes="0"/>
+                                  <Component id="ramField" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="hddField" alignment="1" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cpuField" min="-2" pref="78" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="cpuLabel" max="32767" attributes="0"/>
+                                  <Component id="gpuLabel" max="32767" attributes="0"/>
+                                  <Component id="psuLabel" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -227,26 +246,31 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cpuLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cpuField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="8" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="ramLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ramField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="hddLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="hddField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="gpuLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="gpuField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="psuLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="psuField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -294,6 +318,19 @@
             </Component>
             <Component class="javax.swing.JLabel" name="psuLabel">
             </Component>
+            <Component class="javax.swing.JTextField" name="cpuField">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cpuFieldActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JTextField" name="ramField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="hddField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="gpuField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="psuField">
+            </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel13">
@@ -331,70 +368,69 @@
                           <Component id="jLabel2" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="osKeyLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="officeLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="osLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="invBrojLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="macAdresaLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="ipAdresaLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="lokacijaLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="officeKeyLabel" max="32767" attributes="0"/>
-                          <Component id="korisnikLabel" alignment="0" pref="156" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="officeKeyField" alignment="0" pref="130" max="32767" attributes="0"/>
+                          <Component id="osKeyField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="officeField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="osField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="invBrojField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="macAdresaField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="ipAdresaField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lokacijaField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="korisnikField" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lokacijaLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="ipAdresaLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lokacijaField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="macAdresaLabel" min="-2" pref="14" max="-2" attributes="0"/>
-                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ipAdresaField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="macAdresaField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="invBrojLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="invBrojField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="osLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="osField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="officeLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel23" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="officeField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="osKeyLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel25" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="osKeyField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="officeKeyLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="officeKeyField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="korisnikLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="korisnikField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="33" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -406,17 +442,11 @@
                 <Property name="text" type="java.lang.String" value="Lokacija -"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lokacijaLabel">
-            </Component>
-            <Component class="javax.swing.JLabel" name="macAdresaLabel">
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="MAC Adresa -"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="ipAdresaLabel">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
@@ -430,15 +460,11 @@
                 <Property name="text" type="java.lang.String" value="Inventarski broj -"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="invBrojLabel">
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel21">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="Operativni sistem -"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="osLabel">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel23">
               <Properties>
@@ -446,15 +472,11 @@
                 <Property name="text" type="java.lang.String" value="Office -"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="officeLabel">
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel25">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="OS Key -"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="osKeyLabel">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel27">
               <Properties>
@@ -462,15 +484,29 @@
                 <Property name="text" type="java.lang.String" value="Office Key -"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="officeKeyLabel">
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="Korisnik -"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="korisnikLabel">
+            <Component class="javax.swing.JTextField" name="lokacijaField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="ipAdresaField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="macAdresaField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="invBrojField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="osField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="officeField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="osKeyField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="officeKeyField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="korisnikField">
             </Component>
           </SubComponents>
         </Container>

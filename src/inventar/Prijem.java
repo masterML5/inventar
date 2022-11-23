@@ -80,6 +80,10 @@ public class Prijem extends javax.swing.JPanel {
 
     }
 
+    Prijem() throws SQLException {
+        
+    }
+
     boolean add(String brPrijem, String naziv, int idKategorija, int podkategorija, int idLokacija, int kolicina, String faktura, String uneo, String datum, String napomena, String korisnikLokacija) throws SQLException {
         String sqlAddPrijem = "INSERT INTO prijem (broj_prijem,id_kategorija,id_podkategorija,id_lokacija,naziv,kolicina,faktura,napomena,korisnikLokacija,uneo,datum) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstInsertPrijem = conSQL.prepareStatement(sqlAddPrijem);
@@ -177,6 +181,21 @@ public class Prijem extends javax.swing.JPanel {
 
         return brojPrijema;
     }
+    String brojFakture(int idRacunar) throws SQLException{
+        String brojFakture;
+        String sqlbrojFakture = "SELECT faktura FROM prijem WHERE aktivan AND vazeci AND id_racunar ="+idRacunar;
+        PreparedStatement pstbrojFakture = conSQL.prepareStatement(sqlbrojFakture);
+        ResultSet rsBrojFakture = pstbrojFakture.executeQuery();
+
+        if (rsBrojFakture.next()) {
+
+            brojFakture = rsBrojFakture.getString("faktura");
+
+        } else {
+            brojFakture = null;
+        }
+        return brojFakture;
+    }
 
     private void resetData() {
         kategorijaComboBox.setSelectedIndex(0);
@@ -187,7 +206,18 @@ public class Prijem extends javax.swing.JPanel {
         fakturaField.setText(null);
         napomenaField.setText(null);
     }
-
+    
+    ArrayList fakture() throws SQLException{
+        
+        String sqlFak = "SELECT faktura FROM prijem WHERE aktivan and vazeci";
+        PreparedStatement pstFak = conSQL.prepareStatement(sqlFak);
+        ResultSet rsFak = pstFak.executeQuery();
+        ArrayList fakture = new ArrayList<>();
+        while (rsFak.next()) {
+            fakture.add(rsFak.getString("faktura"));
+        }
+        return fakture;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -492,6 +522,11 @@ public class Prijem extends javax.swing.JPanel {
             int OJ2 = parseInt(lokacija.getId(OJComboBox.getSelectedItem().toString()));
             String naziv2 = nazivField.getText();
             String brfakture = fakturaField.getText();
+            if(fakture().contains(brfakture)){
+                  JOptionPane.showMessageDialog(null, "Faktura već postoji!","Greška",JOptionPane.ERROR_MESSAGE);
+                  return;
+            }
+            
             String napomena = napomenaField.getText();
             String korisnikLokacija = korisnikLokacijaField.getText();
             String brPrijema = brojPrijema(datumG, kategorija2, OJ2);
@@ -507,13 +542,21 @@ public class Prijem extends javax.swing.JPanel {
                     naziv2 = dat.marka+" "+dat.model;
                     break;
                 default:
+                    if(podkategorija == 0){
+                       if (add(brPrijema, naziv2, kategorija2, OJ2, kolicina2, brfakture, korisnikG, datumG, napomena, korisnikLokacija)) {
+                        JOptionPane.showMessageDialog(null, "Uspešno ste uneli novi prijem " + brPrijema);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Došlo je do greške pokušajte ponovo");
+                    }
+                    }else{
                     if (add(brPrijema, naziv2, kategorija2, podkategorija, OJ2, kolicina2, brfakture, korisnikG, datumG, napomena, korisnikLokacija)) {
                         JOptionPane.showMessageDialog(null, "Uspešno ste uneli novi prijem " + brPrijema);
                     } else {
                         JOptionPane.showMessageDialog(null, "Došlo je do greške pokušajte ponovo");
                     }
-                    ;
+                    
                     break;
+            }
             }
         } catch (SQLException ex) {
             Logger.getLogger(Prijem.class.getName()).log(Level.SEVERE, null, ex);

@@ -333,7 +333,7 @@ public class Racunari {
     }
 
     String getDatum(int idRacunar) throws SQLException{
-        String sqlDatum = "SELECT datum FROM racunari where id_racunar =" + idRacunar;
+        String sqlDatum = "SELECT datum FROM racunari where aktivan and vazeci and id_racunar =" + idRacunar;
         PreparedStatement pstDatum = conSQL.prepareStatement(sqlDatum);
         String datum;
         ResultSet rsDatum = pstDatum.executeQuery();

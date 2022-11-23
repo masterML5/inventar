@@ -22,6 +22,7 @@ public class Evidencija extends javax.swing.JFrame {
 
     private static int id;
     private RacunariPregled rp;
+    private RacunariEdit re;
     private Prijem prijem;
     private Izdavanje izdavanje;
     private Otpis otpis;
@@ -214,6 +215,11 @@ public class Evidencija extends javax.swing.JFrame {
         jMenu5.add(jMenuItem5);
 
         jMenuItem7.setText("Izmena");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem7);
 
         jMenuBar1.add(jMenu5);
@@ -322,7 +328,7 @@ public class Evidencija extends javax.swing.JFrame {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
             rp = new RacunariPregled();
-            jTabbedPane1.add(rp, "RacunariPregled");
+            jTabbedPane1.add(rp, "Računari Pregled");
             tabbedCount = jTabbedPane1.getTabCount();
             initTabComponent(tabbedCount-1);
             jTabbedPane1.setSelectedIndex(tabbedCount -1);
@@ -330,6 +336,18 @@ public class Evidencija extends javax.swing.JFrame {
             Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        try {
+            re = new RacunariEdit();
+            jTabbedPane1.add(re, "Računari Izmena");
+            tabbedCount = jTabbedPane1.getTabCount();
+            initTabComponent(tabbedCount-1);
+            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     /**
      * @param args the command line arguments

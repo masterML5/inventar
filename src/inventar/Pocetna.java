@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -46,7 +47,7 @@ public class Pocetna extends javax.swing.JFrame {
         Image logo = createImageIcon("/res/pionir-logo.png", "logo").getImage().getScaledInstance(90, 48, Image.SCALE_SMOOTH);
         ImageIcon logoIcon = new ImageIcon(logo);
         logoLabel.setIcon(logoIcon);
-
+        
     }
 
     /**

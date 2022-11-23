@@ -79,7 +79,7 @@ public class ButtonTabComponent extends JPanel {
         public TabButton() {
             int size = 17;
             setPreferredSize(new Dimension(size, size));
-            setToolTipText("close this tab");
+            setToolTipText("Zatvorite tab");
             //Make the button looks the same for all Laf's
             setUI(new BasicButtonUI());
             //Make it transparent
