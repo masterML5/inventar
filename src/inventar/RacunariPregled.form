@@ -142,24 +142,26 @@
                   <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel13" min="-2" pref="108" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="datumLabel" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
+                          <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel18" min="-2" pref="90" max="-2" attributes="0"/>
+                              <Component id="jLabel13" min="-2" pref="90" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel18" min="-2" pref="108" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                  <Component id="datumLabel" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                                   <Component id="fakturaLabel" min="-2" pref="74" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -212,8 +214,8 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="ramLabel" alignment="1" pref="69" max="32767" attributes="0"/>
-                          <Component id="psuLabel" max="32767" attributes="0"/>
+                          <Component id="ramLabel" alignment="1" max="32767" attributes="0"/>
+                          <Component id="psuLabel" pref="69" max="32767" attributes="0"/>
                           <Component id="gpuLabel" max="32767" attributes="0"/>
                           <Component id="hddLabel" max="32767" attributes="0"/>
                           <Component id="cpuLabel" max="32767" attributes="0"/>
@@ -258,57 +260,42 @@
             <Component class="javax.swing.JLabel" name="jLabel14">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="Procesor"/>
+                <Property name="text" type="java.lang.String" value="Procesor -"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel15">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="RAM Memorija"/>
+                <Property name="text" type="java.lang.String" value="RAM  -"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel16">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="HDD/SSD"/>
+                <Property name="text" type="java.lang.String" value="HDD/SSD -"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel17">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="Graficka kartica"/>
+                <Property name="text" type="java.lang.String" value="Graficka kartica -"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel19">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="Napajanje"/>
+                <Property name="text" type="java.lang.String" value="Napajanje -"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="cpuLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel12"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="ramLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel13"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="hddLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel18"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="gpuLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel20"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="psuLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel21"/>
-              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -325,14 +312,8 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="datumLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jLabel20"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="fakturaLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jLabel21"/>
-          </Properties>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel5">
 
@@ -357,12 +338,12 @@
                           <Component id="osKeyLabel" alignment="0" max="32767" attributes="0"/>
                           <Component id="officeLabel" alignment="0" max="32767" attributes="0"/>
                           <Component id="osLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="invBrojLabel" alignment="0" pref="156" max="32767" attributes="0"/>
+                          <Component id="invBrojLabel" alignment="0" max="32767" attributes="0"/>
                           <Component id="macAdresaLabel" alignment="0" max="32767" attributes="0"/>
                           <Component id="ipAdresaLabel" alignment="0" max="32767" attributes="0"/>
                           <Component id="lokacijaLabel" alignment="0" max="32767" attributes="0"/>
                           <Component id="officeKeyLabel" max="32767" attributes="0"/>
-                          <Component id="korisnikLabel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="korisnikLabel" alignment="0" pref="156" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -429,14 +410,8 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lokacijaLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel13"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="macAdresaLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel15"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
@@ -445,9 +420,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="ipAdresaLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel21"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
@@ -462,9 +434,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="invBrojLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="invBrojLabel"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel21">
               <Properties>
@@ -473,9 +442,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="osLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="osLabel"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel23">
               <Properties>
@@ -484,9 +450,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="officeLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="officeLabel"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel25">
               <Properties>
@@ -495,9 +458,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="osKeyLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel26"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel27">
               <Properties>
@@ -506,9 +466,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="officeKeyLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel28"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
@@ -517,9 +474,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="korisnikLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jLabel6"/>
-              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -549,9 +503,11 @@
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="93" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="58" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -561,7 +517,10 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="150" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton3" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -593,6 +552,20 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton3">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="12" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="33" green="33" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="X"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

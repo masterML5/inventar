@@ -6,14 +6,18 @@
 package inventar;
 
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFormattedTextField;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.text.NumberFormatter;
+import static org.apache.commons.lang3.math.NumberUtils.isNumber;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +48,95 @@ public class RacunariPregled extends javax.swing.JPanel {
         result = racunari.getAllInfoInv(parametar);
         return result;
     }
+
+    void puniRezId(int search) throws SQLException, JSONException {
+        ArrayList sviId = racunari.sviId();
+        if (sviId.contains(search)) {
+            ipAdresaLabel.setText(racunari.getIpAdresa(search));
+            lokacijaLabel.setText(racunari.getLokacija(search));
+            macAdresaLabel.setText(racunari.getMacAdresa(search));
+            invBrojLabel.setText(racunari.getInventarskiBroj(search));
+            osLabel.setText(racunari.getOs(search));
+            officeLabel.setText(racunari.getOffice(search));
+            osKeyLabel.setText(racunari.getOsKey(search));
+            officeKeyLabel.setText(racunari.getOfficeKey(search));
+            korisnikLabel.setText(racunari.getKorisnik(search));
+            datumLabel.setText(racunari.getDatum(search));
+            String specifikacija = racunari.getSpec(search);
+            JSONObject obj = new JSONObject(specifikacija);
+            cpuLabel.setText(obj.getString("procesor"));
+            ramLabel.setText(obj.getString("ram"));
+            hddLabel.setText(obj.getString("hdd"));
+            gpuLabel.setText(obj.getString("gpu"));
+            psuLabel.setText(obj.getString("napajanje"));
+        } else {
+            JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    void puniRezInv(int search) throws SQLException, JSONException {
+        ArrayList sviInv = racunari.sviInventarski();
+        if (sviInv.contains(String.valueOf(search))) {
+            ipAdresaLabel.setText(racunari.getIpAdresaInv(search));
+            lokacijaLabel.setText(racunari.getLokacijaInv(search));
+            macAdresaLabel.setText(racunari.getMacAdresaInv(search));
+            invBrojLabel.setText(searchField.getText().trim());
+            osLabel.setText(racunari.getOsInv(search));
+            officeLabel.setText(racunari.getOfficeInv(search));
+            osKeyLabel.setText(racunari.getOsKeyInv(search));
+            officeKeyLabel.setText(racunari.getOfficeKeyInv(search));
+            korisnikLabel.setText(racunari.getKorisnikInv(search));
+            datumLabel.setText(racunari.getDatumInv(search));
+            String specifikacija = racunari.getSpecInv(search);
+            JSONObject obj = new JSONObject(specifikacija);
+            cpuLabel.setText(obj.getString("procesor"));
+            ramLabel.setText(obj.getString("ram"));
+            hddLabel.setText(obj.getString("hdd"));
+            gpuLabel.setText(obj.getString("gpu"));
+            psuLabel.setText(obj.getString("napajanje"));
+        } else {
+            JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    boolean checkSearch() {
+        String s = searchField.getText().trim();
+        return !(s.isEmpty() || s.equals(" "));
+    }
+
+    boolean checkSearchNum() {
+        String s = searchField.getText().trim();
+       return isNumber(s);
+        
+
+    }
+    boolean validIP(){
+    String ip = searchField.getText().trim();
+    try {
+        if ( ip == null || ip.isEmpty() ) {
+            return false;
+        }
+
+        String[] parts = ip.split( "\\." );
+        if ( parts.length != 4 ) {
+            return false;
+        }
+
+        for ( String s : parts ) {
+            int i = Integer.parseInt( s );
+            if ( (i < 0) || (i > 255) ) {
+                return false;
+            }
+        }
+        if ( ip.endsWith(".") ) {
+            return false;
+        }
+
+        return true;
+    } catch (NumberFormatException nfe) {
+        return false;
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -99,6 +192,7 @@ public class RacunariPregled extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         resultList = new javax.swing.JList<>();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         inv_brojRadio = new javax.swing.JRadioButton();
         ip_adresaRadio = new javax.swing.JRadioButton();
@@ -125,29 +219,19 @@ public class RacunariPregled extends javax.swing.JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Specifikacija"));
 
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel14.setText("Procesor");
+        jLabel14.setText("Procesor -");
 
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel15.setText("RAM Memorija");
+        jLabel15.setText("RAM  -");
 
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel16.setText("HDD/SSD");
+        jLabel16.setText("HDD/SSD -");
 
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel17.setText("Graficka kartica");
+        jLabel17.setText("Graficka kartica -");
 
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel19.setText("Napajanje");
-
-        cpuLabel.setText("jLabel12");
-
-        ramLabel.setText("jLabel13");
-
-        hddLabel.setText("jLabel18");
-
-        gpuLabel.setText("jLabel20");
-
-        psuLabel.setText("jLabel21");
+        jLabel19.setText("Napajanje -");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -163,8 +247,8 @@ public class RacunariPregled extends javax.swing.JPanel {
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ramLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                    .addComponent(psuLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ramLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(psuLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
                     .addComponent(gpuLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(hddLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cpuLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -201,21 +285,11 @@ public class RacunariPregled extends javax.swing.JPanel {
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel18.setText("Broj fakture -");
 
-        datumLabel.setText("jLabel20");
-
-        fakturaLabel.setText("jLabel21");
-
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Lokacija -");
 
-        lokacijaLabel.setText("jLabel13");
-
-        macAdresaLabel.setText("jLabel15");
-
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("MAC Adresa -");
-
-        ipAdresaLabel.setText("jLabel21");
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("IP Adresa -");
@@ -223,32 +297,20 @@ public class RacunariPregled extends javax.swing.JPanel {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel10.setText("Inventarski broj -");
 
-        invBrojLabel.setText("invBrojLabel");
-
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel21.setText("Operativni sistem -");
-
-        osLabel.setText("osLabel");
 
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel23.setText("Office -");
 
-        officeLabel.setText("officeLabel");
-
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel25.setText("OS Key -");
-
-        osKeyLabel.setText("jLabel26");
 
         jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel27.setText("Office Key -");
 
-        officeKeyLabel.setText("jLabel28");
-
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Korisnik -");
-
-        korisnikLabel.setText("jLabel6");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -271,12 +333,12 @@ public class RacunariPregled extends javax.swing.JPanel {
                     .addComponent(osKeyLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(officeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(osLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(invBrojLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                    .addComponent(invBrojLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(macAdresaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ipAdresaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lokacijaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(officeKeyLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(korisnikLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(korisnikLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -330,19 +392,20 @@ public class RacunariPregled extends javax.swing.JPanel {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(datumLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(fakturaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 1, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addGap(26, 26, 26)
+                                .addComponent(datumLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(38, 38, 38)
+                                .addComponent(fakturaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,6 +440,15 @@ public class RacunariPregled extends javax.swing.JPanel {
             }
         });
 
+        jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 51, 51));
+        jButton3.setText("X");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -386,9 +458,11 @@ public class RacunariPregled extends javax.swing.JPanel {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(80, 80, 80)
+                .addGap(42, 42, 42)
                 .addComponent(jButton1)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addComponent(jButton3)
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -396,7 +470,9 @@ public class RacunariPregled extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(85, 85, 85))
         );
 
@@ -544,45 +620,38 @@ public class RacunariPregled extends javax.swing.JPanel {
         try {
 
             if (inv_brojRadio.isSelected()) {
-                int search = Integer.parseInt(searchField.getText().trim());
-                ipAdresaLabel.setText(racunari.getIpAdresaInv(search));
-                lokacijaLabel.setText(racunari.getLokacijaInv(search));
-                macAdresaLabel.setText(racunari.getMacAdresaInv(search));
-                invBrojLabel.setText(searchField.getText().trim());
-                osLabel.setText(racunari.getOsInv(search));
-                officeLabel.setText(racunari.getOfficeInv(search));
-                osKeyLabel.setText(racunari.getOsKeyInv(search));
-                officeKeyLabel.setText(racunari.getOfficeKeyInv(search));
-                korisnikLabel.setText(racunari.getKorisnikInv(search));
-                datumLabel.setText(racunari.getDatumInv(search));
-                String specifikacija = racunari.getSpecInv(search);
-                JSONObject obj = new JSONObject(specifikacija);
-                cpuLabel.setText(obj.getString("procesor"));
-                ramLabel.setText(obj.getString("ram"));
-                hddLabel.setText(obj.getString("hdd"));
-                gpuLabel.setText(obj.getString("gpu"));
-                psuLabel.setText(obj.getString("napajanje"));
-
+                if (!checkSearch()) {
+                    JOptionPane.showMessageDialog(null, "Morate uneti parametre za pretragu", "Greška", JOptionPane.ERROR_MESSAGE);
+                } else if (!checkSearchNum()) {
+                    JOptionPane.showMessageDialog(null, "Za inventarski broj možete uneti samo brojeve", "Greška", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    String s = searchField.getText().trim();
+                    int search = Integer.parseInt(s);
+                    if(racunari.checkInventarski(s)){
+                        
+                    puniRezInv(search);
+                    }else{
+                         JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             } else if (ip_adresaRadio.isSelected()) {
-                
-                int search = Integer.parseInt(racunari.getIdByIp(searchField.getText().trim()));
-                ipAdresaLabel.setText(racunari.getIpAdresa(search));
-                lokacijaLabel.setText(racunari.getLokacija(search));
-                macAdresaLabel.setText(racunari.getMacAdresa(search));
-                invBrojLabel.setText(racunari.getInventarskiBroj(search));
-                osLabel.setText(racunari.getOs(search));
-                officeLabel.setText(racunari.getOffice(search));
-                osKeyLabel.setText(racunari.getOsKey(search));
-                officeKeyLabel.setText(racunari.getOfficeKey(search));
-                korisnikLabel.setText(racunari.getKorisnik(search));
-                datumLabel.setText(racunari.getDatum(search));
-                String specifikacija = racunari.getSpec(search);
-                JSONObject obj = new JSONObject(specifikacija);
-                cpuLabel.setText(obj.getString("procesor"));
-                ramLabel.setText(obj.getString("ram"));
-                hddLabel.setText(obj.getString("hdd"));
-                gpuLabel.setText(obj.getString("gpu"));
-                psuLabel.setText(obj.getString("napajanje"));
+                if (!checkSearch()) {
+                    JOptionPane.showMessageDialog(null, "Morate uneti parametre za pretragu", "Greška", JOptionPane.ERROR_MESSAGE);
+                } else if (!validIP()) {
+                    JOptionPane.showMessageDialog(null, "Neispravna ip adresa", "Greška", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    String s = racunari.getIdByIp(searchField.getText().trim());
+                    String ip = searchField.getText().trim();
+                    if(racunari.checkIp(ip)){
+                         int search = Integer.parseInt(s);
+                         puniRezId(search);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                   
+                }
+
             } else if (korisnikRadio.isSelected()) {
                 String search = searchField.getText();
                 ArrayList results = racunari.getAllInfoByUser(search);
@@ -596,23 +665,7 @@ public class RacunariPregled extends javax.swing.JPanel {
                     String rez = results.get(0).toString();
                     String[] id = rez.split("•");
                     Integer idRez = Integer.parseInt(id[0].trim());
-                    ipAdresaLabel.setText(racunari.getIpAdresa(idRez));
-                    lokacijaLabel.setText(racunari.getLokacija(idRez));
-                    macAdresaLabel.setText(racunari.getMacAdresa(idRez));
-                    invBrojLabel.setText(racunari.getInventarskiBroj(idRez));
-                    osLabel.setText(racunari.getOs(idRez));
-                    officeLabel.setText(racunari.getOffice(idRez));
-                    osKeyLabel.setText(racunari.getOsKey(idRez));
-                    officeKeyLabel.setText(racunari.getOfficeKey(idRez));
-                    korisnikLabel.setText(racunari.getKorisnik(idRez));
-                    datumLabel.setText(racunari.getDatum(idRez));
-                    String specifikacija = racunari.getSpec(idRez);
-                    JSONObject obj = new JSONObject(specifikacija);
-                    cpuLabel.setText(obj.getString("procesor"));
-                    ramLabel.setText(obj.getString("ram"));
-                    hddLabel.setText(obj.getString("hdd"));
-                    gpuLabel.setText(obj.getString("gpu"));
-                    psuLabel.setText(obj.getString("napajanje"));
+                    puniRezId(idRez);
                 } else {
                     JOptionPane.showMessageDialog(null, "Nema korisnika pod nazivom " + search, "Pretraga", JOptionPane.ERROR_MESSAGE);
                 }
@@ -627,35 +680,19 @@ public class RacunariPregled extends javax.swing.JPanel {
     }//GEN-LAST:event_searchBtnActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(resultList.getVisibleRowCount() == 0){
+        if (resultList.getVisibleRowCount() == 0) {
             JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
-        }else{
+        } else {
             try {
                 String selectedRow = resultList.getSelectedValue();
                 String[] id = selectedRow.split("•");
                 Integer idRez = Integer.parseInt(id[0].trim());
-                ipAdresaLabel.setText(racunari.getIpAdresa(idRez));
-                lokacijaLabel.setText(racunari.getLokacija(idRez));
-                macAdresaLabel.setText(racunari.getMacAdresa(idRez));
-                invBrojLabel.setText(racunari.getInventarskiBroj(idRez));
-                osLabel.setText(racunari.getOs(idRez));
-                officeLabel.setText(racunari.getOffice(idRez));
-                osKeyLabel.setText(racunari.getOsKey(idRez));
-                officeKeyLabel.setText(racunari.getOfficeKey(idRez));
-                korisnikLabel.setText(racunari.getKorisnik(idRez));
-                datumLabel.setText(racunari.getDatum(idRez));
-                String specifikacija = racunari.getSpec(idRez);
-                JSONObject obj = new JSONObject(specifikacija);
-                cpuLabel.setText(obj.getString("procesor"));
-                ramLabel.setText(obj.getString("ram"));
-                hddLabel.setText(obj.getString("hdd"));
-                gpuLabel.setText(obj.getString("gpu"));
-                psuLabel.setText(obj.getString("napajanje"));
+                puniRezId(idRez);
             } catch (JSONException | SQLException ex) {
                 Logger.getLogger(RacunariPregled.class.getName()).log(Level.SEVERE, null, ex);
             }
-             
-    }
+
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ip_adresaRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ip_adresaRadioActionPerformed
@@ -664,11 +701,12 @@ public class RacunariPregled extends javax.swing.JPanel {
     }//GEN-LAST:event_ip_adresaRadioActionPerformed
 
     private void inv_brojRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inv_brojRadioActionPerformed
-         jCheckBox125.setEnabled(false);
+        jCheckBox125.setEnabled(false);
         jCheckBox124.setEnabled(false);
         jCheckBox125.setSelected(false);
         jCheckBox124.setSelected(false);
         searchField.setText(null);
+
     }//GEN-LAST:event_inv_brojRadioActionPerformed
 
     private void korisnikRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_korisnikRadioActionPerformed
@@ -681,27 +719,32 @@ public class RacunariPregled extends javax.swing.JPanel {
 
     private void jCheckBox124ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox124ActionPerformed
         jCheckBox125.setSelected(false);
-        if(jCheckBox124.isSelected()){
-            
-        searchField.setText("10.11.124.");
-        }else{
-        searchField.setText(null);
+        if (jCheckBox124.isSelected()) {
+
+            searchField.setText("10.11.124.");
+        } else {
+            searchField.setText(null);
         }
     }//GEN-LAST:event_jCheckBox124ActionPerformed
 
     private void jCheckBox125ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox125ActionPerformed
-       jCheckBox124.setSelected(false);
-       if(jCheckBox125.isSelected()){
-           
-        searchField.setText("10.11.125.");
-       }else{
-        searchField.setText(null);
+        jCheckBox124.setSelected(false);
+        if (jCheckBox125.isSelected()) {
+
+            searchField.setText("10.11.125.");
+        } else {
+            searchField.setText(null);
         }
     }//GEN-LAST:event_jCheckBox125ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         searchField.setText(null);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        DefaultListModel list = (DefaultListModel) resultList.getModel();
+        list.removeAllElements();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -717,6 +760,7 @@ public class RacunariPregled extends javax.swing.JPanel {
     private javax.swing.JRadioButton ip_adresaRadio;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox124;
     private javax.swing.JCheckBox jCheckBox125;
     private javax.swing.JLabel jLabel1;

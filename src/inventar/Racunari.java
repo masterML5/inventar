@@ -46,7 +46,7 @@ public class Racunari {
             id = rsIdRacunar.getString("id_racunar");
 
         } else {
-            id = "Nije pronadjen racunar";
+            id = "Nema rezultata";
         }
         return id;
     }
@@ -101,7 +101,7 @@ public class Racunari {
         if (rsId.next()) {
             id = rsId.getString("id_racunar");
         } else {
-            id = "Racunar nema unesenu ip adresu!";
+            id = "Nema rezultata";
         }
 
         return id;
@@ -114,7 +114,7 @@ public class Racunari {
         if (rsInvBroj.next()) {
             invBroj = rsInvBroj.getString("inv_broj");
         } else {
-            invBroj = "Racunar nema unesen inventarski broj";
+            invBroj = "Nema rezultata";
         }
 
         return invBroj;
@@ -127,7 +127,7 @@ public class Racunari {
         if (rsIpAdresaRacunar.next()) {
             ipAdresa = rsIpAdresaRacunar.getString("ip_adresa");
         } else {
-            ipAdresa = "Racunar nema unesenu ip adresu!";
+            ipAdresa = "Nema rezultata";
         }
 
         return ipAdresa;
@@ -141,7 +141,7 @@ public class Racunari {
         if (rsIpAdresaRacunar.next()) {
             ipAdresa = rsIpAdresaRacunar.getString("ip_adresa");
         } else {
-            ipAdresa = "Racunar nema unesenu ip adresu!";
+            ipAdresa = "Nema rezultata";
         }
 
         return ipAdresa;
@@ -155,7 +155,7 @@ public class Racunari {
         if (rsMacAdresaRacunar.next()) {
             ipAdresa = rsMacAdresaRacunar.getString("mac_adresa");
         } else {
-            ipAdresa = "Racunar nema unesenu mac adresu!";
+            ipAdresa = "Nema rezultata";
         }
 
         return ipAdresa;
@@ -169,7 +169,7 @@ public class Racunari {
         if (rsMacAdresaRacunar.next()) {
             ipAdresa = rsMacAdresaRacunar.getString("mac_adresa");
         } else {
-            ipAdresa = "Racunar nema unesenu mac adresu!";
+            ipAdresa = "Nema rezultata";
         }
 
         return ipAdresa;
@@ -186,7 +186,7 @@ public class Racunari {
             lokacija = rsIdLokRacunar.getString("naziv");
 
         } else {
-            lokacija = "Nije uneta lokacija za racunar!";
+            lokacija = "Nema rezultata";
         }
         return lokacija;
     }
@@ -202,7 +202,7 @@ public class Racunari {
             lokacija = rsIdLokRacunar.getString("naziv");
 
         } else {
-            lokacija = "Nije uneta lokacija za racunar!";
+            lokacija = "Nema rezultata";
         }
         return lokacija;
     }
@@ -217,7 +217,7 @@ public class Racunari {
             spec = rsSpec.getString("specifikacija");
 
         } else {
-            spec = "Nije uneta specifikacija za racunar!";
+            spec = "Nema rezultata";
         }
         return spec;
     }
@@ -232,7 +232,7 @@ public class Racunari {
             spec = rsSpec.getString("specifikacija");
 
         } else {
-            spec = "Nije uneta specifikacija za racunar!";
+            spec = "Nema rezultata";
         }
         return spec;
     }
@@ -247,7 +247,7 @@ public class Racunari {
             os = rsOs.getString("os");
 
         } else {
-            os = "Nije unet os za racunar!";
+            os = "Nema rezultata";
         }
         return os;
     }
@@ -263,7 +263,7 @@ public class Racunari {
             os = rsOs.getString("os");
 
         } else {
-            os = "Nije unet os za racunar!";
+            os = "Nema rezultata";
         }
         return os;
     }
@@ -279,7 +279,7 @@ public class Racunari {
             osKey = rsOsKey.getString("os_key");
 
         } else {
-            osKey = "Nije unet os key za racunar!";
+            osKey = "Nema rezultata";
         }
         return osKey;
     }
@@ -295,7 +295,7 @@ public class Racunari {
             osKey = rsOsKey.getString("os_key");
 
         } else {
-            osKey = "Nije unet os key za racunar!";
+            osKey = "Nema rezultata";
         }
         return osKey;
     }
@@ -311,7 +311,7 @@ public class Racunari {
             office = rsOffice.getString("office");
 
         } else {
-            office = "Nije unet os za racunar!";
+            office = "Nema rezultata";
         }
         return office;
     }
@@ -327,7 +327,7 @@ public class Racunari {
             office = rsOffice.getString("office");
 
         } else {
-            office = "Nije unet os za racunar!";
+            office = "Nema rezultata";
         }
         return office;
     }
@@ -343,7 +343,7 @@ public class Racunari {
             datum = rsDatum.getString("datum");
 
         } else {
-            datum = "Nije unet datum za racunar!";
+            datum = "Nema rezultata";
         }
         
         return datum;
@@ -359,7 +359,7 @@ public class Racunari {
             datum = rsDatum.getString("datum");
 
         } else {
-            datum = "Nije unet datum za racunar!";
+            datum = "Nema rezultata";
         }
         
         return datum;
@@ -375,7 +375,7 @@ public class Racunari {
             officeKey = rsOfficeKey.getString("office_key");
 
         } else {
-            officeKey = "Nije unet os key za racunar!";
+            officeKey = "Nema rezultata";
         }
         return officeKey;
     }
@@ -391,7 +391,7 @@ public class Racunari {
             officeKey = rsOfficeKey.getString("office_key");
 
         } else {
-            officeKey = "Nije unet os key za racunar!";
+            officeKey = "Nema rezultata";
         }
         return officeKey;
     }
@@ -419,7 +419,7 @@ public class Racunari {
         ResultSet rsAllRacunari = pstAllRacunari.executeQuery();
         ArrayList racunari = new ArrayList();
         while(rsAllRacunari.next()){
-            racunari.add((Integer)rsAllRacunari.getObject("id_racunar")+" • "+rsAllRacunari.getString("inv_broj")+ " • "+ rsAllRacunari.getString("korisnik")+ " • "+ rsAllRacunari.getString("ip_adresa"));         
+            racunari.add((Integer)rsAllRacunari.getObject("id_racunar")+" • "+rsAllRacunari.getString("ip_adresa")+ " • "+ rsAllRacunari.getString("korisnik")+ " • "+ rsAllRacunari.getString("inv_broj"));         
         }
     
         return racunari;
@@ -455,7 +455,7 @@ public class Racunari {
             korisnik = rsKorisnik.getString("korisnik");
 
         } else {
-            korisnik = "Nije unet korisnik za racunar!";
+            korisnik = "Nema rezultata";
         }
         return korisnik;
     }
@@ -471,7 +471,7 @@ public class Racunari {
             korisnik = rsKorisnik.getString("korisnik");
 
         } else {
-            korisnik = "Nije unet korisnik za racunar!";
+            korisnik = "Nema rezultata";
         }
         return korisnik;
     }
@@ -482,7 +482,7 @@ public class Racunari {
         return specifikacija;
     }
 
-    ArrayList<String> sviInventarski() throws SQLException {
+    ArrayList sviInventarski() throws SQLException {
         String sqlInv = "SELECT inv_broj FROM racunari WHERE aktivan and vazeci";
         PreparedStatement pstInv = conSQL.prepareStatement(sqlInv);
         ResultSet rsInv = pstInv.executeQuery();
@@ -491,6 +491,16 @@ public class Racunari {
             inventarskiBrojevi.add(rsInv.getString("inv_broj"));
         }
         return inventarskiBrojevi;
+    }
+    ArrayList sviId() throws SQLException {
+        String sqlId = "SELECT id_racunar FROM racunari WHERE aktivan and vazeci";
+        PreparedStatement pstId = conSQL.prepareStatement(sqlId);
+        ResultSet rsId = pstId.executeQuery();
+        ArrayList idBrojevi = new ArrayList<>();
+        while (rsId.next()) {
+            idBrojevi.add(rsId.getInt("id_racunar"));
+        }
+        return idBrojevi;
     }
 
     ArrayList<String> sveIpAdrese() throws SQLException {
