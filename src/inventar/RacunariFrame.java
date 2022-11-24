@@ -66,12 +66,12 @@ public class RacunariFrame extends javax.swing.JFrame {
         uneoLabel.setText(uneo);
         datumLabel.setText(datum);
         fakturaLabel.setText(brfakture);
-        System.out.println(idKategorija);
-        System.out.println(idLokacija);
-        System.out.println(kolicina);
-        System.out.println(naziv);
-        System.out.println(uneo);
-        System.out.println(datum);
+//        System.out.println(idKategorija);
+//        System.out.println(idLokacija);
+//        System.out.println(kolicina);
+//        System.out.println(naziv);
+//        System.out.println(uneo);
+//        System.out.println(datum);
 
     }
 

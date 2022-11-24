@@ -929,6 +929,7 @@ public class RacunariEdit extends javax.swing.JPanel {
         String os = osComboBox.getSelectedItem().toString();
         if (os.equals("Ostalo") || os.equals("Linux")) {
             osKeyField.setEnabled(false);
+            osKeyField.setText(null);
         } else {
             osKeyField.setEnabled(true);
         }
@@ -938,6 +939,7 @@ public class RacunariEdit extends javax.swing.JPanel {
         String office = officeComboBox.getSelectedItem().toString();
         if (office.equals("LibreOffice") || office.equals("Ostalo")) {
             officeKeyField.setEnabled(false);
+            officeKeyField.setText(null);
         } else {
             officeKeyField.setEnabled(true);
         }
