@@ -721,6 +721,7 @@ public class RacunariPregled extends javax.swing.JPanel {
         if (jCheckBox124.isSelected()) {
 
             searchField.setText("10.11.124.");
+            searchField.requestFocusInWindow();
         } else {
             searchField.setText(null);
         }
@@ -731,6 +732,7 @@ public class RacunariPregled extends javax.swing.JPanel {
         if (jCheckBox125.isSelected()) {
 
             searchField.setText("10.11.125.");
+            searchField.requestFocusInWindow();
         } else {
             searchField.setText(null);
         }

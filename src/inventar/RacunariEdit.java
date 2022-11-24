@@ -6,12 +6,15 @@
 package inventar;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JFormattedTextField;
 import javax.swing.JList;
@@ -30,36 +33,95 @@ public class RacunariEdit extends javax.swing.JPanel {
     Racunari racunari;
     Lokacija lokacija;
     Prijem prijem;
-
+    ArrayList<String> sveLokacije;
+    int idRacunar;
+    String korisnik;
     /**
      * Creates new form RacunariPregled
      *
      * @throws java.sql.SQLException
      */
-    public RacunariEdit() throws SQLException {
+    public RacunariEdit(String username) throws SQLException {
         initComponents();
         racunari = new Racunari();
         lokacija = new Lokacija();
         prijem = new Prijem();
+        sveLokacije = lokacija.getAll();
+        this.korisnik = username;
 
     }
+    
+    class Data {
 
-    ArrayList getData(String search) throws SQLException {
-        ArrayList result = new ArrayList<String>();
-        int parametar = Integer.parseInt(search);
-        result = racunari.getAllInfoInv(parametar);
-        return result;
+        String korisnik;
+        String invBroj;
+        String ipAdresa;
+        String macAdresa;
+        String os;
+        String osKey;
+        String office;
+        String officeKey;
+        String procesor;
+        String ram;
+        String hdd;
+        String gpu;
+        String napajanje;
+        String specifikacija;
+        String lokacija;
+
+        public Data(String korisnik, String invBroj, String ipAdresa,String lokacija, String macAdresa, String os, String osKey, String office, String officeKey, String procesor, String ram, String hdd, String gpu, String napajanje, String specifikacija) {
+            this.korisnik = korisnik;
+            this.invBroj = invBroj;
+            this.ipAdresa = ipAdresa;
+            this.macAdresa = macAdresa;
+            this.os = os;
+            this.osKey = osKey;
+            this.office = office;
+            this.officeKey = officeKey;
+            this.procesor = procesor;
+            this.ram = ram;
+            this.hdd = hdd;
+            this.gpu = gpu;
+            this.napajanje = napajanje;
+            this.specifikacija = specifikacija;
+            this.lokacija = lokacija;
+        }
     }
 
+    public Data getData() {
+        // return person details from the method
+        String procesor = cpuField.getText();
+        String ram = ramField.getText();
+        String hdd = hddField.getText();
+        String gpu = gpuField.getText();
+        String napajanje = psuField.getText();
+        String specifikacija = racunari.specifikacija(procesor, ram, hdd, gpu, napajanje);
+        String korisnik = korisnikField.getText();
+        String invBroj = invBrojField.getText();
+        String ipAdresa = ipAdresaField.getText();
+        String macAdresa = macAdresaField.getText();
+        String os = osComboBox.getSelectedItem().toString();
+        String osKey = osKeyField.getText();
+        String office = officeComboBox.getSelectedItem().toString();
+        String officeKey = officeKeyField.getText();
+        String lokacija = lokacijaComboBox.getSelectedItem().toString();
+
+        return new Data(korisnik, invBroj, ipAdresa, lokacija, macAdresa, os, osKey, office, officeKey, procesor, ram, hdd, gpu, napajanje, specifikacija);
+    }
+
+   
     void puniRezId(int search) throws SQLException, JSONException {
         ArrayList sviId = racunari.sviId();
         if (sviId.contains(search)) {
+            idRacunar = search;
             ipAdresaField.setText(racunari.getIpAdresa(search));
-            lokacijaField.setText(racunari.getLokacija(search));
+            sveLokacije.add(0, null);
+            lokacijaComboBox.setModel(new DefaultComboBoxModel<>(sveLokacije.toArray(new String[0])));
+            lokacijaComboBox.setSelectedItem(racunari.getLokacija(search));
             macAdresaField.setText(racunari.getMacAdresa(search));
             invBrojField.setText(racunari.getInventarskiBroj(search));
-            osField.setText(racunari.getOs(search));
-            officeField.setText(racunari.getOffice(search));
+            osComboBox.setSelectedItem(racunari.getOs(search));
+            officeComboBox.setSelectedItem(racunari.getOffice(search));
             osKeyField.setText(racunari.getOsKey(search));
             officeKeyField.setText(racunari.getOfficeKey(search));
             korisnikField.setText(racunari.getKorisnik(search));
@@ -81,12 +143,14 @@ public class RacunariEdit extends javax.swing.JPanel {
         ArrayList sviInv = racunari.sviInventarski();
         if (sviInv.contains(String.valueOf(search))) {
             String id = racunari.getId(search);
+            idRacunar = Integer.parseInt(id);
             ipAdresaField.setText(racunari.getIpAdresaInv(search));
-            lokacijaField.setText(racunari.getLokacijaInv(search));
+            lokacijaComboBox.setModel(new DefaultComboBoxModel<>(sveLokacije.toArray(new String[0])));
+            lokacijaComboBox.setSelectedItem(racunari.getLokacija(search));
             macAdresaField.setText(racunari.getMacAdresaInv(search));
             invBrojField.setText(searchField.getText().trim());
-            osField.setText(racunari.getOsInv(search));
-            officeField.setText(racunari.getOfficeInv(search));
+            osComboBox.setSelectedItem(racunari.getOs(search));
+            officeComboBox.setSelectedItem(racunari.getOffice(search));
             osKeyField.setText(racunari.getOsKeyInv(search));
             officeKeyField.setText(racunari.getOfficeKeyInv(search));
             korisnikField.setText(racunari.getKorisnikInv(search));
@@ -138,6 +202,7 @@ public class RacunariEdit extends javax.swing.JPanel {
         return false;
     }
 }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -184,15 +249,15 @@ public class RacunariEdit extends javax.swing.JPanel {
         jLabel25 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        lokacijaField = new javax.swing.JTextField();
         ipAdresaField = new javax.swing.JTextField();
         macAdresaField = new javax.swing.JTextField();
         invBrojField = new javax.swing.JTextField();
-        osField = new javax.swing.JTextField();
-        officeField = new javax.swing.JTextField();
         osKeyField = new javax.swing.JTextField();
         officeKeyField = new javax.swing.JTextField();
         korisnikField = new javax.swing.JTextField();
+        lokacijaComboBox = new javax.swing.JComboBox<>();
+        osComboBox = new javax.swing.JComboBox<>();
+        officeComboBox = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -206,6 +271,8 @@ public class RacunariEdit extends javax.swing.JPanel {
         jCheckBox124 = new javax.swing.JCheckBox();
         jCheckBox125 = new javax.swing.JCheckBox();
         jButton2 = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        resetButton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(800, 450));
 
@@ -234,10 +301,10 @@ public class RacunariEdit extends javax.swing.JPanel {
         jLabel16.setText("HDD/SSD -");
 
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel17.setText("Graficka kartica -");
+        jLabel17.setText("GPU -");
 
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel19.setText("Napajanje -");
+        jLabel19.setText("PSU -");
 
         cpuField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,10 +319,12 @@ public class RacunariEdit extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -343,42 +412,58 @@ public class RacunariEdit extends javax.swing.JPanel {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Korisnik -");
 
+        osComboBox.setMaximumRowCount(10);
+        osComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Windows 98", "Windows XP", "Windows 7", "Windows 8", "Windows 10", "Windows 11", "Linux", "Ostalo" }));
+        osComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                osComboBoxItemStateChanged(evt);
+            }
+        });
+
+        officeComboBox.setMaximumRowCount(10);
+        officeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "MS Office 2003", "MS Office 2007", "MS Office 2010", "MS Office 2013", "MS Office 2019", "MS Office 2021", "LibreOffice", "Ostalo" }));
+        officeComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                officeComboBoxItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel25, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21)
+                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(officeKeyField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                    .addComponent(osKeyField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(officeField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(osField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(invBrojField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(macAdresaField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ipAdresaField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lokacijaField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(korisnikField))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(officeKeyField)
+                    .addComponent(osKeyField)
+                    .addComponent(invBrojField)
+                    .addComponent(macAdresaField)
+                    .addComponent(ipAdresaField)
+                    .addComponent(lokacijaComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(korisnikField)
+                    .addComponent(osComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(officeComboBox, 0, 171, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(lokacijaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lokacijaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -394,11 +479,11 @@ public class RacunariEdit extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
-                    .addComponent(osField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(osComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
-                    .addComponent(officeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(officeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
@@ -418,22 +503,24 @@ public class RacunariEdit extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(datumLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(fakturaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 21, Short.MAX_VALUE))))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(17, 17, 17))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(17, 17, 17))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -448,10 +535,10 @@ public class RacunariEdit extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fakturaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -579,6 +666,20 @@ public class RacunariEdit extends javax.swing.JPanel {
             }
         });
 
+        editButton.setText("Izmeni");
+        editButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                editButtonMouseReleased(evt);
+            }
+        });
+
+        resetButton.setText("Poništi");
+        resetButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                resetButtonMouseReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -594,7 +695,13 @@ public class RacunariEdit extends javax.swing.JPanel {
                             .addComponent(jSeparator1)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGap(34, 34, 34)
+                                        .addComponent(editButton)
+                                        .addGap(41, 41, 41)
+                                        .addComponent(resetButton)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
@@ -607,7 +714,7 @@ public class RacunariEdit extends javax.swing.JPanel {
                 .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBox124)
                     .addComponent(jCheckBox125))
@@ -638,7 +745,12 @@ public class RacunariEdit extends javax.swing.JPanel {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(editButton)
+                            .addComponent(resetButton)))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
         );
@@ -750,6 +862,7 @@ public class RacunariEdit extends javax.swing.JPanel {
         if (jCheckBox124.isSelected()) {
 
             searchField.setText("10.11.124.");
+            searchField.requestFocusInWindow();
         } else {
             searchField.setText(null);
         }
@@ -760,6 +873,7 @@ public class RacunariEdit extends javax.swing.JPanel {
         if (jCheckBox125.isSelected()) {
 
             searchField.setText("10.11.125.");
+            searchField.requestFocusInWindow();
         } else {
             searchField.setText(null);
         }
@@ -774,9 +888,60 @@ public class RacunariEdit extends javax.swing.JPanel {
         list.removeAllElements();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void editButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editButtonMouseReleased
+        try {
+            Data data = getData();
+            if(racunari.edit(idRacunar, 1, racunari.getLokacijaId(data.lokacija), data.invBroj,data.specifikacija, data.os, data.office, data.korisnik, data.ipAdresa, data.macAdresa, data.osKey, data.officeKey, korisnik)){
+                JOptionPane.showMessageDialog(null, "Uspešno ste izmenili podatke","Edit", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(null, "Neuspešno ažuriranje podataka, pokušajte ponovo","Edit", JOptionPane.ERROR_MESSAGE);
+            };
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Neuspešno ažuriranje podataka, greška je : \n"+ex,"Edit", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(RacunariEdit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_editButtonMouseReleased
+
+    private void resetButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetButtonMouseReleased
+            ipAdresaField.setText(null);
+            lokacijaComboBox.setSelectedIndex(0);
+            macAdresaField.setText(null);
+            invBrojField.setText(null);
+             osComboBox.setSelectedIndex(0);
+            officeComboBox.setSelectedIndex(0);
+            osKeyField.setText(null);
+            officeKeyField.setText(null);
+            korisnikField.setText(null);
+            datumLabel.setText(null);       
+            cpuField.setText(null);
+            ramField.setText(null);
+            hddField.setText(null);
+            gpuField.setText(null);
+            psuField.setText(null);
+            fakturaLabel.setText(null);
+    }//GEN-LAST:event_resetButtonMouseReleased
+
     private void cpuFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpuFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cpuFieldActionPerformed
+
+    private void osComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_osComboBoxItemStateChanged
+        String os = osComboBox.getSelectedItem().toString();
+        if (os.equals("Ostalo") || os.equals("Linux")) {
+            osKeyField.setEnabled(false);
+        } else {
+            osKeyField.setEnabled(true);
+        }
+    }//GEN-LAST:event_osComboBoxItemStateChanged
+
+    private void officeComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_officeComboBoxItemStateChanged
+        String office = officeComboBox.getSelectedItem().toString();
+        if (office.equals("LibreOffice") || office.equals("Ostalo")) {
+            officeKeyField.setEnabled(false);
+        } else {
+            officeKeyField.setEnabled(true);
+        }
+    }//GEN-LAST:event_officeComboBoxItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -784,6 +949,7 @@ public class RacunariEdit extends javax.swing.JPanel {
     private javax.swing.JTextField cpuField;
     private javax.swing.JLabel cpuLabel;
     private javax.swing.JLabel datumLabel;
+    private javax.swing.JButton editButton;
     private javax.swing.JLabel fakturaLabel;
     private javax.swing.JTextField gpuField;
     private javax.swing.JLabel gpuLabel;
@@ -825,16 +991,17 @@ public class RacunariEdit extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField korisnikField;
     private javax.swing.JRadioButton korisnikRadio;
-    private javax.swing.JTextField lokacijaField;
+    private javax.swing.JComboBox<String> lokacijaComboBox;
     private javax.swing.JTextField macAdresaField;
-    private javax.swing.JTextField officeField;
+    private javax.swing.JComboBox<String> officeComboBox;
     private javax.swing.JTextField officeKeyField;
-    private javax.swing.JTextField osField;
+    private javax.swing.JComboBox<String> osComboBox;
     private javax.swing.JTextField osKeyField;
     private javax.swing.JTextField psuField;
     private javax.swing.JLabel psuLabel;
     private javax.swing.JTextField ramField;
     private javax.swing.JLabel ramLabel;
+    private javax.swing.JButton resetButton;
     private javax.swing.JList<String> resultList;
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchField;

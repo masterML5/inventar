@@ -37,7 +37,7 @@ public class Racunari {
 
     String getId(int inventarskiBroj) throws SQLException {
         String id = null;
-        String sqlIdRacunar = "SELECT id_racunar from stampaci WHERE inv_broj=" + inventarskiBroj;
+        String sqlIdRacunar = "SELECT id_racunar from racunari WHERE inv_broj=" + inventarskiBroj;
         PreparedStatement pstIdRacunar = conSQL.prepareStatement(sqlIdRacunar);
         ResultSet rsIdRacunar = pstIdRacunar.executeQuery();
 
@@ -80,13 +80,13 @@ public class Racunari {
         return key;
     }
 
-    boolean edit(int idRacunar, int idKategorija, int idLokacija, int invBroj, String specifikacija, String os, String office, String korisnik, String ipAdresa, String macAdresa, String os_key, String office_key, String editovao, String datum) throws SQLException {
+    boolean edit(int idRacunar, int idKategorija, int idLokacija, String invBroj, String specifikacija, String os, String office, String korisnik, String ipAdresa, String macAdresa, String os_key, String office_key, String editovao) throws SQLException {
         String sqlEditRacunar
-                = "UPDATE stampaci SET id_kategorija = " + idKategorija + ", id_lokacija=" + idLokacija + ",inv_broj = " + invBroj + ",specifikacija = '" + specifikacija + "',"
+                = "UPDATE racunari SET id_kategorija = " + idKategorija + ", id_lokacija=" + idLokacija + ",inv_broj = '" + invBroj + "',specifikacija = '" + specifikacija + "',"
                 + "os = '" + os + "',office = '" + office + "'"
                 + ",korisnik = '" + korisnik + "',mac_adresa = '" + macAdresa + "',"
                 + "ip_adresa = '" + ipAdresa + "',os_key = '" + os_key + "', office_key ='" + office_key + "'"
-                + "editovao = '" + editovao + "',datum = '" + datum + "' WHERE id_racunar=" + idRacunar;
+                + ",editovao = '" + editovao + "',edit_ts = CURRENT_TIMESTAMP WHERE id_racunar=" + idRacunar;
 
         PreparedStatement pstUpdateRacunar = conSQL.prepareStatement(sqlEditRacunar);
         int i = pstUpdateRacunar.executeUpdate();
@@ -187,6 +187,37 @@ public class Racunari {
 
         } else {
             lokacija = "Nema rezultata";
+        }
+        return lokacija;
+    }
+    
+    String getLokacijaId(int idRacunar) throws SQLException {
+        String sqlLokacijaStampaci = "SELECT id_lokacija FROM lokacija as lok JOIN racunari as rac WHERE lok.id_lokacija = rac.id_lokacija AND rac.id_racunar =" + idRacunar;
+        PreparedStatement pstLokacija = conSQL.prepareStatement(sqlLokacijaStampaci);
+        String lokacija;
+        ResultSet rsIdLokRacunar = pstLokacija.executeQuery();
+
+        if (rsIdLokRacunar.next()) {
+
+            lokacija = rsIdLokRacunar.getString("id_lokacija");
+
+        } else {
+            lokacija = "Nema rezultata";
+        }
+        return lokacija;
+    }
+     int getLokacijaId(String nazivlok) throws SQLException {
+        String sqlLokacijaStampaci = "SELECT id_lokacija FROM lokacija WHERE aktivan and vazeci and naziv='"+nazivlok+"'";
+        PreparedStatement pstLokacija = conSQL.prepareStatement(sqlLokacijaStampaci);
+        int lokacija;
+        ResultSet rsIdLokRacunar = pstLokacija.executeQuery();
+
+        if (rsIdLokRacunar.next()) {
+
+            lokacija = rsIdLokRacunar.getInt("id_lokacija");
+
+        } else {
+            lokacija = 0;
         }
         return lokacija;
     }

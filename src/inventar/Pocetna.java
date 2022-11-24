@@ -6,6 +6,7 @@
 package inventar;
 
 import java.awt.Image;
+
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,7 +17,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -47,6 +47,7 @@ public class Pocetna extends javax.swing.JFrame {
         Image logo = createImageIcon("/res/pionir-logo.png", "logo").getImage().getScaledInstance(90, 48, Image.SCALE_SMOOTH);
         ImageIcon logoIcon = new ImageIcon(logo);
         logoLabel.setIcon(logoIcon);
+        jPanel2.getRootPane().setDefaultButton(loginButton);
         
     }
 
@@ -110,6 +111,12 @@ public class Pocetna extends javax.swing.JFrame {
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetButtonActionPerformed(evt);
+            }
+        });
+
+        lozinkaField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lozinkaFieldKeyPressed(evt);
             }
         });
 
@@ -356,6 +363,38 @@ public class Pocetna extends javax.swing.JFrame {
            lozinkaField.setEchoChar('*');
        }
     }//GEN-LAST:event_showPasswordActionPerformed
+
+    private void lozinkaFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lozinkaFieldKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+             try {
+            String username = korisnickoTextField.getText();
+            String password = lozinkaField.getText();
+
+            // String generatedSecuredPasswordHash = BCrypt.hashpw(test, BCrypt.gensalt(12));
+            String sqlCheck = "SELECT * FROM login WHERE aktivan AND vazeci AND username = '" + username + "'";
+            PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheck);
+            ResultSet rsCheck = pstCheck.executeQuery();
+            String password2 = "";
+            if (rsCheck.next()) {
+                password2 = rsCheck.getString("password");
+            }
+
+            if (password2.isEmpty() || password2 == null) {
+                JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
+            } else {
+                boolean matched = BCrypt.checkpw(password, password2);
+                if (matched) {
+                    new Evidencija(username).setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Pogresna lozinka ili korisnicko ime!");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Pocetna.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+    }//GEN-LAST:event_lozinkaFieldKeyPressed
 
     /**
      * @param args the command line arguments

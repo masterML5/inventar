@@ -339,7 +339,7 @@ public class Evidencija extends javax.swing.JFrame {
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         try {
-            re = new RacunariEdit();
+            re = new RacunariEdit(korisnik);
             jTabbedPane1.add(re, "Računari Izmena");
             tabbedCount = jTabbedPane1.getTabCount();
             initTabComponent(tabbedCount-1);
