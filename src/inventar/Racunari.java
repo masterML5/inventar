@@ -597,4 +597,34 @@ public class Racunari {
             return false;
         }
     }
+    int getQueryRowCount(String query) throws SQLException {
+    try (Statement statement = conSQL.createStatement();
+        ResultSet standardRS = statement.executeQuery(query)) {
+        int size = 0;
+        while (standardRS.next()) {
+            size++;
+        }
+        return size;
+    }
+    
+    
+        
+}
+    String sqlEditCheck(String key,String param) throws SQLException{
+        String sql = null;
+        switch (key) {
+            case "inventarski":
+                sql = "SELECT inv_broj FROM racunari WHERE aktivan AND vazeci AND inv_broj ='" + param + "'";
+                break;
+            case "ip":
+                sql = "SELECT ip_adresa FROM racunari WHERE aktivan AND vazeci AND ip_adresa ='" + param + "'";
+                break;
+            case "mac":
+                sql = "SELECT mac_adresa FROM racunari WHERE aktivan AND vazeci AND mac_adresa ='" + param + "'";
+                break;
+            default:
+                break;
+        }
+        return sql;
+    }
 }

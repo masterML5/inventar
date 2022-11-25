@@ -6,17 +6,11 @@
 package inventar;
 
 import java.sql.SQLException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JFormattedTextField;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.text.NumberFormatter;
 import static org.apache.commons.lang3.math.NumberUtils.isNumber;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -575,8 +569,8 @@ public class RacunariPregled extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

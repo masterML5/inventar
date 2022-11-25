@@ -5,9 +5,7 @@
  */
 package inventar;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.String.valueOf;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

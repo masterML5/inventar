@@ -522,10 +522,10 @@ public class Prijem extends javax.swing.JPanel {
             int OJ2 = parseInt(lokacija.getId(OJComboBox.getSelectedItem().toString()));
             String naziv2 = nazivField.getText();
             String brfakture = fakturaField.getText();
-            if(fakture().contains(brfakture)){
-                  JOptionPane.showMessageDialog(null, "Faktura već postoji!","Greška",JOptionPane.ERROR_MESSAGE);
-                  return;
-            }
+//            if(fakture().contains(brfakture)){
+//                  JOptionPane.showMessageDialog(null, "Faktura već postoji!","Greška",JOptionPane.ERROR_MESSAGE);
+//                  return;
+//            }
             
             String napomena = napomenaField.getText();
             String korisnikLokacija = korisnikLokacijaField.getText();

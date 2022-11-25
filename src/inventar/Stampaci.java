@@ -22,7 +22,7 @@ public class Stampaci {
 
     private static Connection conSQL;
     private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
-    private static String BULLET_SEPARATOR = " • ";
+    private static final String BULLET_SEPARATOR = " • ";
 
     public Stampaci() {
 
