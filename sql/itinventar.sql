@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2022 at 09:02 PM
+-- Generation Time: Nov 25, 2022 at 02:58 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -164,6 +164,29 @@ INSERT INTO `lokacija` (`id_lokacija`, `naziv`, `uneo`, `editovao`, `uneo_ts`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `otpis`
+--
+
+CREATE TABLE `otpis` (
+  `id_otpis` int(11) NOT NULL,
+  `id_kategorija` int(11) NOT NULL,
+  `id_podkategorija` int(11) DEFAULT NULL,
+  `id_racunar` int(11) DEFAULT NULL,
+  `id_stampac` int(11) DEFAULT NULL,
+  `broj_otpis` varchar(50) DEFAULT NULL,
+  `naziv_artikal` varchar(50) DEFAULT NULL,
+  `uneo` varchar(50) NOT NULL,
+  `editovao` varchar(50) DEFAULT NULL,
+  `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
+  `edit_ts` timestamp NULL DEFAULT NULL,
+  `datum` varchar(50) NOT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `podkategorija`
 --
 
@@ -230,7 +253,12 @@ INSERT INTO `prijem` (`id_prijem`, `broj_prijem`, `id_kategorija`, `id_podkatego
 (11, '20221103-PRIJEM-11-10', 1, NULL, 1, 20, NULL, '213', 1, '123', '', '1', 'ff', NULL, '2022-11-03 12:03:34', NULL, '2022-11-03', 1, 1),
 (12, '20221103-PRIJEM-13-11', 1, NULL, 3, 21, NULL, 'test', 1, 'test', '', 'test', 'ff', NULL, '2022-11-03 12:08:03', NULL, '2022-11-03', 1, 1),
 (13, '20221103-PRIJEM-12-12', 1, NULL, 2, 22, NULL, 'asd', 1, 'asd', 'zasd', 'ad', 'ff', NULL, '2022-11-03 12:51:46', NULL, '2022-11-03', 1, 1),
-(16, '20221116-PRIJEM-72-13', 7, NULL, 2, NULL, 16, 'Canon LBP 351x', 1, 'test', NULL, 'test', 'ff', NULL, '2022-11-16 10:37:19', NULL, '2022-11-16', 1, 1);
+(16, '20221116-PRIJEM-72-13', 7, NULL, 2, NULL, 16, 'Canon LBP 351x', 1, 'test', NULL, 'test', 'ff', NULL, '2022-11-16 10:37:19', NULL, '2022-11-16', 1, 1),
+(17, '20221118-PRIJEM-13-16', 1, NULL, 3, 23, NULL, 'ALtos', 1, '123', '', 'Test', 'ff', NULL, '2022-11-18 11:05:15', NULL, '2022-11-18', 1, 1),
+(24, '20221123-PRIJEM-33-17', 3, NULL, 3, NULL, NULL, 'asus', 1, 'test2', '', '12', 'ff', NULL, '2022-11-23 12:42:16', NULL, '2022-11-23', 1, 1),
+(25, '20221123-PRIJEM-42-24', 4, 2, 2, NULL, NULL, 'test', 1, 'test3', '', 'test', 'ff', NULL, '2022-11-23 12:48:29', NULL, '2022-11-23', 1, 1),
+(26, '20221123-PRIJEM-52-25', 5, NULL, 2, NULL, NULL, 'test', 1, 'test34', '', 'test', 'ff', NULL, '2022-11-23 12:53:28', NULL, '2022-11-23', 1, 1),
+(27, '20221124-PRIJEM-41-26', 4, 2, 1, NULL, NULL, 'test', 1, 'test', '', 'test', 'ff', NULL, '2022-11-24 12:14:04', NULL, '2022-11-24', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -265,22 +293,23 @@ CREATE TABLE `racunari` (
 --
 
 INSERT INTO `racunari` (`id_racunar`, `id_kategorija`, `id_lokacija`, `inv_broj`, `specifikacija`, `os`, `office`, `korisnik`, `ip_adresa`, `mac_adresa`, `os_key`, `office_key`, `datum`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `aktivan`, `vazeci`) VALUES
-(1, 1, 7, '12321', 'test', 'Windows 10', 'Office 2019', 'test', '10.11.124.22', 'AE:A3:A2:A2:A1', 'asdasd--asdasdas-asdasd', 'asdas-asd-asda', 'ff', '2022-10-28', '', '2022-10-28 08:46:20', NULL, 1, 1),
-(3, 1, 2, '123213', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500W}', 'Windows 10', 'MS Office 2021', 'Melinda', '10.11.125.222', 'A5:F3:F1:23:32:12', 'asda-aadssa-asdas-asdad', 'asda-asdasd-asda-asd', 'ff', '2022-11-03', '', '2022-11-03 06:44:28', NULL, 1, 1),
-(5, 1, 1, '1232132', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.198', 'AF:AD:DA:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:25:28', NULL, 1, 1),
-(6, 1, 1, '34534', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.195', 'AF:AD:DA:E2:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:27:17', NULL, 1, 1),
-(8, 1, 1, '345343', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.190', 'AF:AD:D2:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:28:03', NULL, 1, 1),
-(9, 1, 1, '3453432', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.191', 'AF:AD:DA:EF:A3:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:28:53', NULL, 1, 1),
-(10, 1, 1, '345343211', '{procesor:i5,ram:16, hdd:500,gpu:,napajanje:500w}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.192', 'AF:A8:DA:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:47:54', NULL, 1, 1),
-(13, 1, 3, 'a', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Linux', 'LibreOffice', 'a', 'a', 'a', '', '', 'ff', '2022-11-03', '', '2022-11-03 07:56:56', NULL, 1, 1),
-(14, 1, 3, 'atest', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 8', 'MS Office 2010', 'ateste', 'atest', 'atest', 'test', 'test', 'ff', '2022-11-03', '', '2022-11-03 08:12:44', NULL, 1, 1),
-(15, 1, 2, '1', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 98', 'MS Office 2007', '2', '2', '2', '1', '1', 'ff', '2022-11-03', '', '2022-11-03 08:14:45', NULL, 1, 1),
-(17, 1, 2, '12', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 98', 'MS Office 2003', '1', '1', '1', '1', '1', 'ff', '2022-11-03', '', '2022-11-03 10:22:03', NULL, 1, 1),
-(18, 1, 1, '111', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 10', 'MS Office 2021', 'ksenija', '10.11.125.163', '2A:3A:ED:D2:F7:A2', 'sadas-asdasda-asdas', 'asda-asdasd-asdas', 'ff', '2022-11-03', '', '2022-11-03 10:26:16', NULL, 1, 1),
-(19, 1, 2, '234234324242', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows XP', 'MS Office 2003', 'sasda', '13213213213123', '213121', 'adas', 'asdasd', '2022-11-03', 'ff', '', '2022-11-03 11:20:11', NULL, 1, 1),
-(20, 1, 1, '', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows XP', 'MS Office 2003', '1', '13213', '1222', '1', '1', '2022-11-03', 'ff', '', '2022-11-03 12:03:34', NULL, 1, 1),
-(21, 1, 3, '12313213123213', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Windows 7', 'MS Office 2007', 'test', '32132132131', '12321313213231', 'test', 'test', '2022-11-03', 'ff', '', '2022-11-03 12:08:02', NULL, 1, 1),
-(22, 1, 2, 'as', '{procesor:,ram:, hdd:,gpu:,napajanje:}', 'Linux', 'LibreOffice', 'ad', 'sda', 'das', '', 'dasads', '2022-11-03', 'ff', '', '2022-11-03 12:51:46', NULL, 1, 1);
+(1, 1, 7, '1232130', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 10', 'MS Office 2010', 'test', '10.11.124.229', 'AE:A3:A2:A7:A1', 'asda--asda-sdas-asda-siid', 'asdas-asd-asda', 'ff', '2022-10-28', 'ff', '2022-10-28 08:46:20', '2022-11-25 07:46:23', 1, 1),
+(3, 1, 2, '123213', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 10', 'MS Office 2021', 'Melinda', '10.11.125.222', 'A5:F3:F1:23:32:12', 'asda-aadssa-asdas-asdad', 'asda-asdasd-asda-asd', 'ff', '2022-11-03', '', '2022-11-03 06:44:28', NULL, 1, 1),
+(5, 1, 1, '1232132', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.198', 'AF:AD:DA:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:25:28', NULL, 1, 1),
+(6, 1, 1, '34534', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.195', 'AF:AD:DA:E2:AD:DE', 'asdasd-', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:27:17', NULL, 1, 1),
+(8, 1, 1, '345343', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.190', 'AF:AD:D2:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:28:03', NULL, 1, 1),
+(9, 1, 1, '3453432', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.191', 'AF:AD:DA:EF:A3:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:28:53', NULL, 1, 1),
+(10, 1, 1, '345343211', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 10', 'MS Office 2021', 'Dejana', '10.11.124.192', 'AF:A8:DA:EF:AD:DE', 'asdasd-asdasdad-asdasd', 'asdasd-asdasd-asd', 'ff', '2022-11-03', '', '2022-11-03 07:47:54', NULL, 1, 1),
+(13, 1, 3, '1232136', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Linux', 'LibreOffice', 'a', 'a', 'a', '', '', 'ff', '2022-11-03', '', '2022-11-03 07:56:56', NULL, 1, 1),
+(14, 1, 3, '333333', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 8', 'MS Office 2010', 'ateste', 'atest2333', 'atest', 'test', 'test', 'ff', '2022-11-03', 'ff', '2022-11-03 08:12:44', '2022-11-25 06:30:42', 1, 1),
+(15, 1, 2, '1', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 98', 'MS Office 2007', '2', '10.11.124.2', '2', '1', '1', '123', '2022-11-03', '', '2022-11-03 08:14:45', NULL, 1, 1),
+(17, 1, 2, '12', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 98', 'MS Office 2003', '1', '1', '1', '1', '1', 'ff', '2022-11-03', '', '2022-11-03 10:22:03', NULL, 1, 1),
+(18, 1, 1, '111', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 10', 'MS Office 2021', 'ksenija', '10.11.125.163', '2A:3A:ED:D2:F7:A2', 'sadas-asdasda-asdas', 'asda-asdasd-asdas', 'ff', '2022-11-03', '', '2022-11-03 10:26:16', NULL, 1, 1),
+(19, 1, 2, '234234324242', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows XP', 'MS Office 2003', 'sasda', '13213213213123', '213121', 'adas', 'asdasd', '2022-11-03', 'ff', '', '2022-11-03 11:20:11', NULL, 1, 1),
+(20, 1, 1, '', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows XP', 'MS Office 2003', '1', '13213', '1222', '1', '1', '2022-11-03', 'ff', '', '2022-11-03 12:03:34', NULL, 1, 1),
+(21, 1, 3, '12313213', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Windows 7', 'MS Office 2007', 'test', '32132132131', '12321313213231', 'test', 'test', '2022-11-03', 'ff', '', '2022-11-03 12:08:02', NULL, 1, 1),
+(22, 1, 2, '8788', '{\"procesor\":\"i5\",\"ram\":\"16\",\"hdd\":\"500\",\"gpu\":\"a\",\"napajanje\":\"500w\"}', 'Linux', 'LibreOffice', 'ad', 'sda', 'das', '', 'dasads', '2022-11-03', 'ff', '', '2022-11-03 12:51:46', NULL, 1, 1),
+(23, 1, 3, '321', '{\"procesor\":\"3333\",\"ram\":\"3\",\"hdd\":\"321\",\"gpu\":\"\",\"napajanje\":\"1\"}', 'Windows 10', 'LibreOffice', 'Test', '10.11.124.223', '321', '11', '', '2022-11-18', 'ff', 'ff', '2022-11-18 11:05:15', '2022-11-25 07:39:23', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -316,11 +345,11 @@ CREATE TABLE `stampaci` (
 
 INSERT INTO `stampaci` (`id_stampaci`, `id_kategorija`, `id_lokacija`, `id_toner`, `inv_broj`, `model`, `marka`, `toner`, `vrsta`, `mrezni`, `ip_adresa`, `lokacijaKorisnik`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
 (1, 7, 6, 1, '55555', '111', 'HP', 'CF259', 'Multifunkcijski', 'Mrežni', '10.11.124.22', 'Danijela', '', NULL, '2022-10-27 09:00:19', NULL, NULL, 1, 1),
-(2, 7, 2, 1, '21321', 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:00:20', NULL, '2022-10-26', 1, 1),
-(7, 7, 2, 1, '213221', 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:06:20', NULL, '2022-10-27', 1, 1),
+(2, 7, 2, 1, '21321', 'LBP351X', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '10.11.124.107', 'Pozadi', 'ff', NULL, '2022-10-27 09:00:20', NULL, '2022-10-26', 1, 1),
+(7, 7, 2, 1, '213221', 'LBP352X', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '10.11.124.106', 'Pozadi', 'ff', NULL, '2022-10-27 09:06:20', NULL, '2022-10-27', 1, 1),
 (11, 7, 2, 2, '', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '12.13', 'pozadi', 'ff', NULL, '2022-11-16 10:52:44', NULL, '2022-11-16', 1, 1),
-(12, 7, 2, 2, 'uu', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '12.13r', 'pozadi', 'ff', NULL, '2022-11-16 10:54:40', NULL, '2022-11-16', 1, 1),
-(13, 7, 2, 2, 'uu2', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '12.13r6', 'pozadi', 'ff', NULL, '2022-11-16 10:55:08', NULL, '2022-11-16', 1, 1),
+(12, 7, 2, 3, 'uu', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', '12.13r', 'pozadi', 'ff', NULL, '2022-11-16 10:54:40', NULL, '2022-11-16', 1, 1),
+(13, 7, 2, 1, 'uu2', 'LBP 351x', 'Canon', 'CF259A', 'Monograf', 'Mrežni', '12.13r6', 'pozadi', 'ff', NULL, '2022-11-16 10:55:08', NULL, '2022-11-16', 1, 1),
 (15, 7, 2, 2, '', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', 'test', 'test', 'ff', NULL, '2022-11-16 11:35:53', NULL, '2022-11-16', 1, 1),
 (16, 7, 2, 2, '', 'LBP 351x', 'Canon', 'CRG039', 'Monograf', 'Mrežni', 'test2', 'test', 'ff', NULL, '2022-11-16 11:37:19', NULL, '2022-11-16', 1, 1);
 
@@ -334,6 +363,7 @@ CREATE TABLE `toneri` (
   `id_toner` int(11) NOT NULL,
   `naziv` varchar(50) NOT NULL DEFAULT '',
   `kolicina` int(11) DEFAULT NULL,
+  `prep_kolicina` int(11) DEFAULT NULL,
   `uneo` varchar(50) NOT NULL,
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` datetime NOT NULL DEFAULT current_timestamp(),
@@ -347,9 +377,10 @@ CREATE TABLE `toneri` (
 -- Dumping data for table `toneri`
 --
 
-INSERT INTO `toneri` (`id_toner`, `naziv`, `kolicina`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
-(1, 'CF259A', 1, '', NULL, '2022-11-15 13:50:49', NULL, NULL, 1, 1),
-(2, 'CRG039', 5, '', NULL, '2022-11-16 09:31:37', NULL, NULL, 1, 1);
+INSERT INTO `toneri` (`id_toner`, `naziv`, `kolicina`, `prep_kolicina`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 'CF259A', 10, 4, 'ff', NULL, '2022-11-15 13:50:49', NULL, NULL, 1, 1),
+(2, 'CRG039', 4, 4, 'ff', NULL, '2022-11-16 09:31:37', NULL, NULL, 1, 1),
+(3, 'CF217A', 3, 4, 'ff', NULL, '2022-11-25 10:48:46', NULL, NULL, 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -384,6 +415,16 @@ ALTER TABLE `login`
 --
 ALTER TABLE `lokacija`
   ADD PRIMARY KEY (`id_lokacija`);
+
+--
+-- Indexes for table `otpis`
+--
+ALTER TABLE `otpis`
+  ADD PRIMARY KEY (`id_otpis`),
+  ADD KEY `FK_otpis_kategorija` (`id_kategorija`),
+  ADD KEY `FK_otpis_podkategorija` (`id_podkategorija`),
+  ADD KEY `FK_otpis_racunar` (`id_racunar`),
+  ADD KEY `FK_otpis_stampac` (`id_stampac`);
 
 --
 -- Indexes for table `podkategorija`
@@ -421,6 +462,7 @@ ALTER TABLE `racunari`
 ALTER TABLE `stampaci`
   ADD PRIMARY KEY (`id_stampaci`),
   ADD UNIQUE KEY `id_stampaci_inv_broj_aktivan_vazeci` (`id_stampaci`,`inv_broj`,`aktivan`,`vazeci`),
+  ADD UNIQUE KEY `ip_adresa_aktivan_vazeci` (`ip_adresa`,`aktivan`,`vazeci`),
   ADD KEY `FK_lokacija_stampaci` (`id_lokacija`),
   ADD KEY `FK_kategorija_stampaci` (`id_kategorija`),
   ADD KEY `FK_toner_stampaci` (`id_toner`);
@@ -460,6 +502,12 @@ ALTER TABLE `lokacija`
   MODIFY `id_lokacija` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT for table `otpis`
+--
+ALTER TABLE `otpis`
+  MODIFY `id_otpis` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `podkategorija`
 --
 ALTER TABLE `podkategorija`
@@ -469,13 +517,13 @@ ALTER TABLE `podkategorija`
 -- AUTO_INCREMENT for table `prijem`
 --
 ALTER TABLE `prijem`
-  MODIFY `id_prijem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_prijem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `racunari`
 --
 ALTER TABLE `racunari`
-  MODIFY `id_racunar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_racunar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `stampaci`
@@ -487,7 +535,7 @@ ALTER TABLE `stampaci`
 -- AUTO_INCREMENT for table `toneri`
 --
 ALTER TABLE `toneri`
-  MODIFY `id_toner` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_toner` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -501,6 +549,15 @@ ALTER TABLE `inventar`
   ADD CONSTRAINT `FK_lokacija_inventar` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_racunar_inventar` FOREIGN KEY (`id_racunar`) REFERENCES `racunari` (`id_racunar`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_stampac_inventar` FOREIGN KEY (`id_stampac`) REFERENCES `stampaci` (`id_stampaci`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `otpis`
+--
+ALTER TABLE `otpis`
+  ADD CONSTRAINT `FK_otpis_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_otpis_podkategorija` FOREIGN KEY (`id_podkategorija`) REFERENCES `podkategorija` (`id_podkategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_otpis_racunar` FOREIGN KEY (`id_racunar`) REFERENCES `racunari` (`id_racunar`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_otpis_stampac` FOREIGN KEY (`id_stampac`) REFERENCES `stampaci` (`id_stampaci`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `podkategorija`
