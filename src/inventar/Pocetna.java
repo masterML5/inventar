@@ -87,6 +87,7 @@ public class Pocetna extends javax.swing.JFrame {
         podnaslovLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         podnaslovLabel.setText("Prijava");
 
+        loginButton.setBackground(new java.awt.Color(204, 255, 204));
         loginButton.setText("Login");
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -102,6 +103,7 @@ public class Pocetna extends javax.swing.JFrame {
             }
         });
 
+        resetButton.setBackground(new java.awt.Color(255, 153, 153));
         resetButton.setText("Reset");
         resetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -181,6 +183,7 @@ public class Pocetna extends javax.swing.JFrame {
                 .addGap(79, 79, 79))
         );
 
+        registracijaButton.setBackground(new java.awt.Color(204, 204, 255));
         registracijaButton.setText("Registracija");
         registracijaButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

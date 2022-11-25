@@ -416,6 +416,7 @@ public class RacunariFrame extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
+        jButton1.setBackground(new java.awt.Color(204, 255, 204));
         jButton1.setText("Unesi");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -423,6 +424,7 @@ public class RacunariFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(255, 153, 153));
         jButton2.setText("Poništi");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {

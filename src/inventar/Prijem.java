@@ -278,6 +278,7 @@ public class Prijem extends javax.swing.JPanel {
 
         jLabel3.setText("* OJ/Lokacija");
 
+        jButton1.setBackground(new java.awt.Color(204, 255, 204));
         jButton1.setText("Dodaj");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -285,6 +286,7 @@ public class Prijem extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(255, 153, 153));
         jButton2.setText("Poništi");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {

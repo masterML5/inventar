@@ -341,6 +341,7 @@ public class RacunariEdit extends javax.swing.JPanel {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Računari Izmena");
 
+        searchBtn.setBackground(new java.awt.Color(255, 255, 204));
         searchBtn.setText("Pretraži");
         searchBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -618,6 +619,7 @@ public class RacunariEdit extends javax.swing.JPanel {
 
         jScrollPane1.setViewportView(resultList);
 
+        jButton1.setBackground(new java.awt.Color(204, 204, 255));
         jButton1.setText("Izaberi");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -736,6 +738,7 @@ public class RacunariEdit extends javax.swing.JPanel {
             }
         });
 
+        editButton.setBackground(new java.awt.Color(204, 255, 204));
         editButton.setText("Izmeni");
         editButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -743,6 +746,7 @@ public class RacunariEdit extends javax.swing.JPanel {
             }
         });
 
+        resetButton.setBackground(new java.awt.Color(255, 153, 153));
         resetButton.setText("Poništi");
         resetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -811,7 +815,7 @@ public class RacunariEdit extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jCheckBox125))
                             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

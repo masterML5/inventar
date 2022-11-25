@@ -174,6 +174,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="loginButton">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="cc" green="ff" red="cc" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Login"/>
               </Properties>
               <Events>
@@ -184,6 +187,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="resetButton">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="99" green="99" red="ff" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Reset"/>
               </Properties>
               <Events>
@@ -223,6 +229,9 @@
         </Container>
         <Component class="javax.swing.JButton" name="registracijaButton">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="cc" red="cc" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Registracija"/>
           </Properties>
           <Events>
