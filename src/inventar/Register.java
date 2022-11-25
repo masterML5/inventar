@@ -252,7 +252,7 @@ public class Register extends javax.swing.JFrame {
             } else if (!isValidEmail(email)) {
                 System.out.println("The Email address " + email + " is invalid");
             } else {
-                String sqlCheckUser = "SELECT username FROM login where username ='" + username + "'";
+                String sqlCheckUser = "SELECT username FROM login where aktivan and vazeci and  username ='" + username + "'";
                 PreparedStatement pstCheck = conSQL.prepareStatement(sqlCheckUser);
                 ResultSet rsCheck = pstCheck.executeQuery();
                 if (rsCheck.next()) {

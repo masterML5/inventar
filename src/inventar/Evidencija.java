@@ -30,6 +30,7 @@ public class Evidencija extends javax.swing.JFrame {
     private String datum;
     private String username;
     private int tabbedCount;
+    private ToneriPregled tp;
    
 
     /**
@@ -57,6 +58,7 @@ public class Evidencija extends javax.swing.JFrame {
         prijem = new Prijem(korisnik, datum);
         izdavanje = new Izdavanje();
         otpis = new Otpis();
+        tp = new ToneriPregled();
 
 //        jTabbedPane1.addTab("Prijem", icon, prijem);
 //        jTabbedPane1.addTab("Izdavanje", icon, izdavanje);
@@ -292,7 +294,15 @@ public class Evidencija extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu2MouseReleased
 
     private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
-       
+        try {
+            tp = new ToneriPregled(korisnik);
+            jTabbedPane1.add(tp, "Toneri pregled");
+            tabbedCount = jTabbedPane1.getTabCount();
+            initTabComponent(tabbedCount-1);
+            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem3MouseReleased
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed

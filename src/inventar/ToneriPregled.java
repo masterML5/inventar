@@ -5,17 +5,103 @@
  */
 package inventar;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
+
 /**
  *
  * @author milosjelic
  */
 public class ToneriPregled extends javax.swing.JPanel {
 
+    private static Connection conSQL;
+    private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
+    private static DefaultTableModel tm;
+
     /**
      * Creates new form ToneriPregled
      */
-    public ToneriPregled() {
+    public ToneriPregled() throws SQLException {
         initComponents();
+
+    }
+
+    public ToneriPregled(String username) throws SQLException {
+        initComponents();
+        tm = (DefaultTableModel) toneriTable.getModel();
+        TableColumnModel tcm = toneriTable.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(100);
+        tcm.getColumn(1).setPreferredWidth(450);
+        tcm.getColumn(2).setPreferredWidth(50);
+        tcm.removeColumn(tcm.getColumn(3));
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        toneriTable.setDefaultRenderer(String.class, centerRenderer);
+        toneriTable.setDefaultRenderer(Integer.class, centerRenderer);
+
+        try {
+            conSQL = DriverManager.getConnection(connectionUrlMySQL);
+            conSQL.setAutoCommit(false);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        ArrayList toneri = getToneri();
+        for (int i = 0; i < toneri.size(); i++) {
+            String data = toneri.get(i).toString();
+            String[] a = data.split("•");
+            tm.addRow(a);
+        }
+
+        for (int j = 0; j < tm.getRowCount(); j++) {
+            int kolicina = Integer.parseInt(tm.getValueAt(j, 2).toString().trim());
+            int prep_kolicina = Integer.parseInt(tm.getValueAt(j, 3).toString().trim());
+            if(kolicina < prep_kolicina){
+                toneriTable.setValueAt("<html><p color='red'>"+kolicina+"</p></html>", j, 2);
+            }else if(kolicina == prep_kolicina){
+                toneriTable.setValueAt("<html><p color='FF8C00'>"+kolicina+"</p></html>", j, 2);
+            }else{
+                toneriTable.setValueAt("<html><p color='green'>"+kolicina+"</p></html>", j, 2);
+            }
+       
+
+        }
+    }
+
+  
+
+    ArrayList getToneri() throws SQLException {
+        String sql = "SELECT ton.naziv, ton.kolicina, ton.prep_kolicina, GROUP_CONCAT(distinct stmp.marka,\" \",stmp.model SEPARATOR ' --- ') as mm FROM toneri AS ton, stampaci AS stmp WHERE ton.aktivan and ton.vazeci "
+                + "and ton.id_toner = stmp.id_toner and stmp.aktivan and stmp.vazeci GROUP BY ton.id_toner";
+        PreparedStatement pstAllToneri = conSQL.prepareStatement(sql);
+        ResultSet rsAllToneri = pstAllToneri.executeQuery();
+        ArrayList toneri = new ArrayList();
+        while (rsAllToneri.next()) {
+            toneri.add(rsAllToneri.getString("ton.naziv") + " • " + rsAllToneri.getString("mm") + " • " + rsAllToneri.getInt("ton.kolicina") + " • " + rsAllToneri.getInt("ton.prep_kolicina"));
+        }
+
+        return toneri;
+    }
+
+    public void filter(String query) {
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(tm);
+        toneriTable.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter("(?i)" + query));
+
     }
 
     /**
@@ -28,29 +114,114 @@ public class ToneriPregled extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        toneriTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
 
-        jLabel1.setText("ToneriPregled");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText(" Toneri");
+
+        toneriTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Toner", "Štampač", "Količina", "PrepKol"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(toneriTable);
+        if (toneriTable.getColumnModel().getColumnCount() > 0) {
+            toneriTable.getColumnModel().getColumn(0).setHeaderValue("Toner");
+            toneriTable.getColumnModel().getColumn(1).setHeaderValue("Štampač");
+            toneriTable.getColumnModel().getColumn(2).setResizable(false);
+            toneriTable.getColumnModel().getColumn(2).setHeaderValue("Količina");
+            toneriTable.getColumnModel().getColumn(3).setResizable(false);
+            toneriTable.getColumnModel().getColumn(3).setHeaderValue("PrepKol");
+        }
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("Pretraga")));
+
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(24, Short.MAX_VALUE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(137, 137, 137)
-                .addComponent(jLabel1)
-                .addContainerGap(639, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 182, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(119, 119, 119)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(362, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        String query = jTextField1.getText();
+        filter(query);
+    }//GEN-LAST:event_jTextField1KeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable toneriTable;
     // End of variables declaration//GEN-END:variables
 }

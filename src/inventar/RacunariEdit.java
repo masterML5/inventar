@@ -239,9 +239,31 @@ public class RacunariEdit extends javax.swing.JPanel {
         return !ip.endsWith(".");
     } catch (NumberFormatException nfe) {
         return false;
-    }
+    }  
+}
     
+     boolean validIP(String ip){
     
+    try {
+        if ( ip == null || ip.isEmpty() ) {
+            return false;
+        }
+
+        String[] parts = ip.split( "\\." );
+        if ( parts.length != 4 ) {
+            return false;
+        }
+
+        for ( String s : parts ) {
+            int i = Integer.parseInt( s );
+            if ( (i < 0) || (i > 255) ) {
+                return false;
+            }
+        }
+        return !ip.endsWith(".");
+    } catch (NumberFormatException nfe) {
+        return false;
+    }  
 }
     
     void resetData(){
@@ -986,7 +1008,10 @@ public class RacunariEdit extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "IP Adresa mora biti jedinstvena za svaki računar", "Greška", JOptionPane.ERROR_MESSAGE);
             } else if (racunari.getQueryRowCount(racunari.sqlEditCheck("mac", data.macAdresa)) >= 1 && !macAdresaRez.equals(data.macAdresa)) {
                 JOptionPane.showMessageDialog(null, "MAC Adresa mora biti jedinstvena za svaki računar", "Greška", JOptionPane.ERROR_MESSAGE);
-            } else{
+            } else if (!validIP(data.ipAdresa)){
+                JOptionPane.showMessageDialog(null, "Neispravna IP Adresa", "Greška", JOptionPane.ERROR_MESSAGE);
+            } 
+            else{
              if(racunari.edit(idRacunar, 1, racunari.getLokacijaId(data.lokacija), data.invBroj,data.specifikacija, data.os, data.office, data.korisnik, data.ipAdresa, data.macAdresa, data.osKey, data.officeKey, korisnik)){
                 JOptionPane.showMessageDialog(null, "Uspešno ste izmenili podatke","Edit", JOptionPane.INFORMATION_MESSAGE);
                 resetData();
