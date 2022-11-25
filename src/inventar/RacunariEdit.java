@@ -240,7 +240,28 @@ public class RacunariEdit extends javax.swing.JPanel {
     } catch (NumberFormatException nfe) {
         return false;
     }
+    
+    
 }
+    
+    void resetData(){
+        ipAdresaField.setText(null);
+            lokacijaComboBox.setSelectedIndex(0);
+            macAdresaField.setText(null);
+            invBrojField.setText(null);
+             osComboBox.setSelectedIndex(0);
+            officeComboBox.setSelectedIndex(0);
+            osKeyField.setText(null);
+            officeKeyField.setText(null);
+            korisnikField.setText(null);
+            datumLabel.setText(null);       
+            cpuField.setText(null);
+            ramField.setText(null);
+            hddField.setText(null);
+            gpuField.setText(null);
+            psuField.setText(null);
+            fakturaLabel.setText(null);
+    }
     
 
     /**
@@ -964,6 +985,7 @@ public class RacunariEdit extends javax.swing.JPanel {
             } else{
              if(racunari.edit(idRacunar, 1, racunari.getLokacijaId(data.lokacija), data.invBroj,data.specifikacija, data.os, data.office, data.korisnik, data.ipAdresa, data.macAdresa, data.osKey, data.officeKey, korisnik)){
                 JOptionPane.showMessageDialog(null, "Uspešno ste izmenili podatke","Edit", JOptionPane.INFORMATION_MESSAGE);
+                resetData();
             }else{
                 JOptionPane.showMessageDialog(null, "Neuspešno ažuriranje podataka, pokušajte ponovo","Edit", JOptionPane.ERROR_MESSAGE);
             };
@@ -974,22 +996,7 @@ public class RacunariEdit extends javax.swing.JPanel {
     }//GEN-LAST:event_editButtonMouseReleased
 
     private void resetButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetButtonMouseReleased
-            ipAdresaField.setText(null);
-            lokacijaComboBox.setSelectedIndex(0);
-            macAdresaField.setText(null);
-            invBrojField.setText(null);
-             osComboBox.setSelectedIndex(0);
-            officeComboBox.setSelectedIndex(0);
-            osKeyField.setText(null);
-            officeKeyField.setText(null);
-            korisnikField.setText(null);
-            datumLabel.setText(null);       
-            cpuField.setText(null);
-            ramField.setText(null);
-            hddField.setText(null);
-            gpuField.setText(null);
-            psuField.setText(null);
-            fakturaLabel.setText(null);
+            resetData();
     }//GEN-LAST:event_resetButtonMouseReleased
 
     private void cpuFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpuFieldActionPerformed
