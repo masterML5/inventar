@@ -31,6 +31,7 @@ public class Evidencija extends javax.swing.JFrame {
     private String username;
     private int tabbedCount;
     private ToneriPregled tp;
+    private ToneriPrijem tprijem;
    
 
     /**
@@ -59,6 +60,7 @@ public class Evidencija extends javax.swing.JFrame {
         izdavanje = new Izdavanje();
         otpis = new Otpis();
         tp = new ToneriPregled();
+        tprijem = new ToneriPrijem(korisnik,datum);
 
 //        jTabbedPane1.addTab("Prijem", icon, prijem);
 //        jTabbedPane1.addTab("Izdavanje", icon, izdavanje);
@@ -102,6 +104,7 @@ public class Evidencija extends javax.swing.JFrame {
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
@@ -197,6 +200,14 @@ public class Evidencija extends javax.swing.JFrame {
             }
         });
         jMenu4.add(jMenuItem3);
+
+        jMenuItem13.setText("Prijem");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem13);
 
         jMenuItem4.setText("Izmena");
         jMenu4.add(jMenuItem4);
@@ -295,7 +306,7 @@ public class Evidencija extends javax.swing.JFrame {
 
     private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
         try {
-            tp = new ToneriPregled(korisnik);
+            tp = new ToneriPregled(korisnik, datum);
             jTabbedPane1.add(tp, "Toneri pregled");
             tabbedCount = jTabbedPane1.getTabCount();
             initTabComponent(tabbedCount-1);
@@ -359,6 +370,18 @@ public class Evidencija extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+       try {
+            tprijem = new ToneriPrijem(korisnik,datum);
+            jTabbedPane1.add(tprijem, "Toneri Prijem");
+            tabbedCount = jTabbedPane1.getTabCount();
+            initTabComponent(tabbedCount-1);
+            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -418,6 +441,7 @@ public class Evidencija extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

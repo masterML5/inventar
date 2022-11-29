@@ -7,12 +7,18 @@ package inventar;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
@@ -22,6 +28,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -32,69 +39,144 @@ public class ToneriPregled extends javax.swing.JPanel {
     private static Connection conSQL;
     private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
     private static DefaultTableModel tm;
-
+    Lokacija lokacija = new Lokacija();
+    ArrayList<String> sveLokacije = lokacija.getAll();
+    ToneriIzdavanje tizdavanje = new ToneriIzdavanje();
+    private static String korisnik;
+    private static String datum;
     /**
      * Creates new form ToneriPregled
+     * @throws java.sql.SQLException
      */
     public ToneriPregled() throws SQLException {
         initComponents();
-
+         try {
+            conSQL = DriverManager.getConnection(connectionUrlMySQL);
+            conSQL.setAutoCommit(false);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
     }
 
-    public ToneriPregled(String username) throws SQLException {
+    public ToneriPregled(String username, String datum) throws SQLException {
         initComponents();
         tm = (DefaultTableModel) toneriTable.getModel();
-        TableColumnModel tcm = toneriTable.getColumnModel();
-        tcm.getColumn(0).setPreferredWidth(100);
-        tcm.getColumn(1).setPreferredWidth(450);
-        tcm.getColumn(2).setPreferredWidth(50);
-        tcm.removeColumn(tcm.getColumn(3));
+        TableColumnModel tcm = toneriTable.getColumnModel();        
+        tcm.getColumn(0).setPreferredWidth(50);
+        tcm.getColumn(1).setPreferredWidth(100);
+        tcm.getColumn(2).setPreferredWidth(450);
+        tcm.getColumn(3).setPreferredWidth(50);
+        tcm.removeColumn(tcm.getColumn(4));
+        tcm.removeColumn(tcm.getColumn(4));
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         toneriTable.setDefaultRenderer(String.class, centerRenderer);
         toneriTable.setDefaultRenderer(Integer.class, centerRenderer);
-
+        korisnik = username;
+        this.datum = datum;
+        sveLokacije.add(0,null);
+        lokacijaComboBox.setModel(new DefaultComboBoxModel<>(sveLokacije.toArray(new String[0])));
+        AutoCompleteDecorator.decorate(lokacijaComboBox);
         try {
             conSQL = DriverManager.getConnection(connectionUrlMySQL);
             conSQL.setAutoCommit(false);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
+        
+        puniTable();
+        
+        Image red = createImageIcon("/res/red.png","redIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+        ImageIcon redIconPng = new ImageIcon(red);
+        redIcon.setIcon(redIconPng);
+        Image green = createImageIcon("/res/green.png","greenIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+        ImageIcon greenIconPng = new ImageIcon(green);
+        greenIcon.setIcon(greenIconPng);
+        Image orange = createImageIcon("/res/orange.png","orangeIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+        ImageIcon orangeIconPng = new ImageIcon(orange);
+        orangeIcon.setIcon(orangeIconPng);
+    }
+
+  
+
+    ArrayList getToneri() throws SQLException {
+        String sql = "SELECT ton.id_toner,ton.naziv, ton.prep_kolicina, ton.kolicina, GROUP_CONCAT(distinct stmp.marka,\" \",stmp.model SEPARATOR '----') as mm,"
+                + " GROUP_CONCAT(DISTINCT lok.naziv) as lokacija FROM toneri AS ton, stampaci AS stmp, lokacija AS lok WHERE"
+                + " ton.id_toner = stmp.id_toner AND stmp.id_lokacija = lok.id_lokacija GROUP BY ton.id_toner";
+        PreparedStatement pstAllToneri = conSQL.prepareStatement(sql);
+        ResultSet rsAllToneri = pstAllToneri.executeQuery();
+        ArrayList toneri = new ArrayList();
+        while (rsAllToneri.next()) {
+            toneri.add(rsAllToneri.getInt("ton.id_toner") + " • "+rsAllToneri.getString("ton.naziv") + " • " + rsAllToneri.getString("mm") + " • " + rsAllToneri.getInt("ton.kolicina")
+                    + " • " + rsAllToneri.getInt("ton.prep_kolicina")+ " • " + rsAllToneri.getString("lokacija"));
+        }
+
+        return toneri;
+    }
+    
+    ArrayList getAllToneri() throws SQLException{
+        String sqlToneri = "SELECT naziv FROM toneri WHERE aktivan AND vazeci GROUP BY naziv";
+        PreparedStatement pstToneri = conSQL.prepareStatement(sqlToneri);
+        ResultSet rsToneri = pstToneri.executeQuery();
+        ArrayList toneriAll = new ArrayList();
+        while(rsToneri.next()){
+            toneriAll.add(rsToneri.getString("naziv"));
+        }
+        
+        return toneriAll;
+    }
+    void puniTable() throws SQLException{
         ArrayList toneri = getToneri();
         for (int i = 0; i < toneri.size(); i++) {
             String data = toneri.get(i).toString();
             String[] a = data.split("•");
             tm.addRow(a);
         }
-
         for (int j = 0; j < tm.getRowCount(); j++) {
-            int kolicina = Integer.parseInt(tm.getValueAt(j, 2).toString().trim());
-            int prep_kolicina = Integer.parseInt(tm.getValueAt(j, 3).toString().trim());
+            int kolicina = Integer.parseInt(tm.getValueAt(j, 3).toString().trim());
+            int prep_kolicina = Integer.parseInt(tm.getValueAt(j, 4).toString().trim());
             if(kolicina < prep_kolicina){
-                toneriTable.setValueAt("<html><p color='red'>"+kolicina+"</p></html>", j, 2);
+                toneriTable.setValueAt("<html><p color='red'><b>"+kolicina+"</b></p></html>", j, 3);
             }else if(kolicina == prep_kolicina){
-                toneriTable.setValueAt("<html><p color='FF8C00'>"+kolicina+"</p></html>", j, 2);
+                toneriTable.setValueAt("<html><p color='FF8C00'><b>"+kolicina+"</b></p></html>", j, 3);
             }else{
-                toneriTable.setValueAt("<html><p color='green'>"+kolicina+"</p></html>", j, 2);
+                toneriTable.setValueAt("<html><p color='green'><b>"+kolicina+"</b></p></html>", j, 3);
             }
        
 
         }
     }
+    String getTonerById(int idToner) throws SQLException{
+        String sqlIdToner = "SELECT naziv from toneri where aktivan and vazeci and id_toner ="+idToner;
+        PreparedStatement pstIdToner = conSQL.prepareStatement(sqlIdToner);
+        String toner;
+        ResultSet rsIdToner = pstIdToner.executeQuery();
 
-  
+        if (rsIdToner.next()) {
 
-    ArrayList getToneri() throws SQLException {
-        String sql = "SELECT ton.naziv, ton.kolicina, ton.prep_kolicina, GROUP_CONCAT(distinct stmp.marka,\" \",stmp.model SEPARATOR ' --- ') as mm FROM toneri AS ton, stampaci AS stmp WHERE ton.aktivan and ton.vazeci "
-                + "and ton.id_toner = stmp.id_toner and stmp.aktivan and stmp.vazeci GROUP BY ton.id_toner";
-        PreparedStatement pstAllToneri = conSQL.prepareStatement(sql);
-        ResultSet rsAllToneri = pstAllToneri.executeQuery();
-        ArrayList toneri = new ArrayList();
-        while (rsAllToneri.next()) {
-            toneri.add(rsAllToneri.getString("ton.naziv") + " • " + rsAllToneri.getString("mm") + " • " + rsAllToneri.getInt("ton.kolicina") + " • " + rsAllToneri.getInt("ton.prep_kolicina"));
+            toner = rsIdToner.getString("naziv");
+
+        } else {
+            toner = "Nema rezultata";
         }
+        
+        return toner;
+    }
+    int getKolicinaById(int idToner) throws SQLException{
+        String sqlIdToner = "SELECT kolicina from toneri where aktivan and vazeci and id_toner ="+idToner;
+        PreparedStatement pstIdToner = conSQL.prepareStatement(sqlIdToner);
+        int kolicina;
+        ResultSet rsIdToner = pstIdToner.executeQuery();
 
-        return toneri;
+        if (rsIdToner.next()) {
+
+            kolicina = rsIdToner.getInt("kolicina");
+
+        } else {
+            kolicina = 0;
+        }
+        
+        return kolicina;
     }
 
     public void filter(String query) {
@@ -103,6 +185,17 @@ public class ToneriPregled extends javax.swing.JPanel {
         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query));
 
     }
+   
+    protected ImageIcon createImageIcon(String path, String description) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,6 +211,13 @@ public class ToneriPregled extends javax.swing.JPanel {
         toneriTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
+        redIcon = new javax.swing.JLabel();
+        greenIcon = new javax.swing.JLabel();
+        orangeIcon = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lokacijaComboBox = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -128,14 +228,14 @@ public class ToneriPregled extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Toner", "Štampač", "Količina", "PrepKol"
+                "ID Toner", "Toner", "Štampač", "Količina", "PrepKol", "Lokacija"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -148,12 +248,10 @@ public class ToneriPregled extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(toneriTable);
         if (toneriTable.getColumnModel().getColumnCount() > 0) {
-            toneriTable.getColumnModel().getColumn(0).setHeaderValue("Toner");
-            toneriTable.getColumnModel().getColumn(1).setHeaderValue("Štampač");
-            toneriTable.getColumnModel().getColumn(2).setResizable(false);
-            toneriTable.getColumnModel().getColumn(2).setHeaderValue("Količina");
+            toneriTable.getColumnModel().getColumn(0).setResizable(false);
             toneriTable.getColumnModel().getColumn(3).setResizable(false);
-            toneriTable.getColumnModel().getColumn(3).setHeaderValue("PrepKol");
+            toneriTable.getColumnModel().getColumn(4).setResizable(false);
+            toneriTable.getColumnModel().getColumn(5).setResizable(false);
         }
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("Pretraga")));
@@ -176,10 +274,55 @@ public class ToneriPregled extends javax.swing.JPanel {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
         );
+
+        redIcon.setText("Potrebno naručiti");
+
+        greenIcon.setText("Dovoljno ");
+
+        orangeIcon.setText("Uskoro naručiti");
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Pretraga po lokaciji"));
+
+        lokacijaComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", " " }));
+
+        jButton1.setText("Filtriraj");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jButton1MouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lokacijaComboBox, 0, 140, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lokacijaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        jButton2.setText("jButton2");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -189,14 +332,25 @@ public class ToneriPregled extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 182, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(104, 104, 104)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(redIcon, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(orangeIcon, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(greenIcon)))
+                .addGap(82, 82, 82))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,9 +358,20 @@ public class ToneriPregled extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(redIcon)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(greenIcon)
+                            .addComponent(jButton2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(orangeIcon)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -216,12 +381,52 @@ public class ToneriPregled extends javax.swing.JPanel {
         filter(query);
     }//GEN-LAST:event_jTextField1KeyReleased
 
+    private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
+        String query;      
+        if(lokacijaComboBox.getSelectedIndex() == -1){
+           query = ""; 
+        }else{
+            String lok = lokacijaComboBox.getSelectedItem().toString();
+            query = lok;
+        }
+        filter(query);
+    }//GEN-LAST:event_jButton1MouseReleased
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        try {
+            int tonerRow = toneriTable.getSelectedRow();
+            int tonerCol = 0;
+            int tonerColPrepKol = 4;
+            String idTonerStr = (String) toneriTable.getValueAt(tonerRow, tonerCol); 
+            String prepKol = (String) tm.getValueAt(tonerRow, tonerColPrepKol);
+            
+            int idToner = Integer.parseInt(idTonerStr.trim());
+            int kolicina = getKolicinaById(idToner);
+            int prep_kolicina = Integer.parseInt(prepKol.trim());
+            tizdavanje = new ToneriIzdavanje(korisnik,getTonerById(idToner),idToner,kolicina,prep_kolicina, datum);
+            tizdavanje.setVisible(true);
+          
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ToneriPregled.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_jButton2MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel greenIcon;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox<String> lokacijaComboBox;
+    private javax.swing.JLabel orangeIcon;
+    private javax.swing.JLabel redIcon;
     private javax.swing.JTable toneriTable;
     // End of variables declaration//GEN-END:variables
 }

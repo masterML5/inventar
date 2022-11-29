@@ -5,19 +5,68 @@
  */
 package inventar;
 
+import static java.lang.String.valueOf;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author milosjelic
  */
 public class Izdavanje extends javax.swing.JPanel {
-
+ private static Connection conSQL;
+    private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
     /**
      * Creates new form Izdavanje
      */
     public Izdavanje() {
         initComponents();
+         try {
+            conSQL = DriverManager.getConnection(connectionUrlMySQL);
+            conSQL.setAutoCommit(false);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+
     }
 
+    boolean izdavanjeAdd(int idKategorija, String korisnik, int idLokacijaS, int idLokacijaN, int kolicina, String naziv, String brojIzdavanje, String uneo, String datum) throws SQLException{
+        String sqlIzdavanje = "INSERT INTO izdavanje (id_kategorija,korisnik,id_lokacija_stara, id_lokacija_nova, kolicina, naziv, brojIzdavanje, uneo,datum) VALUES (?,?,?,?,?,?,?,?,?)";
+        PreparedStatement pstIzdavanje = conSQL.prepareStatement(sqlIzdavanje);
+        pstIzdavanje.setInt(1, idKategorija);
+        pstIzdavanje.setString(2, korisnik);
+        pstIzdavanje.setInt(3, idLokacijaS);
+        pstIzdavanje.setInt(4,idLokacijaN);
+        pstIzdavanje.setInt(5, kolicina);
+        pstIzdavanje.setString(6,naziv);
+        pstIzdavanje.setString(7,brojIzdavanje);
+        pstIzdavanje.setString(8,uneo);
+        pstIzdavanje.setString(9, datum);
+        pstIzdavanje.addBatch();
+        int i = pstIzdavanje.executeUpdate();
+        conSQL.commit();
+        return i > 0;
+    }
+    
+    String brojDok(int idKategorija, int idLokacijaS, int idLokacijaN, String datum) throws SQLException{
+        String datumDok = datum.replace("-", "");
+        String sqlIzdavanje = "SELECT id_izdavanje FROM izdavanje WHERE aktivan AND vazeci AND id_izdavanje = (SELECT MAX(id_izdavanje) FROM izdavanje)";
+        PreparedStatement pstIdStampac = conSQL.prepareStatement(sqlIzdavanje);
+        ResultSet rsIdStampac = pstIdStampac.executeQuery();
+        String id;
+        if (rsIdStampac.next()) {
+
+            id = rsIdStampac.getString("id_izdavanje");
+
+        } else {
+            id = null;
+        }
+        String brojDok = datumDok + "-" + "IZDAVANJE" + "-" + valueOf(idKategorija) + "-"+ valueOf(idLokacijaS)+valueOf(idLokacijaN)+ "-"+ id;
+        return brojDok;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

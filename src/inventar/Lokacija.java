@@ -100,7 +100,7 @@ public class Lokacija {
             id = rsIdlokacija.getString("id_lokacija");
 
         } else {
-            id = "0";
+            id = null;
         }
         return id;
     }

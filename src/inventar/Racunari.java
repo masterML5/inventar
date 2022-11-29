@@ -176,7 +176,7 @@ public class Racunari {
     }
 
     String getLokacija(int idRacunar) throws SQLException {
-        String sqlLokacijaStampaci = "SELECT naziv FROM lokacija as lok JOIN racunari as rac WHERE aktivan and vazeci and lok.id_lokacija = rac.id_lokacija AND rac.id_racunar =" + idRacunar;
+        String sqlLokacijaStampaci = "SELECT naziv FROM lokacija as lok JOIN racunari as rac WHERE lok.aktivan and lok.vazeci and lok.id_lokacija = rac.id_lokacija AND rac.id_racunar =" + idRacunar;
         PreparedStatement pstLokacija = conSQL.prepareStatement(sqlLokacijaStampaci);
         String lokacija;
         ResultSet rsIdLokRacunar = pstLokacija.executeQuery();
@@ -223,7 +223,7 @@ public class Racunari {
     }
 
     String getLokacijaInv(int invBroj) throws SQLException {
-        String sqlLokacijaStampaci = "SELECT naziv FROM lokacija as lok JOIN racunari as rac WHERE aktivan and vazeci and lok.id_lokacija = rac.id_lokacija AND rac.inv_broj =" + invBroj;
+        String sqlLokacijaStampaci = "SELECT naziv FROM lokacija as lok JOIN racunari as rac WHERE lok.aktivan and lok.vazeci and lok.id_lokacija = rac.id_lokacija AND rac.inv_broj =" + invBroj;
         PreparedStatement pstLokacija = conSQL.prepareStatement(sqlLokacijaStampaci);
         String lokacija;
         ResultSet rsIdLokRacunar = pstLokacija.executeQuery();
