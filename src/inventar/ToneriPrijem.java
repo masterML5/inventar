@@ -70,7 +70,6 @@ public class ToneriPrijem extends javax.swing.JPanel {
         kolicinaSpin = new com.toedter.components.JSpinField();
         dodajBtn = new javax.swing.JButton();
         ponistiBtn = new javax.swing.JButton();
-        prekidBtn = new javax.swing.JButton();
 
         toneriList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { " " };
@@ -123,6 +122,11 @@ public class ToneriPrijem extends javax.swing.JPanel {
 
         ponistiBtn.setBackground(new java.awt.Color(255, 153, 153));
         ponistiBtn.setText("Poništi");
+        ponistiBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                ponistiBtnMouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -160,9 +164,6 @@ public class ToneriPrijem extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        prekidBtn.setBackground(new java.awt.Color(255, 153, 153));
-        prekidBtn.setText("Prekid");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -172,20 +173,13 @@ public class ToneriPrijem extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(prijemBtn)
-                                    .addGap(78, 78, 78)
-                                    .addComponent(prekidBtn)
-                                    .addGap(178, 178, 178))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(128, 128, 128)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(ukloniBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(ukloniSveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(128, 128, 128)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ukloniBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ukloniSveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(199, 199, 199)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -194,6 +188,10 @@ public class ToneriPrijem extends javax.swing.JPanel {
                         .addContainerGap()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(328, 328, 328)
+                .addComponent(prijemBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,10 +212,8 @@ public class ToneriPrijem extends javax.swing.JPanel {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(prijemBtn)
-                            .addComponent(prekidBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(prijemBtn)
                         .addContainerGap())))
         );
 
@@ -239,7 +235,11 @@ public class ToneriPrijem extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void dodajBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajBtnActionPerformed
+        if(toneriComboBox.getSelectedIndex() == -1){
+            JOptionPane.showMessageDialog(toneriComboBox, "Izaberite toner koji želite da dodate", "Greška", JOptionPane.ERROR_MESSAGE);
+        }else{
         String toner = toneriComboBox.getSelectedItem().toString();
+        
         int kolicina = kolicinaSpin.getValue();
         
         for(int i=0; i<model.size(); i++){
@@ -267,40 +267,63 @@ public class ToneriPrijem extends javax.swing.JPanel {
             
             
         }
+        
         //System.out.println(existingToneri);
         toneriList.setModel(model);
+        }
     }//GEN-LAST:event_dodajBtnActionPerformed
 
     private void ukloniBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ukloniBtnActionPerformed
         if(model.size() < 1){
            JOptionPane.showMessageDialog(toneriComboBox, "Lista je prazna");
-       }else{
-        int len = existingToneri.size();    
-        int[] index = toneriList.getSelectedIndices();
-            System.out.println(index.length);
-         if(index.length > 0){
-        Iterator itr = existingToneri.iterator();
-        for( int i=0; i<len; i++) {
-
-        itr.next();
-
-        if ( index[i] >= 0) {
-
-        itr.remove();
-        model.removeElementAt(i);
+       }else{ 
+            int items_to_delete[] = null;
+                                                  
+                        if (!toneriList.isSelectionEmpty()){
+                            items_to_delete = toneriList.getSelectedIndices();
+                        } 
+                        else{
+                            JOptionPane.showMessageDialog(null, "Morate izabrati jedan element");
+                            return;
+                        }
+                         
+                        if(items_to_delete != null);
+                        {
+                                 
+                                for(int i=items_to_delete.length - 1; i > -1 ; i--)
+                                {
+                                        model.remove(items_to_delete[i]);
+                                        existingToneri.remove(items_to_delete[i]);
+                                }
+                                toneriList.setModel(model);
+                        }
+//        int len = existingToneri.size();    
+//        int[] index = toneriList.getSelectedIndices();
+//            System.out.println(index.length);
+//         if(index.length > 0){
+//        Iterator itr = existingToneri.iterator();
+//        for( int i=0; i<len; i++) {
+//
+//        itr.next();
+//
+//        if ( index[i] >= 0) {
+//
+//        itr.remove();
+//        model.removeElementAt(i);
+//        }
+//
+//        }
+//            
+// 
+//        
+//         
+//         
+//        
+//         toneriList.setModel(model);
+//        }else{
+//          JOptionPane.showMessageDialog(toneriComboBox, "Morate izabrati element iz liste!", "Greška", JOptionPane.ERROR_MESSAGE);
+//        }
         }
-
-        }
-            
- 
-        
-         
-         
-        
-         toneriList.setModel(model);
-        }else{
-          JOptionPane.showMessageDialog(toneriComboBox, "Morate izabrati element iz liste!", "Greška", JOptionPane.ERROR_MESSAGE);
-        }}
         
     }//GEN-LAST:event_ukloniBtnActionPerformed
 
@@ -316,6 +339,11 @@ public class ToneriPrijem extends javax.swing.JPanel {
        }}
     }//GEN-LAST:event_ukloniSveBtnActionPerformed
 
+    private void ponistiBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ponistiBtnMouseReleased
+        toneriComboBox.setSelectedIndex(-1);
+        kolicinaSpin.setValue(1);
+    }//GEN-LAST:event_ponistiBtnMouseReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton dodajBtn;
@@ -328,7 +356,6 @@ public class ToneriPrijem extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private com.toedter.components.JSpinField kolicinaSpin;
     private javax.swing.JButton ponistiBtn;
-    private javax.swing.JButton prekidBtn;
     private javax.swing.JButton prijemBtn;
     private javax.swing.JComboBox<String> toneriComboBox;
     private javax.swing.JList<String> toneriList;
