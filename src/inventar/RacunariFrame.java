@@ -606,7 +606,7 @@ public class RacunariFrame extends javax.swing.JFrame {
                 Long idKey = racunar.add(idKat, idLok, data.invBroj, data.specifikacija, data.os, data.office, data.korisnik, data.ipAdresa, data.macAdresa, data.osKey, data.officeKey, uneo, datum);
                 if (idKey != null) {
                     Integer idRacunar = idKey.intValue();
-                    String brprijema = prijem.brojPrijema(datum, idKat, idLok);
+                    String brprijema = prijem.brojPrijema(datum);
                     if (prijem.addRacunar(brprijema, naziv, idKat, idLok, kol, idRacunar, brfak, uneo, datum, napomena, data.korisnik)) {
                         JOptionPane.showMessageDialog(null, "Uspešno ste uneli prijem računara!" + "\n" + brprijema, "Uspešno", JOptionPane.INFORMATION_MESSAGE);
                         new Prijem(uneo, datum).setVisible(true);

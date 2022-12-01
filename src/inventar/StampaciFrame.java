@@ -470,7 +470,7 @@ public class StampaciFrame extends javax.swing.JFrame {
                 Long idKey = stampaci.add(idKat, idLok, stampaci.getTonerId(data.toner), data.invBroj, data.model, data.marka, data.toner, data.vrsta, data.tip, data.ipAdresa, data.korisnik, uneo, datum);
                 if (idKey != null) {
                     Integer idStampac = idKey.intValue();
-                    String brprijema = prijem.brojPrijema(datum, idKat, idLok);
+                    String brprijema = prijem.brojPrijema(datum);
                     if (prijem.addStampac(brprijema, data.marka + " " + data.model, idKat, idLok, kol, idStampac, brfak, uneo, datum, napomena, data.korisnik)) {
                         JOptionPane.showMessageDialog(null, "Uspešno ste uneli prijem štampača!" + "\n" + brprijema, "Uspešno", JOptionPane.INFORMATION_MESSAGE);
                         new Prijem(uneo, datum).setVisible(true);
