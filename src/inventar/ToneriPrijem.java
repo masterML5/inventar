@@ -5,16 +5,10 @@
  */
 package inventar;
 
-import java.awt.Component;
-import static java.lang.Integer.valueOf;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -23,22 +17,24 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author milosjelic
  */
 public class ToneriPrijem extends javax.swing.JPanel {
+
     ToneriPregled tp;
     DefaultListModel<String> model;
     ArrayList existingToneri = new ArrayList<>();
+
     /**
      * Creates new form ToneriPrijem
      */
     public ToneriPrijem() {
         initComponents();
     }
-    
+
     public ToneriPrijem(String username, String datum) throws SQLException {
         initComponents();
         tp = new ToneriPregled();
         model = new DefaultListModel<>();
         ArrayList<String> sviToneri = tp.getAllToneri();
-        sviToneri.add(0,null);
+        sviToneri.add(0, null);
         //sviToneri = tp.getAllToneri();
         toneriComboBox.setModel(new DefaultComboBoxModel<>(sviToneri.toArray(new String[0])));
         AutoCompleteDecorator.decorate(toneriComboBox);
@@ -235,68 +231,64 @@ public class ToneriPrijem extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void dodajBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajBtnActionPerformed
-        if(toneriComboBox.getSelectedIndex() == -1){
+        if (toneriComboBox.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(toneriComboBox, "Izaberite toner koji želite da dodate", "Greška", JOptionPane.ERROR_MESSAGE);
-        }else{
-        String toner = toneriComboBox.getSelectedItem().toString();
-        
-        int kolicina = kolicinaSpin.getValue();
-        
-        for(int i=0; i<model.size(); i++){
-            String listComponent = model.get(i);
-            String[] toner2 = listComponent.split("Toner :");
-            String[] toner3 = toner2[1].split(" ");
-            String toner4 = toner3[1];
-            if(!existingToneri.contains(toner4)){
-            existingToneri.add(toner4);
+        } else {
+            String toner = toneriComboBox.getSelectedItem().toString();
+
+            int kolicina = kolicinaSpin.getValue();
+
+            for (int i = 0; i < model.size(); i++) {
+                String listComponent = model.get(i);
+                String[] toner2 = listComponent.split("Toner :");
+                String[] toner3 = toner2[1].split(" ");
+                String toner4 = toner3[1];
+                if (!existingToneri.contains(toner4)) {
+                    existingToneri.add(toner4);
+                }
             }
-        }
-        if(!existingToneri.contains(toner)){
-            
-        model.addElement("Toner : "+toner + " Kolicina : "+kolicina);
-        }else{
-            int index = existingToneri.indexOf(toner);
-            String existingToner = model.get(index);
-            String[] existingToner1 = existingToner.split("Kolicina :");
-            String existingTonerFinal = existingToner1[1];
-            int kolicina2 = Integer.valueOf(existingTonerFinal.trim()) + kolicina;
-            model.remove(index);
-            String input = "Toner : " + toner + " Kolicina : "+ kolicina2;
-            model.add(index,input);
-            
-            
-            
-        }
-        
-        //System.out.println(existingToneri);
-        toneriList.setModel(model);
+            if (!existingToneri.contains(toner)) {
+
+                model.addElement("Toner : " + toner + " Kolicina : " + kolicina);
+            } else {
+                int index = existingToneri.indexOf(toner);
+                String existingToner = model.get(index);
+                String[] existingToner1 = existingToner.split("Kolicina :");
+                String existingTonerFinal = existingToner1[1];
+                int kolicina2 = Integer.valueOf(existingTonerFinal.trim()) + kolicina;
+                model.remove(index);
+                String input = "Toner : " + toner + " Kolicina : " + kolicina2;
+                model.add(index, input);
+
+            }
+
+            //System.out.println(existingToneri);
+            toneriList.setModel(model);
         }
     }//GEN-LAST:event_dodajBtnActionPerformed
 
     private void ukloniBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ukloniBtnActionPerformed
-        if(model.size() < 1){
-           JOptionPane.showMessageDialog(toneriComboBox, "Lista je prazna");
-       }else{ 
+        if (model.size() < 1) {
+            JOptionPane.showMessageDialog(toneriComboBox, "Lista je prazna");
+        } else {
             int items_to_delete[] = null;
-                                                  
-                        if (!toneriList.isSelectionEmpty()){
-                            items_to_delete = toneriList.getSelectedIndices();
-                        } 
-                        else{
-                            JOptionPane.showMessageDialog(null, "Morate izabrati jedan element");
-                            return;
-                        }
-                         
-                        if(items_to_delete != null);
-                        {
-                                 
-                                for(int i=items_to_delete.length - 1; i > -1 ; i--)
-                                {
-                                        model.remove(items_to_delete[i]);
-                                        existingToneri.remove(items_to_delete[i]);
-                                }
-                                toneriList.setModel(model);
-                        }
+
+            if (!toneriList.isSelectionEmpty()) {
+                items_to_delete = toneriList.getSelectedIndices();
+            } else {
+                JOptionPane.showMessageDialog(null, "Morate izabrati jedan element");
+                return;
+            }
+
+            if (items_to_delete != null);
+            {
+
+                for (int i = items_to_delete.length - 1; i > -1; i--) {
+                    model.remove(items_to_delete[i]);
+                    existingToneri.remove(items_to_delete[i]);
+                }
+                toneriList.setModel(model);
+            }
 //        int len = existingToneri.size();    
 //        int[] index = toneriList.getSelectedIndices();
 //            System.out.println(index.length);
@@ -324,19 +316,20 @@ public class ToneriPrijem extends javax.swing.JPanel {
 //          JOptionPane.showMessageDialog(toneriComboBox, "Morate izabrati element iz liste!", "Greška", JOptionPane.ERROR_MESSAGE);
 //        }
         }
-        
+
     }//GEN-LAST:event_ukloniBtnActionPerformed
 
     private void ukloniSveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ukloniSveBtnActionPerformed
-       if(model.size() < 1){
-           JOptionPane.showMessageDialog(toneriComboBox, "Lista je prazna");
-       }else{
-        int q = JOptionPane.showConfirmDialog(toneriComboBox,"Da li želite da izbrišete sve stavke", "Brisanje", JOptionPane.YES_NO_OPTION);
-       if(q == 0){
-        model.removeAllElements();
-       existingToneri.removeAll(existingToneri);
-       toneriList.setModel(model);
-       }}
+        if (model.size() < 1) {
+            JOptionPane.showMessageDialog(toneriComboBox, "Lista je prazna");
+        } else {
+            int q = JOptionPane.showConfirmDialog(toneriComboBox, "Da li želite da izbrišete sve stavke", "Brisanje", JOptionPane.YES_NO_OPTION);
+            if (q == 0) {
+                model.removeAllElements();
+                existingToneri.removeAll(existingToneri);
+                toneriList.setModel(model);
+            }
+        }
     }//GEN-LAST:event_ukloniSveBtnActionPerformed
 
     private void ponistiBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ponistiBtnMouseReleased

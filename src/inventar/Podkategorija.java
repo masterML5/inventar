@@ -86,6 +86,7 @@ public class Podkategorija {
         String sqlGetOne = "SELECT * FROM podkategorija WHERE aktivan AND vazeci AND id_podkategorija=" + idPodkategorija;
         PreparedStatement pstPodkat = conSQL.prepareStatement(sqlGetOne);
         ResultSet rsPodkat = pstPodkat.executeQuery();
+        @SuppressWarnings("UnusedAssignment")
         String naziv = null;
         if (rsPodkat.next()) {
 
@@ -115,11 +116,7 @@ public class Podkategorija {
         PreparedStatement pstUpdatePodkategorija = conSQL.prepareStatement(sqlEdit);
         int i = pstUpdatePodkategorija.executeUpdate();
         conSQL.commit();
-        if (i > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return i > 0;
     }
 
     boolean delete(int idPodkategorija) throws SQLException {

@@ -5,14 +5,12 @@
  */
 package inventar;
 
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-
 
 /**
  *
@@ -32,7 +30,6 @@ public class Evidencija extends javax.swing.JFrame {
     private int tabbedCount;
     private ToneriPregled tp;
     private ToneriPrijem tprijem;
-   
 
     /**
      * Creates new form Interface
@@ -44,7 +41,6 @@ public class Evidencija extends javax.swing.JFrame {
     Evidencija(String username) throws SQLException {
         initComponents();
 
-       
         this.username = username;
         Kategorija kategorija = new Kategorija();
         List<String> sveKategorije = new ArrayList();
@@ -60,24 +56,17 @@ public class Evidencija extends javax.swing.JFrame {
         izdavanje = new Izdavanje();
         otpis = new Otpis();
         tp = new ToneriPregled();
-        tprijem = new ToneriPrijem(korisnik,datum);
+        tprijem = new ToneriPrijem(korisnik, datum);
 
 //        jTabbedPane1.addTab("Prijem", icon, prijem);
 //        jTabbedPane1.addTab("Izdavanje", icon, izdavanje);
 //        jTabbedPane1.addTab("Otpis", icon, otpis);
-
-         
-         jTabbedPane1.add(prijem, "Prijem");
-         initTabComponent(0);
-         jTabbedPane1.add(izdavanje, "Izdavanje");
-         initTabComponent(1);
-         jTabbedPane1.add(otpis, "Otpis");
-         initTabComponent(2);
-         
-        
-         
-         
-     
+        jTabbedPane1.add(prijem, "Prijem");
+        initTabComponent(0);
+        jTabbedPane1.add(izdavanje, "Izdavanje");
+        initTabComponent(1);
+        jTabbedPane1.add(otpis, "Otpis");
+        initTabComponent(2);
 
     }
 
@@ -300,8 +289,8 @@ public class Evidencija extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu2ActionPerformed
 
     private void jMenu2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseReleased
-        
-        
+
+
     }//GEN-LAST:event_jMenu2MouseReleased
 
     private void jMenuItem3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseReleased
@@ -309,8 +298,8 @@ public class Evidencija extends javax.swing.JFrame {
             tp = new ToneriPregled(korisnik, datum);
             jTabbedPane1.add(tp, "Toneri pregled");
             tabbedCount = jTabbedPane1.getTabCount();
-            initTabComponent(tabbedCount-1);
-            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+            initTabComponent(tabbedCount - 1);
+            jTabbedPane1.setSelectedIndex(tabbedCount - 1);
         } catch (SQLException ex) {
             Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -320,30 +309,30 @@ public class Evidencija extends javax.swing.JFrame {
         otpis = new Otpis();
         jTabbedPane1.add(otpis, "Otpis");
         tabbedCount = jTabbedPane1.getTabCount();
-        initTabComponent(tabbedCount-1);
-        jTabbedPane1.setSelectedIndex(tabbedCount -1);
+        initTabComponent(tabbedCount - 1);
+        jTabbedPane1.setSelectedIndex(tabbedCount - 1);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
         izdavanje = new Izdavanje();
         jTabbedPane1.add(izdavanje, "Izdavanje");
         tabbedCount = jTabbedPane1.getTabCount();
-        initTabComponent(tabbedCount-1);
-        jTabbedPane1.setSelectedIndex(tabbedCount -1);
+        initTabComponent(tabbedCount - 1);
+        jTabbedPane1.setSelectedIndex(tabbedCount - 1);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         try {
             prijem = new Prijem(username, datum);
-            jTabbedPane1.add(prijem ,"Prijem");
+            jTabbedPane1.add(prijem, "Prijem");
             tabbedCount = jTabbedPane1.getTabCount();
             initTabComponent(tabbedCount - 1);
-            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+            jTabbedPane1.setSelectedIndex(tabbedCount - 1);
         } catch (SQLException ex) {
             Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
+
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -351,8 +340,8 @@ public class Evidencija extends javax.swing.JFrame {
             rp = new RacunariPregled();
             jTabbedPane1.add(rp, "Računari Pregled");
             tabbedCount = jTabbedPane1.getTabCount();
-            initTabComponent(tabbedCount-1);
-            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+            initTabComponent(tabbedCount - 1);
+            jTabbedPane1.setSelectedIndex(tabbedCount - 1);
         } catch (SQLException ex) {
             Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -363,20 +352,20 @@ public class Evidencija extends javax.swing.JFrame {
             re = new RacunariEdit(korisnik);
             jTabbedPane1.add(re, "Računari Izmena");
             tabbedCount = jTabbedPane1.getTabCount();
-            initTabComponent(tabbedCount-1);
-            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+            initTabComponent(tabbedCount - 1);
+            jTabbedPane1.setSelectedIndex(tabbedCount - 1);
         } catch (SQLException ex) {
             Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-       try {
-            tprijem = new ToneriPrijem(korisnik,datum);
+        try {
+            tprijem = new ToneriPrijem(korisnik, datum);
             jTabbedPane1.add(tprijem, "Toneri Prijem");
             tabbedCount = jTabbedPane1.getTabCount();
-            initTabComponent(tabbedCount-1);
-            jTabbedPane1.setSelectedIndex(tabbedCount -1);
+            initTabComponent(tabbedCount - 1);
+            jTabbedPane1.setSelectedIndex(tabbedCount - 1);
         } catch (SQLException ex) {
             Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -403,7 +392,7 @@ public class Evidencija extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        
+
         //</editor-fold>
         //</editor-fold>
 
@@ -424,9 +413,10 @@ public class Evidencija extends javax.swing.JFrame {
 
         return datum1;
     }
-     private void initTabComponent(int i) {
-        jTabbedPane1.setTabComponentAt(i,new ButtonTabComponent(jTabbedPane1));
-    } 
+
+    private void initTabComponent(int i) {
+        jTabbedPane1.setTabComponentAt(i, new ButtonTabComponent(jTabbedPane1));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel infoLabel;

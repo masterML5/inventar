@@ -38,6 +38,7 @@ public class RacunariFrame extends javax.swing.JFrame {
      * @param kolicina
      * @param brfakture
      * @param naziv
+     * @param napomena
      * @param uneo
      * @param datum
      * @throws java.sql.SQLException
@@ -112,6 +113,7 @@ public class RacunariFrame extends javax.swing.JFrame {
         }
     }
 
+    @SuppressWarnings("NonPublicExported")
     public Data getData() {
         // return person details from the method
         String procesor = procesorInput.getText();
@@ -673,10 +675,8 @@ public class RacunariFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RacunariFrame().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new RacunariFrame().setVisible(true);
         });
     }
 

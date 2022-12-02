@@ -39,6 +39,7 @@ public class RacunariPregled extends javax.swing.JPanel {
     }
 
     ArrayList getData(String search) throws SQLException {
+        @SuppressWarnings("UnusedAssignment")
         ArrayList result = new ArrayList<String>();
         int parametar = Integer.parseInt(search);
         result = racunari.getAllInfoInv(parametar);
@@ -105,33 +106,33 @@ public class RacunariPregled extends javax.swing.JPanel {
 
     boolean checkSearchNum() {
         String s = searchField.getText().trim();
-       return isNumber(s);
-        
+        return isNumber(s);
 
     }
-    boolean validIP(){
-    String ip = searchField.getText().trim();
-    try {
-        if ( ip == null || ip.isEmpty() ) {
-            return false;
-        }
 
-        String[] parts = ip.split( "\\." );
-        if ( parts.length != 4 ) {
-            return false;
-        }
-
-        for ( String s : parts ) {
-            int i = Integer.parseInt( s );
-            if ( (i < 0) || (i > 255) ) {
+    boolean validIP() {
+        String ip = searchField.getText().trim();
+        try {
+            if (ip == null || ip.isEmpty()) {
                 return false;
             }
+
+            String[] parts = ip.split("\\.");
+            if (parts.length != 4) {
+                return false;
+            }
+
+            for (String s : parts) {
+                int i = Integer.parseInt(s);
+                if ((i < 0) || (i > 255)) {
+                    return false;
+                }
+            }
+            return !ip.endsWith(".");
+        } catch (NumberFormatException nfe) {
+            return false;
         }
-        return !ip.endsWith(".");
-    } catch (NumberFormatException nfe) {
-        return false;
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -622,11 +623,11 @@ public class RacunariPregled extends javax.swing.JPanel {
                 } else {
                     String s = searchField.getText().trim();
                     int search = Integer.parseInt(s);
-                    if(racunari.checkInventarski(s)){
-                        
-                    puniRezInv(search);
-                    }else{
-                         JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
+                    if (racunari.checkInventarski(s)) {
+
+                        puniRezInv(search);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } else if (ip_adresaRadio.isSelected()) {
@@ -637,14 +638,13 @@ public class RacunariPregled extends javax.swing.JPanel {
                 } else {
                     String s = racunari.getIdByIp(searchField.getText().trim());
                     String ip = searchField.getText().trim();
-                    if(racunari.checkIp(ip)){
-                         int search = Integer.parseInt(s);
-                         puniRezId(search);
-                    }else{
+                    if (racunari.checkIp(ip)) {
+                        int search = Integer.parseInt(s);
+                        puniRezId(search);
+                    } else {
                         JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
                     }
-                    
-                   
+
                 }
 
             } else if (korisnikRadio.isSelected()) {

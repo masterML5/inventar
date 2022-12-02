@@ -36,6 +36,7 @@ public class Racunari {
     }
 
     String getId(int inventarskiBroj) throws SQLException {
+        @SuppressWarnings("UnusedAssignment")
         String id = null;
         String sqlIdRacunar = "SELECT id_racunar from racunari WHERE aktivan and vazeci and inv_broj=" + inventarskiBroj;
         PreparedStatement pstIdRacunar = conSQL.prepareStatement(sqlIdRacunar);
@@ -93,8 +94,9 @@ public class Racunari {
         conSQL.commit();
         return i > 0;
     }
-    String getIdByIp (String ipAddr) throws SQLException{
-        String sqlInvBroj = "SELECT id_racunar FROM racunari WHERE aktivan and vazeci and ip_adresa='"+ipAddr+"'";
+
+    String getIdByIp(String ipAddr) throws SQLException {
+        String sqlInvBroj = "SELECT id_racunar FROM racunari WHERE aktivan and vazeci and ip_adresa='" + ipAddr + "'";
         PreparedStatement pstId = conSQL.prepareStatement(sqlInvBroj);
         String id;
         ResultSet rsId = pstId.executeQuery();
@@ -106,7 +108,8 @@ public class Racunari {
 
         return id;
     }
-     String getInventarskiBroj(int idRacunar) throws SQLException {
+
+    String getInventarskiBroj(int idRacunar) throws SQLException {
         String sqlInvBroj = "SELECT inv_broj FROM racunari WHERE aktivan and vazeci and id_racunar=" + idRacunar;
         PreparedStatement pstInvBroj = conSQL.prepareStatement(sqlInvBroj);
         String invBroj;
@@ -119,6 +122,7 @@ public class Racunari {
 
         return invBroj;
     }
+
     String getIpAdresa(int idRacunar) throws SQLException {
         String sqlIpAdresaRacunar = "SELECT ip_adresa FROM racunari WHERE aktivan and vazeci and id_racunar=" + idRacunar;
         PreparedStatement pstIpAdresa = conSQL.prepareStatement(sqlIpAdresaRacunar);
@@ -190,7 +194,7 @@ public class Racunari {
         }
         return lokacija;
     }
-    
+
     String getLokacijaId(int idRacunar) throws SQLException {
         String sqlLokacijaStampaci = "SELECT id_lokacija FROM lokacija as lok JOIN racunari as rac WHERE aktivan and vazeci and lok.id_lokacija = rac.id_lokacija AND rac.id_racunar =" + idRacunar;
         PreparedStatement pstLokacija = conSQL.prepareStatement(sqlLokacijaStampaci);
@@ -206,8 +210,9 @@ public class Racunari {
         }
         return lokacija;
     }
-     int getLokacijaId(String nazivlok) throws SQLException {
-        String sqlLokacijaStampaci = "SELECT id_lokacija FROM lokacija WHERE aktivan and vazeci and naziv='"+nazivlok+"'";
+
+    int getLokacijaId(String nazivlok) throws SQLException {
+        String sqlLokacijaStampaci = "SELECT id_lokacija FROM lokacija WHERE aktivan and vazeci and naziv='" + nazivlok + "'";
         PreparedStatement pstLokacija = conSQL.prepareStatement(sqlLokacijaStampaci);
         int lokacija;
         ResultSet rsIdLokRacunar = pstLokacija.executeQuery();
@@ -237,7 +242,8 @@ public class Racunari {
         }
         return lokacija;
     }
-    String getSpec(int idRacunar) throws SQLException{
+
+    String getSpec(int idRacunar) throws SQLException {
         String sqlSpec = "SELECT specifikacija FROM racunari where aktivan and vazeci and id_racunar =" + idRacunar;
         PreparedStatement pstSpec = conSQL.prepareStatement(sqlSpec);
         String spec;
@@ -252,7 +258,8 @@ public class Racunari {
         }
         return spec;
     }
-    String getSpecInv(int invBroj) throws SQLException{
+
+    String getSpecInv(int invBroj) throws SQLException {
         String sqlSpec = "SELECT specifikacija FROM racunari where aktivan and vazeci and inv_broj =" + invBroj;
         PreparedStatement pstSpec = conSQL.prepareStatement(sqlSpec);
         String spec;
@@ -267,6 +274,7 @@ public class Racunari {
         }
         return spec;
     }
+
     String getOs(int idRacunar) throws SQLException {
         String sqlOs = "SELECT os FROM racunari where aktivan and vazeci and id_racunar =" + idRacunar;
         PreparedStatement pstOs = conSQL.prepareStatement(sqlOs);
@@ -363,7 +371,7 @@ public class Racunari {
         return office;
     }
 
-    String getDatum(int idRacunar) throws SQLException{
+    String getDatum(int idRacunar) throws SQLException {
         String sqlDatum = "SELECT datum FROM racunari where aktivan and vazeci and id_racunar =" + idRacunar;
         PreparedStatement pstDatum = conSQL.prepareStatement(sqlDatum);
         String datum;
@@ -376,10 +384,11 @@ public class Racunari {
         } else {
             datum = "Nema rezultata";
         }
-        
+
         return datum;
     }
-    String getDatumInv(int invBroj) throws SQLException{
+
+    String getDatumInv(int invBroj) throws SQLException {
         String sqlDatum = "SELECT datum FROM racunari where aktivan and vazeci and inv_broj =" + invBroj;
         PreparedStatement pstDatum = conSQL.prepareStatement(sqlDatum);
         String datum;
@@ -392,9 +401,10 @@ public class Racunari {
         } else {
             datum = "Nema rezultata";
         }
-        
+
         return datum;
     }
+
     String getOfficeKey(int idRacunar) throws SQLException {
         String sqlOfficeKey = "SELECT office_key FROM racunari where aktivan and vazeci and id_racunar =" + idRacunar;
         PreparedStatement pstOfficeKey = conSQL.prepareStatement(sqlOfficeKey);
@@ -443,20 +453,18 @@ public class Racunari {
 
         return racunari;
     }
-    
-    ArrayList<String> getAllInfoByUser(String user) throws SQLException{
-        String sqlGetAllInfoByUser = "SELECT id_racunar,inv_broj,korisnik, ip_adresa FROM racunari WHERE aktivan and vazeci and korisnik like '%"+user+"%'";
+
+    ArrayList<String> getAllInfoByUser(String user) throws SQLException {
+        String sqlGetAllInfoByUser = "SELECT id_racunar,inv_broj,korisnik, ip_adresa FROM racunari WHERE aktivan and vazeci and korisnik like '%" + user + "%'";
         PreparedStatement pstAllRacunari = conSQL.prepareStatement(sqlGetAllInfoByUser);
         ResultSet rsAllRacunari = pstAllRacunari.executeQuery();
         ArrayList racunari = new ArrayList();
-        while(rsAllRacunari.next()){
-            racunari.add((Integer)rsAllRacunari.getObject("id_racunar")+" • "+rsAllRacunari.getString("ip_adresa")+ " • "+ rsAllRacunari.getString("korisnik")+ " • "+ rsAllRacunari.getString("inv_broj"));         
+        while (rsAllRacunari.next()) {
+            racunari.add((Integer) rsAllRacunari.getObject("id_racunar") + " • " + rsAllRacunari.getString("ip_adresa") + " • " + rsAllRacunari.getString("korisnik") + " • " + rsAllRacunari.getString("inv_broj"));
         }
-    
+
         return racunari;
     }
-    
-    
 
     ArrayList<String> getAllInfoInv(int invBroj) throws SQLException {
         String sqlGetAllInfo = "SELECT * FROM racunari WHERE aktivan and vazeci and inv_broj =" + invBroj;
@@ -508,7 +516,7 @@ public class Racunari {
     }
 
     String specifikacija(String procesor, String ram, String hdd, String gpu, String napajanje) {
-        String specifikacija = "{\"procesor\":\""+procesor+"\",\"ram\":\""+ram+"\",\"hdd\":\""+hdd+"\",\"gpu\":\""+gpu+"\",\"napajanje\":\""+napajanje+"\"}";
+        String specifikacija = "{\"procesor\":\"" + procesor + "\",\"ram\":\"" + ram + "\",\"hdd\":\"" + hdd + "\",\"gpu\":\"" + gpu + "\",\"napajanje\":\"" + napajanje + "\"}";
 
         return specifikacija;
     }
@@ -523,6 +531,7 @@ public class Racunari {
         }
         return inventarskiBrojevi;
     }
+
     ArrayList sviId() throws SQLException {
         String sqlId = "SELECT id_racunar FROM racunari WHERE aktivan and vazeci";
         PreparedStatement pstId = conSQL.prepareStatement(sqlId);
@@ -597,20 +606,20 @@ public class Racunari {
             return false;
         }
     }
+
     int getQueryRowCount(String query) throws SQLException {
-    try (Statement statement = conSQL.createStatement();
-        ResultSet standardRS = statement.executeQuery(query)) {
-        int size = 0;
-        while (standardRS.next()) {
-            size++;
+        try (Statement statement = conSQL.createStatement();
+                ResultSet standardRS = statement.executeQuery(query)) {
+            int size = 0;
+            while (standardRS.next()) {
+                size++;
+            }
+            return size;
         }
-        return size;
+
     }
-    
-    
-        
-}
-    String sqlEditCheck(String key,String param) throws SQLException{
+
+    String sqlEditCheck(String key, String param) throws SQLException {
         String sql = null;
         switch (key) {
             case "inventarski":

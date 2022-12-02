@@ -48,11 +48,7 @@ public class Kategorija {
         PreparedStatement pstUpdateKategorija = conSQL.prepareStatement(sqlEditKategorija);
         int i = pstUpdateKategorija.executeUpdate();
         conSQL.commit();
-        if(i > 0){
-            return true;
-        }else{
-            return false;
-        }
+        return i > 0;
     }
     
     boolean edit(String stariNaziv, String noviNaziv) throws SQLException{
@@ -96,6 +92,7 @@ public class Kategorija {
         String sqlIdKategorija = "SELECT id_kategorija FROM kategorija WHERE naziv ='"+nazivKategorije+"'";
         PreparedStatement pstIdKategorija = conSQL.prepareStatement(sqlIdKategorija);
         ResultSet rsIdKategorija = pstIdKategorija.executeQuery();
+        @SuppressWarnings("UnusedAssignment")
         String id = null;
         if(rsIdKategorija.next()){
             

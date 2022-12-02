@@ -84,6 +84,7 @@ public class StampaciFrame extends javax.swing.JFrame {
         }
     }
 
+    @SuppressWarnings("NonPublicExported")
     public Data getData() {
         // return person details from the method
 
@@ -432,7 +433,7 @@ public class StampaciFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3MouseReleased
 
     private void tipComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tipComboBoxItemStateChanged
-        if (tipComboBox.getSelectedItem().toString() != "Mrežni") {
+        if (!"Mrežni".equals(tipComboBox.getSelectedItem().toString())) {
             ipAddrInput.setEnabled(false);
             ipAddrInput.setText("Za mrežne štampače");
         } else {
@@ -517,10 +518,8 @@ public class StampaciFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new StampaciFrame().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new StampaciFrame().setVisible(true);
         });
     }
 

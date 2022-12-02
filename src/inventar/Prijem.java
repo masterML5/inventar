@@ -2,7 +2,6 @@ package inventar;
 
 import inventar.StampaciFrame.Data;
 import static java.lang.Integer.parseInt;
-import static java.lang.String.valueOf;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -109,26 +108,25 @@ public class Prijem extends javax.swing.JPanel {
         return i > 0;
     }
 
-    Long add(String brPrijem,int brojStavki,String faktura, String uneo, String datum) throws SQLException {
+    Long add(String brPrijem, int brojStavki, String faktura, String uneo, String datum) throws SQLException {
         String sqlAddPrijem = "INSERT INTO prijem (broj_prijem,broj_stavki,faktura,uneo,datum) VALUES(?,?,?,?,?)";
         PreparedStatement pstInsertPrijem = conSQL.prepareStatement(sqlAddPrijem, Statement.RETURN_GENERATED_KEYS);
         pstInsertPrijem.setString(1, brPrijem);
         pstInsertPrijem.setInt(2, brojStavki);
-        pstInsertPrijem.setString(3, faktura);      
+        pstInsertPrijem.setString(3, faktura);
         pstInsertPrijem.setString(4, uneo);
         pstInsertPrijem.setString(5, datum);
         pstInsertPrijem.addBatch();
         int i = pstInsertPrijem.executeUpdate();
-         Long key = null;
-       ResultSet generatedKey = pstInsertPrijem.getGeneratedKeys();
+        Long key = null;
+        ResultSet generatedKey = pstInsertPrijem.getGeneratedKeys();
         if (generatedKey.next()) {
             key = generatedKey.getLong(1);
 
         }
         conSQL.commit();
         return key;
-        
-      
+
     }
 
     boolean addRacunar(String brPrijem, String naziv, int idKategorija, int idLokacija, int kolicina, int idRacunar, String faktura, String uneo, String datum, String napomena, String korisnikLokacija) throws SQLException {
@@ -170,26 +168,52 @@ public class Prijem extends javax.swing.JPanel {
         conSQL.commit();
         return i > 0;
     }
-    boolean insertStavka(int idPrijem, String brojPrijema,String kategorijaStavka, String podkategorijaStavka, String lokacijaStavka, String nazivStavka, String korisnikStavka, String napomenaStavka, int kolicinaStavkaInt) throws SQLException {
-       String sqlStavka = "INSERT INTO prijem_stavka (id_prijem,id_kategorija,id_podkategorija,id_lokacija,broj_prijem,naziv,kolicina,uneo,datum) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-       PreparedStatement pstStavka = conSQL.prepareStatement(sqlStavka);
-       pstStavka.setInt(1,idPrijem);
-       pstStavka.setInt(2, Integer.parseInt(kategorija.getId(kategorijaStavka)));
-       pstStavka.setInt(3,podkat.getId(podkategorijaStavka));
-       pstStavka.setInt(4, Integer.parseInt(lokacija.getId(lokacijaStavka)));
-       pstStavka.setString(5, brojPrijema);
-       pstStavka.setString(6, nazivStavka);
-       pstStavka.setString(7, korisnikStavka);
-       pstStavka.setString(8, napomenaStavka);
-       pstStavka.setInt(9,kolicinaStavkaInt);
-       pstStavka.setString(10, korisnikG);
-       pstStavka.setString(11, datumG);
-       int i = pstStavka.executeUpdate();
-       conSQL.commit();
-       return i > 0;
-      
+
+    boolean insertStavka(int idPrijem, String brojPrijema, String kategorijaStavka, String podkategorijaStavka, String lokacijaStavka, String nazivStavka, String korisnikStavka, String napomenaStavka, int kolicinaStavkaInt) throws SQLException {
+        if ("".equals(podkategorijaStavka)) {
+            podkategorijaStavka = null;
+        }
+        String sqlStavka = "INSERT INTO prijem_stavka (id_prijem,id_kategorija,id_podkategorija,id_lokacija,broj_prijem,naziv,korisnikLokacija,napomena,kolicina,uneo,datum) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement pstStavka = conSQL.prepareStatement(sqlStavka);
+        pstStavka.setInt(1, idPrijem);
+        pstStavka.setInt(2, Integer.parseInt(kategorija.getId(kategorijaStavka)));
+        pstStavka.setInt(3, podkat.getId(podkategorijaStavka));
+        pstStavka.setInt(4, Integer.parseInt(lokacija.getId(lokacijaStavka)));
+        pstStavka.setString(5, brojPrijema);
+        pstStavka.setString(6, nazivStavka);
+        pstStavka.setString(7, korisnikStavka);
+        pstStavka.setString(8, napomenaStavka);
+        pstStavka.setInt(9, kolicinaStavkaInt);
+        pstStavka.setString(10, korisnikG);
+        pstStavka.setString(11, datumG);
+        pstStavka.addBatch();
+        int i = pstStavka.executeUpdate();
+        conSQL.commit();
+        return i > 0;
+
     }
 
+    boolean insertStavka(int idPrijem, String brojPrijema, String kategorijaStavka, String lokacijaStavka, String nazivStavka, String korisnikStavka, String napomenaStavka, int kolicinaStavkaInt) throws SQLException {
+
+        String sqlStavka = "INSERT INTO prijem_stavka (id_prijem,id_kategorija,id_lokacija,broj_prijem,naziv,korisnikLokacija,napomena,kolicina,uneo,datum) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement pstStavka = conSQL.prepareStatement(sqlStavka);
+        pstStavka.setInt(1, idPrijem);
+        pstStavka.setInt(2, Integer.parseInt(kategorija.getId(kategorijaStavka)));
+
+        pstStavka.setInt(3, Integer.parseInt(lokacija.getId(lokacijaStavka)));
+        pstStavka.setString(4, brojPrijema);
+        pstStavka.setString(5, nazivStavka);
+        pstStavka.setString(6, korisnikStavka);
+        pstStavka.setString(7, napomenaStavka);
+        pstStavka.setInt(8, kolicinaStavkaInt);
+        pstStavka.setString(9, korisnikG);
+        pstStavka.setString(10, datumG);
+        pstStavka.addBatch();
+        int i = pstStavka.executeUpdate();
+        conSQL.commit();
+        return i > 0;
+
+    }
 
     public String brojPrijema(String datum) throws SQLException {
         String datumDok = datum.replace("-", "");
@@ -205,11 +229,11 @@ public class Prijem extends javax.swing.JPanel {
         } else {
             id = "0";
         }
-        String brojPrijema = datumDok + "-" + "PRIJEM-"  + id;
+        String brojPrijema = datumDok + "-" + "PRIJEM-" + id;
 
         return brojPrijema;
     }
-    
+
     String brojFakture(int idRacunar) throws SQLException {
         String brojFakture;
         String sqlbrojFakture = "SELECT faktura FROM prijem WHERE aktivan AND vazeci AND id_racunar =" + idRacunar;
@@ -351,7 +375,7 @@ public class Prijem extends javax.swing.JPanel {
         jLabel9.setText("Polja sa * su obavezna!");
 
         jLabel10.setText("* Broj fakture / Zavodni broj");
-        jLabel10.setToolTipText("<html><b>Primer :</b><br> \nR-PSU-002312/2022<br>\nR-PBG-000445/2021</html>");
+        jLabel10.setToolTipText("<html><b><i>Broj fakture se unosi na nivou primera, ne na nivou stavke!</b></i><br>\n<b>Primer :</b><br> \nR-PSU-002312/2022<br>\nR-PBG-000445/2021</html>");
 
         fakturaField.setToolTipText("Zavodni broj fakture ");
 
@@ -611,8 +635,8 @@ public class Prijem extends javax.swing.JPanel {
 
             String napomena = napomenaField.getText();
             String korisnikLokacija = korisnikLokacijaField.getText();
-       
-        switch (kategorijaComboBox.getSelectedItem().toString()) {
+
+            switch (kategorijaComboBox.getSelectedItem().toString()) {
                 case "Racunari":
                     new RacunariFrame(kategorija2, OJ2, kolicina2, brfakture, naziv2, napomena, korisnikG, datumG).setVisible(true);
                     break;
@@ -623,143 +647,154 @@ public class Prijem extends javax.swing.JPanel {
                     naziv2 = dat.marka + " " + dat.model;
                     break;
                 default:
-        if (kategorijaComboBox.getSelectedIndex() != 1 && OJComboBox.getSelectedIndex() != -1 && !nazivField.getText().equals("") && !"0".equals(jSpinner1.getValue().toString())) {
+                    if (kategorijaComboBox.getSelectedIndex() != 1 && OJComboBox.getSelectedIndex() != -1 && !nazivField.getText().equals("") && !"0".equals(jSpinner1.getValue().toString())) {
 
-            String kategorijaStavka = kategorijaComboBox.getSelectedItem().toString();
-            String podkategorijaStavka;
-            if (podkatComboBox.getSelectedIndex() != -1) {
-                podkategorijaStavka = podkatComboBox.getSelectedItem().toString();
-            } else {
-                podkategorijaStavka = "";
+                        String kategorijaStavka = kategorijaComboBox.getSelectedItem().toString();
+                        String podkategorijaStavka;
+                        if (podkatComboBox.getSelectedIndex() != -1) {
+                            podkategorijaStavka = podkatComboBox.getSelectedItem().toString();
+                        } else {
+                            podkategorijaStavka = "";
+                        }
+
+                        String lokacijaStavka = OJComboBox.getSelectedItem().toString();
+                        String nazivStavka = nazivField.getText();
+                        String kolicinaStavka = jSpinner1.getValue().toString();
+
+                        String stavka = "Kategorija : " + kategorijaStavka + " | Podkategorija : " + podkategorijaStavka + " | Lokacija : " + lokacijaStavka + " | Naziv : " + nazivStavka + " | Korisnik : " + korisnikLokacija + " | Napomena :" + napomena + " | Kolicina : " + kolicinaStavka;
+                        String[] exStavka = stavka.split("Kolicina");
+                        if (existingStavke.contains(exStavka[0].trim())) {
+                            int index = existingStavke.indexOf(exStavka[0].trim());
+                            String postojecaStavka = modelStavka.get(index);
+                            String[] exKolicina = postojecaStavka.split("Kolicina :");
+                            int exKolicinaInt = Integer.parseInt(exKolicina[1].trim());
+                            int novaKolicina = exKolicinaInt + Integer.parseInt(kolicinaStavka.trim());
+                            String[] novaStavka1 = stavka.split("Kolicina :");
+                            String novaStavka2 = novaStavka1[0];
+                            String novaStavka3 = novaStavka2 + "Kolicina : " + novaKolicina;
+
+                            modelStavka.remove(index);
+                            modelStavka.add(index, novaStavka3);
+                            System.out.println(exKolicinaInt);
+
+                        } else {
+
+                            modelStavka.addElement(stavka);
+                            existingStavke.add(exStavka[0].trim());
+                            stavkaList.setModel(modelStavka);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(podkatComboBox, "Morate popuniti sva obavezna polja!", "Greška", JOptionPane.ERROR_MESSAGE);
+                    }
             }
-
-            String lokacijaStavka = OJComboBox.getSelectedItem().toString();
-            String nazivStavka = nazivField.getText();
-            String kolicinaStavka = jSpinner1.getValue().toString();
-            
-            
-            String stavka = "Kategorija : " + kategorijaStavka + " | Podkategorija : " + podkategorijaStavka + " | Lokacija : " + lokacijaStavka + " | Naziv : " + nazivStavka + " | Korisnik : "+korisnikLokacija+" | Napomena :"+napomena+" | Kolicina : " + kolicinaStavka;
-            String[] exStavka = stavka.split("Kolicina");
-            if(existingStavke.contains(exStavka[0].trim())){
-                int index = existingStavke.indexOf(exStavka[0].trim());
-                String postojecaStavka = modelStavka.get(index);
-                String[] exKolicina = postojecaStavka.split("Kolicina :");
-                int exKolicinaInt = Integer.parseInt(exKolicina[1].trim());
-                int novaKolicina = exKolicinaInt + Integer.parseInt(kolicinaStavka.trim());
-                String[] novaStavka1 = stavka.split("Kolicina :");
-                String novaStavka2 = novaStavka1[0];
-                String novaStavka3 = novaStavka2 + "Kolicina : "+novaKolicina;
-                
-                modelStavka.remove(index);
-                modelStavka.add(index, novaStavka3);
-                System.out.println(exKolicinaInt);
-                
-            }else{
-            
-            modelStavka.addElement(stavka);
-            existingStavke.add(exStavka[0].trim());
-            stavkaList.setModel(modelStavka);
-        }} else {
-            JOptionPane.showMessageDialog(podkatComboBox, "Morate popuniti sva obavezna polja!", "Greška", JOptionPane.ERROR_MESSAGE);
-        }
-        }
         } catch (SQLException ex) {
             Logger.getLogger(Prijem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1MouseReleased
 
-       
-    
+
     private void jButton2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseReleased
         resetData();
     }//GEN-LAST:event_jButton2MouseReleased
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-       if(modelStavka.size() < 1){
-           JOptionPane.showMessageDialog(null, "Lista je prazna");
-       }else{
-        int q = JOptionPane.showConfirmDialog(null,"Da li želite da izbrišete sve stavke", "Brisanje", JOptionPane.YES_NO_OPTION);
-       if(q == 0){
-        modelStavka.removeAllElements();
-       existingStavke.removeAll(existingStavke);
-       stavkaList.setModel(modelStavka);
-       }}
+        if (modelStavka.size() < 1) {
+            JOptionPane.showMessageDialog(null, "Lista je prazna");
+        } else {
+            int q = JOptionPane.showConfirmDialog(null, "Da li želite da izbrišete sve stavke", "Brisanje", JOptionPane.YES_NO_OPTION);
+            if (q == 0) {
+                modelStavka.removeAllElements();
+                existingStavke.removeAll(existingStavke);
+                stavkaList.setModel(modelStavka);
+            }
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void obrisiBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_obrisiBtnActionPerformed
-         if(modelStavka.size() < 1){
-           JOptionPane.showMessageDialog(null, "Lista je prazna");
-       }else{ 
+        if (modelStavka.size() < 1) {
+            JOptionPane.showMessageDialog(null, "Lista je prazna");
+        } else {
+            @SuppressWarnings("UnusedAssignment")
             int items_to_delete[] = null;
-                                                  
-                        if (!stavkaList.isSelectionEmpty()){
-                            items_to_delete = stavkaList.getSelectedIndices();
-                        } 
-                        else{
-                            JOptionPane.showMessageDialog(null, "Morate izabrati jedan element");
-                            return;
-                        }
-                         
-                        if(items_to_delete != null);
-                        {
-                                 
-                                for(int i=items_to_delete.length - 1; i > -1 ; i--)
-                                {
-                                        modelStavka.remove(items_to_delete[i]);
-                                        existingStavke.remove(items_to_delete[i]);
-                                }
-                                stavkaList.setModel(modelStavka);
-                        }
-         }
-        
-    
+
+            if (!stavkaList.isSelectionEmpty()) {
+                items_to_delete = stavkaList.getSelectedIndices();
+            } else {
+                JOptionPane.showMessageDialog(null, "Morate izabrati jedan element");
+                return;
+            }
+
+            if (items_to_delete != null);
+            {
+
+                for (int i = items_to_delete.length - 1; i > -1; i--) {
+                    modelStavka.remove(items_to_delete[i]);
+                    existingStavke.remove(items_to_delete[i]);
+                }
+                stavkaList.setModel(modelStavka);
+            }
+        }
+
+
     }//GEN-LAST:event_obrisiBtnActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try {
-            String brPrijema = brojPrijema(datumG);
-            int brojStavki = stavkaList.getVisibleRowCount();
-            String faktura = fakturaField.getText();
-            Long idPrijemL = add(brPrijema, brojStavki, faktura, korisnikG, datumG);
-            int idPrijem = idPrijemL.intValue();
-                    
-                        if (idPrijemL != null) {
-                            JOptionPane.showMessageDialog(null, "Uspešno ste uneli novi prijem " + brPrijema);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Došlo je do greške pokušajte ponovo");
-                        }
-                   
-             for (int i =0; i<modelStavka.getSize(); i++){
-                String stavka = modelStavka.get(i);
-                String[] stavkaKomp = stavka.split("\\|");
-                
-                String kat1 = stavkaKomp[0];
-                String kategorijaStavka = kat1.split(":")[1].trim();
-                                      
-                String podkat1 = stavkaKomp[1];
-                String podkategorijaStavka = podkat1.split(":")[1].trim();
-                               
-                String oj1 = stavkaKomp[2];
-                String lokacijaStavka = oj1.split(":")[1].trim();
-                                
-                String naz1 = stavkaKomp[3];
-                String nazivStavka = naz1.split(":")[1].trim();
-                
-                String kor1 = stavkaKomp[4];
-                String korisnikStavka = kor1.split(":")[1].trim();
+        String faktura = fakturaField.getText();
+        if (faktura.isEmpty() || faktura.equals(" ")) {
+            JOptionPane.showMessageDialog(null, "Morate uneti fakturu prijema!", "Greška", JOptionPane.ERROR_MESSAGE);
+        } else if (modelStavka.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Morate uneti stavke prijema!", "Greška", JOptionPane.ERROR_MESSAGE);
+        } else {
 
-                String nap1 = stavkaKomp[5];
-                String napomenaStavka = nap1.split(":")[1].trim();
-                
-                String kol1 = stavkaKomp[6];
-                String kolicinaStavka = kol1.split(":")[1].trim();
-                int kolicinaStavkaInt = Integer.parseInt(kolicinaStavka);
-                insertStavka(idPrijem,brPrijema, kategorijaStavka,podkategorijaStavka,lokacijaStavka,nazivStavka,korisnikStavka,napomenaStavka,kolicinaStavkaInt);
+            try {
+                String brPrijema = brojPrijema(datumG);
+                int brojStavki = stavkaList.getVisibleRowCount();
+
+                Long idPrijemL = add(brPrijema, brojStavki, faktura, korisnikG, datumG);
+                int idPrijem = idPrijemL.intValue();
+
+                if (idPrijemL != null) {
+                    JOptionPane.showMessageDialog(null, "Uspešno ste uneli novi prijem " + brPrijema);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Došlo je do greške pokušajte ponovo");
+                }
+
+                for (int i = 0; i < modelStavka.getSize(); i++) {
+                    String stavka = modelStavka.get(i);
+                    String[] stavkaKomp = stavka.split("\\|");
+
+                    String kat1 = stavkaKomp[0];
+                    String kategorijaStavka = kat1.split(":")[1].trim();
+
+                    String podkat1 = stavkaKomp[1];
+                    String podkategorijaStavka = podkat1.split(":")[1].trim();
+
+                    String oj1 = stavkaKomp[2];
+                    String lokacijaStavka = oj1.split(":")[1].trim();
+
+                    String naz1 = stavkaKomp[3];
+                    String nazivStavka = naz1.split(":")[1].trim();
+
+                    String kor1 = stavkaKomp[4];
+                    String korisnikStavka = kor1.split(":")[1].trim();
+
+                    String nap1 = stavkaKomp[5];
+                    String napomenaStavka = nap1.split(":")[1].trim();
+
+                    String kol1 = stavkaKomp[6];
+                    String kolicinaStavka = kol1.split(":")[1].trim();
+                    int kolicinaStavkaInt = Integer.parseInt(kolicinaStavka);
+                    if (podkategorijaStavka.equals("") || podkategorijaStavka.isEmpty()) {
+                        insertStavka(idPrijem, brPrijema, kategorijaStavka, lokacijaStavka, nazivStavka, korisnikStavka, napomenaStavka, kolicinaStavkaInt);
+                    } else {
+
+                        insertStavka(idPrijem, brPrijema, kategorijaStavka, podkategorijaStavka, lokacijaStavka, nazivStavka, korisnikStavka, napomenaStavka, kolicinaStavkaInt);
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Prijem.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        } catch (SQLException ex) {
-            Logger.getLogger(Prijem.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
@@ -794,7 +829,5 @@ public class Prijem extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> podkatComboBox;
     private javax.swing.JList<String> stavkaList;
     // End of variables declaration//GEN-END:variables
-
-    
 
 }

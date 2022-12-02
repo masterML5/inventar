@@ -5,8 +5,6 @@
  */
 package inventar;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,14 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
-import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -35,7 +29,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author milosjelic
  */
 public class ToneriPregled extends javax.swing.JPanel {
-
+    
     private static Connection conSQL;
     private static final String connectionUrlMySQL = "jdbc:mysql://localhost:3306/it-inventar?user=root&password=";
     private static DefaultTableModel tm;
@@ -44,13 +38,15 @@ public class ToneriPregled extends javax.swing.JPanel {
     ToneriIzdavanje tizdavanje = new ToneriIzdavanje();
     private static String korisnik;
     private static String datum;
+
     /**
      * Creates new form ToneriPregled
+     *
      * @throws java.sql.SQLException
      */
     public ToneriPregled() throws SQLException {
         initComponents();
-         try {
+        try {
             conSQL = DriverManager.getConnection(connectionUrlMySQL);
             conSQL.setAutoCommit(false);
         } catch (SQLException ex) {
@@ -61,7 +57,7 @@ public class ToneriPregled extends javax.swing.JPanel {
     public ToneriPregled(String username, String datum) throws SQLException {
         initComponents();
         tm = (DefaultTableModel) toneriTable.getModel();
-        TableColumnModel tcm = toneriTable.getColumnModel();        
+        TableColumnModel tcm = toneriTable.getColumnModel();
         tcm.getColumn(0).setPreferredWidth(50);
         tcm.getColumn(1).setPreferredWidth(100);
         tcm.getColumn(2).setPreferredWidth(450);
@@ -74,7 +70,7 @@ public class ToneriPregled extends javax.swing.JPanel {
         toneriTable.setDefaultRenderer(Integer.class, centerRenderer);
         korisnik = username;
         this.datum = datum;
-        sveLokacije.add(0,null);
+        sveLokacije.add(0, null);
         lokacijaComboBox.setModel(new DefaultComboBoxModel<>(sveLokacije.toArray(new String[0])));
         AutoCompleteDecorator.decorate(lokacijaComboBox);
         try {
@@ -83,21 +79,19 @@ public class ToneriPregled extends javax.swing.JPanel {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        
+
         puniTable();
-        
-        Image red = createImageIcon("/res/red.png","redIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+
+        Image red = createImageIcon("/res/red.png", "redIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
         ImageIcon redIconPng = new ImageIcon(red);
         redIcon.setIcon(redIconPng);
-        Image green = createImageIcon("/res/green.png","greenIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+        Image green = createImageIcon("/res/green.png", "greenIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
         ImageIcon greenIconPng = new ImageIcon(green);
         greenIcon.setIcon(greenIconPng);
-        Image orange = createImageIcon("/res/orange.png","orangeIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+        Image orange = createImageIcon("/res/orange.png", "orangeIcon").getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
         ImageIcon orangeIconPng = new ImageIcon(orange);
         orangeIcon.setIcon(orangeIconPng);
     }
-
-  
 
     ArrayList getToneri() throws SQLException {
         String sql = "SELECT ton.id_toner,ton.naziv, ton.prep_kolicina, ton.kolicina, GROUP_CONCAT(distinct stmp.marka,\" \",stmp.model SEPARATOR '----') as mm,"
@@ -107,25 +101,26 @@ public class ToneriPregled extends javax.swing.JPanel {
         ResultSet rsAllToneri = pstAllToneri.executeQuery();
         ArrayList toneri = new ArrayList();
         while (rsAllToneri.next()) {
-            toneri.add(rsAllToneri.getInt("ton.id_toner") + " • "+rsAllToneri.getString("ton.naziv") + " • " + rsAllToneri.getString("mm") + " • " + rsAllToneri.getInt("ton.kolicina")
-                    + " • " + rsAllToneri.getInt("ton.prep_kolicina")+ " • " + rsAllToneri.getString("lokacija"));
+            toneri.add(rsAllToneri.getInt("ton.id_toner") + " • " + rsAllToneri.getString("ton.naziv") + " • " + rsAllToneri.getString("mm") + " • " + rsAllToneri.getInt("ton.kolicina")
+                    + " • " + rsAllToneri.getInt("ton.prep_kolicina") + " • " + rsAllToneri.getString("lokacija"));
         }
 
         return toneri;
     }
-    
-    ArrayList getAllToneri() throws SQLException{
+
+    ArrayList getAllToneri() throws SQLException {
         String sqlToneri = "SELECT naziv FROM toneri WHERE aktivan AND vazeci GROUP BY naziv";
         PreparedStatement pstToneri = conSQL.prepareStatement(sqlToneri);
         ResultSet rsToneri = pstToneri.executeQuery();
         ArrayList toneriAll = new ArrayList();
-        while(rsToneri.next()){
+        while (rsToneri.next()) {
             toneriAll.add(rsToneri.getString("naziv"));
         }
-        
+
         return toneriAll;
     }
-    void puniTable() throws SQLException{
+
+    void puniTable() throws SQLException {
         ArrayList toneri = getToneri();
         for (int i = 0; i < toneri.size(); i++) {
             String data = toneri.get(i).toString();
@@ -135,19 +130,19 @@ public class ToneriPregled extends javax.swing.JPanel {
         for (int j = 0; j < tm.getRowCount(); j++) {
             int kolicina = Integer.parseInt(tm.getValueAt(j, 3).toString().trim());
             int prep_kolicina = Integer.parseInt(tm.getValueAt(j, 4).toString().trim());
-            if(kolicina < prep_kolicina){
-                toneriTable.setValueAt("<html><p color='red'><b>"+kolicina+"</b></p></html>", j, 3);
-            }else if(kolicina == prep_kolicina){
-                toneriTable.setValueAt("<html><p color='FF8C00'><b>"+kolicina+"</b></p></html>", j, 3);
-            }else{
-                toneriTable.setValueAt("<html><p color='green'><b>"+kolicina+"</b></p></html>", j, 3);
+            if (kolicina < prep_kolicina) {
+                toneriTable.setValueAt("<html><p color='red'><b>" + kolicina + "</b></p></html>", j, 3);
+            } else if (kolicina == prep_kolicina) {
+                toneriTable.setValueAt("<html><p color='FF8C00'><b>" + kolicina + "</b></p></html>", j, 3);
+            } else {
+                toneriTable.setValueAt("<html><p color='green'><b>" + kolicina + "</b></p></html>", j, 3);
             }
-       
 
         }
     }
-    String getTonerById(int idToner) throws SQLException{
-        String sqlIdToner = "SELECT naziv from toneri where aktivan and vazeci and id_toner ="+idToner;
+
+    String getTonerById(int idToner) throws SQLException {
+        String sqlIdToner = "SELECT naziv from toneri where aktivan and vazeci and id_toner =" + idToner;
         PreparedStatement pstIdToner = conSQL.prepareStatement(sqlIdToner);
         String toner;
         ResultSet rsIdToner = pstIdToner.executeQuery();
@@ -159,11 +154,12 @@ public class ToneriPregled extends javax.swing.JPanel {
         } else {
             toner = "Nema rezultata";
         }
-        
+
         return toner;
     }
-    int getKolicinaById(int idToner) throws SQLException{
-        String sqlIdToner = "SELECT kolicina from toneri where aktivan and vazeci and id_toner ="+idToner;
+
+    int getKolicinaById(int idToner) throws SQLException {
+        String sqlIdToner = "SELECT kolicina from toneri where aktivan and vazeci and id_toner =" + idToner;
         PreparedStatement pstIdToner = conSQL.prepareStatement(sqlIdToner);
         int kolicina;
         ResultSet rsIdToner = pstIdToner.executeQuery();
@@ -175,7 +171,7 @@ public class ToneriPregled extends javax.swing.JPanel {
         } else {
             kolicina = 0;
         }
-        
+
         return kolicina;
     }
 
@@ -185,7 +181,7 @@ public class ToneriPregled extends javax.swing.JPanel {
         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query));
 
     }
-   
+
     protected ImageIcon createImageIcon(String path, String description) {
         java.net.URL imgURL = getClass().getResource(path);
         if (imgURL != null) {
@@ -195,7 +191,6 @@ public class ToneriPregled extends javax.swing.JPanel {
             return null;
         }
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -382,10 +377,10 @@ public class ToneriPregled extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
-        String query;      
-        if(lokacijaComboBox.getSelectedIndex() == -1){
-           query = ""; 
-        }else{
+        String query;
+        if (lokacijaComboBox.getSelectedIndex() == -1) {
+            query = "";
+        } else {
             String lok = lokacijaComboBox.getSelectedItem().toString();
             query = lok;
         }
@@ -397,21 +392,20 @@ public class ToneriPregled extends javax.swing.JPanel {
             int tonerRow = toneriTable.getSelectedRow();
             int tonerCol = 0;
             int tonerColPrepKol = 4;
-            String idTonerStr = (String) toneriTable.getValueAt(tonerRow, tonerCol); 
+            String idTonerStr = (String) toneriTable.getValueAt(tonerRow, tonerCol);
             String prepKol = (String) tm.getValueAt(tonerRow, tonerColPrepKol);
-            
+
             int idToner = Integer.parseInt(idTonerStr.trim());
             int kolicina = getKolicinaById(idToner);
             int prep_kolicina = Integer.parseInt(prepKol.trim());
-            tizdavanje = new ToneriIzdavanje(korisnik,getTonerById(idToner),idToner,kolicina,prep_kolicina, datum);
+            tizdavanje = new ToneriIzdavanje(korisnik, getTonerById(idToner), idToner, kolicina, prep_kolicina, datum);
             tizdavanje.setVisible(true);
-          
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ToneriPregled.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
+
     }//GEN-LAST:event_jButton2MouseClicked
 
 
