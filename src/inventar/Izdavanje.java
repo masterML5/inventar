@@ -100,7 +100,9 @@ public class Izdavanje extends javax.swing.JPanel {
                         listModel.addElement(data.get(i));
                     }
                    
-                }
+                }else{
+             listModel.add(0, "Nema rezultata");
+         }
      
      
           dataList.setModel(listModel);
@@ -116,7 +118,9 @@ public class Izdavanje extends javax.swing.JPanel {
                         listModel.addElement(data.get(i));
                     }
                    
-                }
+                }else{
+             listModel.add(0, "Nema rezultata");
+         }
      
      
           dataList.setModel(listModel);
