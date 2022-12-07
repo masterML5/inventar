@@ -54,6 +54,7 @@ public class Podkategorija {
 
         return podkat;
     }
+   
 
     int getId(String naziv) throws SQLException {
         int id;

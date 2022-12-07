@@ -69,7 +69,8 @@ public class Evidencija extends javax.swing.JFrame {
         initTabComponent(2);
 
     }
-
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -314,11 +315,15 @@ public class Evidencija extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-        izdavanje = new Izdavanje();
-        jTabbedPane1.add(izdavanje, "Izdavanje");
-        tabbedCount = jTabbedPane1.getTabCount();
-        initTabComponent(tabbedCount - 1);
-        jTabbedPane1.setSelectedIndex(tabbedCount - 1);
+        try {
+            izdavanje = new Izdavanje();
+            jTabbedPane1.add(izdavanje, "Izdavanje");
+            tabbedCount = jTabbedPane1.getTabCount();
+            initTabComponent(tabbedCount - 1);
+            jTabbedPane1.setSelectedIndex(tabbedCount - 1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Evidencija.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed

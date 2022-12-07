@@ -43,7 +43,7 @@ public class RacunariEdit extends javax.swing.JPanel {
     String psuRez;
     String invRez;
     /**
-     * Creates new form RacunariPregled
+     * Creates new form RacunariEdit
      *
      * @param username
      * @throws java.sql.SQLException
@@ -103,7 +103,7 @@ public class RacunariEdit extends javax.swing.JPanel {
         String gpu = gpuField.getText();
         String napajanje = psuField.getText();
         String specifikacija = racunari.specifikacija(procesor, ram, hdd, gpu, napajanje);
-        String korisnik = korisnikField.getText();
+        String korisnik2 = korisnikField.getText();
         String invBroj = invBrojField.getText();
         String ipAdresa = ipAdresaField.getText();
         String macAdresa = macAdresaField.getText();
@@ -111,9 +111,9 @@ public class RacunariEdit extends javax.swing.JPanel {
         String osKey = osKeyField.getText();
         String office = officeComboBox.getSelectedItem().toString();
         String officeKey = officeKeyField.getText();
-        String lokacija = lokacijaComboBox.getSelectedItem().toString();
+        String lokacija2 = lokacijaComboBox.getSelectedItem().toString();
 
-        return new Data(korisnik, invBroj, ipAdresa, lokacija, macAdresa, os, osKey, office, officeKey, procesor, ram, hdd, gpu, napajanje, specifikacija);
+        return new Data(korisnik2, invBroj, ipAdresa, lokacija2, macAdresa, os, osKey, office, officeKey, procesor, ram, hdd, gpu, napajanje, specifikacija);
     }
 
    

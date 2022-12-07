@@ -39,7 +39,7 @@ public class RacunariPregled extends javax.swing.JPanel {
     }
 
     ArrayList getData(String search) throws SQLException {
-        @SuppressWarnings("UnusedAssignment")
+       
         ArrayList result = new ArrayList<String>();
         int parametar = Integer.parseInt(search);
         result = racunari.getAllInfoInv(parametar);
@@ -93,7 +93,7 @@ public class RacunariPregled extends javax.swing.JPanel {
             hddLabel.setText(obj.getString("hdd"));
             gpuLabel.setText(obj.getString("gpu"));
             psuLabel.setText(obj.getString("napajanje"));
-            fakturaLabel.setText(prijem.brojFakture(Integer.valueOf(id)));
+            fakturaLabel.setText(prijem.brojFakture(Integer.valueOf(id.trim())));
         } else {
             JOptionPane.showMessageDialog(null, "Nema rezultata", "Greška", JOptionPane.ERROR_MESSAGE);
         }

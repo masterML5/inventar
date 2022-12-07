@@ -236,13 +236,13 @@ public class Prijem extends javax.swing.JPanel {
 
     String brojFakture(int idRacunar) throws SQLException {
         String brojFakture;
-        String sqlbrojFakture = "SELECT faktura FROM prijem WHERE aktivan AND vazeci AND id_racunar =" + idRacunar;
+        String sqlbrojFakture = "SELECT p.faktura FROM prijem as p JOIN prijem_stavka as ps WHERE p.aktivan AND p.vazeci AND ps.aktivan AND ps.vazeci AND p.id_prijem = ps.id_prijem and ps.id_racunar =" + idRacunar;
         PreparedStatement pstbrojFakture = conSQL.prepareStatement(sqlbrojFakture);
         ResultSet rsBrojFakture = pstbrojFakture.executeQuery();
 
         if (rsBrojFakture.next()) {
 
-            brojFakture = rsBrojFakture.getString("faktura");
+            brojFakture = rsBrojFakture.getString("p.faktura");
 
         } else {
             brojFakture = null;
@@ -374,8 +374,8 @@ public class Prijem extends javax.swing.JPanel {
 
         jLabel9.setText("Polja sa * su obavezna!");
 
-        jLabel10.setText("* Broj fakture / Zavodni broj");
-        jLabel10.setToolTipText("<html><b><i>Broj fakture se unosi na nivou primera, ne na nivou stavke!</b></i><br>\n<b>Primer :</b><br> \nR-PSU-002312/2022<br>\nR-PBG-000445/2021</html>");
+        jLabel10.setText("* Broj fakture / Zavodni broj - prijema");
+        jLabel10.setToolTipText("<html><b>Primer :</b><br> \nR-PSU-002312/2022<br>\nR-PBG-000445/2021</html>");
 
         fakturaField.setToolTipText("Zavodni broj fakture ");
 

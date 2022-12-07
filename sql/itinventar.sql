@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2022 at 02:58 PM
+-- Generation Time: Dec 07, 2022 at 02:44 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -52,6 +52,75 @@ CREATE TABLE `inventar` (
 
 INSERT INTO `inventar` (`id_inventar`, `id_kategorija`, `id_lokacija`, `id_racunar`, `id_stampac`, `naziv`, `lokacija`, `kolicina`, `napomena`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
 (1, 2, 18, NULL, NULL, '', '', 0, NULL, '', NULL, '0000-00-00 00:00:00', NULL, '', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `izdavanje`
+--
+
+CREATE TABLE `izdavanje` (
+  `id_izdavanje` int(11) NOT NULL,
+  `id_kategorija` int(11) NOT NULL,
+  `korisnik` varchar(50) DEFAULT NULL,
+  `id_lokacija_stara` int(11) NOT NULL,
+  `id_lokacija_nova` int(11) NOT NULL,
+  `id_stavka` int(11) DEFAULT NULL,
+  `id_toner` int(11) DEFAULT NULL,
+  `id_racunar` int(11) DEFAULT NULL,
+  `id_stampac` int(11) DEFAULT NULL,
+  `kolicina` int(11) NOT NULL,
+  `naziv` varchar(50) NOT NULL DEFAULT '',
+  `brojIzdavanje` varchar(50) NOT NULL DEFAULT '',
+  `uneo` varchar(50) NOT NULL,
+  `editovao` varchar(50) DEFAULT NULL,
+  `uneo_ts` datetime NOT NULL DEFAULT current_timestamp(),
+  `edit_ts` datetime DEFAULT NULL,
+  `datum` varchar(50) DEFAULT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `izdavanje`
+--
+
+INSERT INTO `izdavanje` (`id_izdavanje`, `id_kategorija`, `korisnik`, `id_lokacija_stara`, `id_lokacija_nova`, `id_stavka`, `id_toner`, `id_racunar`, `id_stampac`, `kolicina`, `naziv`, `brojIzdavanje`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 2, 'test', 18, 4, 0, NULL, NULL, NULL, 1, 'CRG039', '20221128', 'ff', NULL, '2022-11-29 08:58:01', NULL, '28-11-2022', 1, 1),
+(2, 2, 'test', 18, 2, 0, NULL, NULL, NULL, 1, 'CF259A', '20221129-IZDAVANJE-2-182-1', 'ff', NULL, '2022-11-29 08:58:49', NULL, '2022-11-29', 1, 1),
+(8, 2, 'test', 18, 5, 0, NULL, NULL, NULL, 1, 'CF259A', '20221129-IZDAVANJE-2-185-2', 'ff', NULL, '2022-11-29 09:16:19', NULL, '2022-11-29', 1, 1),
+(9, 2, 'test', 18, 6, 0, NULL, NULL, NULL, 1, 'CF259A', '20221129-IZDAVANJE-2-186-8', 'ff', NULL, '2022-11-29 09:17:09', NULL, '2022-11-29', 1, 1),
+(10, 3, 'test', 18, 15, 0, NULL, NULL, NULL, 2, 'test', '20221129-IZDAVANJE-2-1815-9', 'ff', NULL, '2022-11-29 09:17:54', NULL, '2022-11-29', 1, 1),
+(11, 3, 'test', 18, 4, 0, NULL, NULL, NULL, 1, 'test', '20221129-IZDAVANJE-2-184-10', 'ff', NULL, '2022-11-29 10:36:38', NULL, '2022-11-29', 1, 1),
+(12, 2, 'test', 18, 6, NULL, NULL, NULL, NULL, 2, 'CRG039', '20221206-IZDAVANJE-2-186-11', 'ff', NULL, '2022-12-06 09:13:06', NULL, '2022-12-06', 1, 1),
+(13, 2, '', 18, 1, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-181-12', 'ff', NULL, '2022-12-06 09:16:24', NULL, '2022-12-06', 1, 1),
+(14, 2, 'a', 18, 4, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-184-13', 'ff', NULL, '2022-12-06 09:17:07', NULL, '2022-12-06', 1, 1),
+(15, 2, '', 18, 3, NULL, NULL, NULL, NULL, 1, 'CF217A', '20221206-IZDAVANJE-2-183-14', 'ff', NULL, '2022-12-06 09:18:42', NULL, '2022-12-06', 1, 1),
+(16, 2, '', 18, 5, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-185-15', 'ff', NULL, '2022-12-06 09:20:02', NULL, '2022-12-06', 1, 1),
+(17, 2, '', 18, 5, NULL, NULL, NULL, NULL, 1, 'CRG039', '20221206-IZDAVANJE-2-185-16', 'ff', NULL, '2022-12-06 09:21:25', NULL, '2022-12-06', 1, 1),
+(18, 2, '', 18, 4, NULL, NULL, NULL, NULL, 1, 'CF217A', '20221206-IZDAVANJE-2-184-17', 'ff', NULL, '2022-12-06 09:23:25', NULL, '2022-12-06', 1, 1),
+(19, 2, '', 18, 7, NULL, NULL, NULL, NULL, 1, 'CRG039', '20221206-IZDAVANJE-2-187-18', 'ff', NULL, '2022-12-06 09:24:21', NULL, '2022-12-06', 1, 1),
+(20, 2, '', 18, 3, NULL, NULL, NULL, NULL, 1, 'CF217A', '20221206-IZDAVANJE-2-183-19', 'ff', NULL, '2022-12-06 09:53:34', NULL, '2022-12-06', 1, 1),
+(21, 2, '', 18, 7, NULL, NULL, NULL, NULL, 0, 'CF217A', '20221206-IZDAVANJE-2-187-20', 'ff', NULL, '2022-12-06 10:00:22', NULL, '2022-12-06', 1, 1),
+(22, 2, '', 18, 9, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-189-21', 'ff', NULL, '2022-12-06 10:26:48', NULL, '2022-12-06', 1, 1),
+(23, 2, 't', 18, 4, NULL, NULL, NULL, NULL, 2, 'CF259A', '20221206-IZDAVANJE-2-184-22', 'ff', NULL, '2022-12-06 10:28:18', NULL, '2022-12-06', 1, 1),
+(24, 2, '', 18, 5, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-185-23', 'ff', NULL, '2022-12-06 10:31:06', NULL, '2022-12-06', 1, 1),
+(25, 2, '', 18, 6, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-186-24', 'ff', NULL, '2022-12-06 10:32:38', NULL, '2022-12-06', 1, 1),
+(26, 2, '', 18, 5, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-185-25', 'ff', NULL, '2022-12-06 10:33:34', NULL, '2022-12-06', 1, 1),
+(27, 2, '', 18, 4, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-184-26', 'ff', NULL, '2022-12-06 10:34:50', NULL, '2022-12-06', 1, 1),
+(28, 2, '', 18, 4, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-184-27', 'ff', NULL, '2022-12-06 10:36:31', NULL, '2022-12-06', 1, 1),
+(29, 2, '', 18, 6, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-186-28', 'ff', NULL, '2022-12-06 10:37:46', NULL, '2022-12-06', 1, 1),
+(30, 2, '', 18, 3, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-183-29', 'ff', NULL, '2022-12-06 10:39:15', NULL, '2022-12-06', 1, 1),
+(31, 2, '', 18, 3, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-183-30', 'ff', NULL, '2022-12-06 10:39:53', NULL, '2022-12-06', 1, 1),
+(32, 2, '', 18, 1, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-181-31', 'ff', NULL, '2022-12-06 11:12:53', NULL, '2022-12-06', 1, 1),
+(33, 2, '', 18, 4, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-184-32', 'ff', NULL, '2022-12-06 11:21:43', NULL, '2022-12-06', 1, 1),
+(34, 2, '', 18, 6, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-186-33', 'ff', NULL, '2022-12-06 11:28:12', NULL, '2022-12-06', 1, 1),
+(35, 2, '', 18, 6, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-186-34', 'ff', NULL, '2022-12-06 11:29:11', NULL, '2022-12-06', 1, 1),
+(36, 2, '', 18, 7, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-187-35', 'ff', NULL, '2022-12-06 11:29:31', NULL, '2022-12-06', 1, 1),
+(37, 2, '', 18, 5, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-185-36', 'ff', NULL, '2022-12-06 11:33:24', NULL, '2022-12-06', 1, 1),
+(38, 2, '', 18, 4, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-184-37', 'ff', NULL, '2022-12-06 11:34:18', NULL, '2022-12-06', 1, 1),
+(39, 2, '', 18, 4, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-184-38', 'ff', NULL, '2022-12-06 11:46:43', NULL, '2022-12-06', 1, 1),
+(40, 2, '', 18, 17, NULL, NULL, NULL, NULL, 1, 'CF259A', '20221206-IZDAVANJE-2-1817-39', 'ff', NULL, '2022-12-06 12:03:12', NULL, '2022-12-06', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -220,16 +289,8 @@ INSERT INTO `podkategorija` (`id_podkategorija`, `id_kategorija`, `naziv`, `uneo
 CREATE TABLE `prijem` (
   `id_prijem` int(11) NOT NULL,
   `broj_prijem` varchar(50) NOT NULL DEFAULT '',
-  `id_kategorija` int(11) NOT NULL,
-  `id_podkategorija` int(11) DEFAULT NULL,
-  `id_lokacija` int(11) NOT NULL,
-  `id_racunar` int(11) DEFAULT NULL,
-  `id_stampac` int(11) DEFAULT NULL,
-  `naziv` varchar(100) NOT NULL DEFAULT '',
-  `kolicina` int(11) NOT NULL,
+  `broj_stavki` int(11) NOT NULL,
   `faktura` varchar(100) NOT NULL DEFAULT '',
-  `napomena` longtext DEFAULT NULL,
-  `korisnikLokacija` varchar(255) DEFAULT NULL,
   `uneo` varchar(50) NOT NULL,
   `editovao` varchar(50) DEFAULT NULL,
   `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -243,22 +304,74 @@ CREATE TABLE `prijem` (
 -- Dumping data for table `prijem`
 --
 
-INSERT INTO `prijem` (`id_prijem`, `broj_prijem`, `id_kategorija`, `id_podkategorija`, `id_lokacija`, `id_racunar`, `id_stampac`, `naziv`, `kolicina`, `faktura`, `napomena`, `korisnikLokacija`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
-(1, '20221103-PRIJEM-1-30', 1, NULL, 3, NULL, NULL, 'a', 1, 'a', '', 'a', 'ff', NULL, '2022-11-03 07:56:56', NULL, '2022-11-03', 1, 1),
-(2, '20221103-PRIJEM-1-311', 1, NULL, 3, 14, NULL, 'test', 1, 'test', '', 'ateste', 'ff', NULL, '2022-11-03 08:12:44', NULL, '2022-11-03', 1, 1),
-(3, '20221103-PRIJEM-1-221', 1, NULL, 2, 15, NULL, '11', 1, '1', '', '1', 'ff', NULL, '2022-11-03 08:14:45', NULL, '2022-11-03', 1, 1),
-(4, '20221103-PRIJEM-1-231', 1, NULL, 2, 17, NULL, 'a', 1, 'a', '', '1', 'ff', NULL, '2022-11-03 10:22:03', NULL, '2022-11-03', 1, 1),
-(5, '20221103-PRIJEM-1-141', 1, NULL, 1, 18, NULL, 'Altos', 1, 'R-PSU-25615/22', '', 'ksenija', 'ff', NULL, '2022-11-03 10:26:16', NULL, '2022-11-03', 1, 1),
-(10, '20221103-PRIJEM-12-5', 1, NULL, 2, 19, NULL, 'aa', 1, 'aa', '', 'sasda', 'ff', NULL, '2022-11-03 11:20:11', NULL, '2022-11-03', 1, 1),
-(11, '20221103-PRIJEM-11-10', 1, NULL, 1, 20, NULL, '213', 1, '123', '', '1', 'ff', NULL, '2022-11-03 12:03:34', NULL, '2022-11-03', 1, 1),
-(12, '20221103-PRIJEM-13-11', 1, NULL, 3, 21, NULL, 'test', 1, 'test', '', 'test', 'ff', NULL, '2022-11-03 12:08:03', NULL, '2022-11-03', 1, 1),
-(13, '20221103-PRIJEM-12-12', 1, NULL, 2, 22, NULL, 'asd', 1, 'asd', 'zasd', 'ad', 'ff', NULL, '2022-11-03 12:51:46', NULL, '2022-11-03', 1, 1),
-(16, '20221116-PRIJEM-72-13', 7, NULL, 2, NULL, 16, 'Canon LBP 351x', 1, 'test', NULL, 'test', 'ff', NULL, '2022-11-16 10:37:19', NULL, '2022-11-16', 1, 1),
-(17, '20221118-PRIJEM-13-16', 1, NULL, 3, 23, NULL, 'ALtos', 1, '123', '', 'Test', 'ff', NULL, '2022-11-18 11:05:15', NULL, '2022-11-18', 1, 1),
-(24, '20221123-PRIJEM-33-17', 3, NULL, 3, NULL, NULL, 'asus', 1, 'test2', '', '12', 'ff', NULL, '2022-11-23 12:42:16', NULL, '2022-11-23', 1, 1),
-(25, '20221123-PRIJEM-42-24', 4, 2, 2, NULL, NULL, 'test', 1, 'test3', '', 'test', 'ff', NULL, '2022-11-23 12:48:29', NULL, '2022-11-23', 1, 1),
-(26, '20221123-PRIJEM-52-25', 5, NULL, 2, NULL, NULL, 'test', 1, 'test34', '', 'test', 'ff', NULL, '2022-11-23 12:53:28', NULL, '2022-11-23', 1, 1),
-(27, '20221124-PRIJEM-41-26', 4, 2, 1, NULL, NULL, 'test', 1, 'test', '', 'test', 'ff', NULL, '2022-11-24 12:14:04', NULL, '2022-11-24', 1, 1);
+INSERT INTO `prijem` (`id_prijem`, `broj_prijem`, `broj_stavki`, `faktura`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, '20221103-PRIJEM-1-30', 1, 'a', 'ff', NULL, '2022-11-03 07:56:56', NULL, '2022-11-03', 1, 1),
+(2, '20221103-PRIJEM-1-311', 1, 'test', 'ff', NULL, '2022-11-03 08:12:44', NULL, '2022-11-03', 1, 1),
+(3, '20221103-PRIJEM-1-221', 1, '1', 'ff', NULL, '2022-11-03 08:14:45', NULL, '2022-11-03', 1, 1),
+(4, '20221103-PRIJEM-1-231', 1, 'a', 'ff', NULL, '2022-11-03 10:22:03', NULL, '2022-11-03', 1, 1),
+(5, '20221103-PRIJEM-1-141', 1, 'R-PSU-25615/22', 'ff', NULL, '2022-11-03 10:26:16', NULL, '2022-11-03', 1, 1),
+(10, '20221103-PRIJEM-12-5', 1, 'aa', 'ff', NULL, '2022-11-03 11:20:11', NULL, '2022-11-03', 1, 1),
+(11, '20221103-PRIJEM-11-10', 1, '123', 'ff', NULL, '2022-11-03 12:03:34', NULL, '2022-11-03', 1, 1),
+(12, '20221103-PRIJEM-13-11', 1, 'test', 'ff', NULL, '2022-11-03 12:08:03', NULL, '2022-11-03', 1, 1),
+(13, '20221103-PRIJEM-12-12', 1, 'asd', 'ff', NULL, '2022-11-03 12:51:46', NULL, '2022-11-03', 1, 1),
+(16, '20221116-PRIJEM-72-13', 1, 'test', 'ff', NULL, '2022-11-16 10:37:19', NULL, '2022-11-16', 1, 1),
+(17, '20221118-PRIJEM-13-16', 1, '123', 'ff', NULL, '2022-11-18 11:05:15', NULL, '2022-11-18', 1, 1),
+(24, '20221123-PRIJEM-33-17', 1, 'test2', 'ff', NULL, '2022-11-23 12:42:16', NULL, '2022-11-23', 1, 1),
+(25, '20221123-PRIJEM-42-24', 1, 'test3', 'ff', NULL, '2022-11-23 12:48:29', NULL, '2022-11-23', 1, 1),
+(26, '20221123-PRIJEM-52-25', 1, 'test34', 'ff', NULL, '2022-11-23 12:53:28', NULL, '2022-11-23', 1, 1),
+(27, '20221124-PRIJEM-41-26', 1, 'test', 'ff', NULL, '2022-11-24 12:14:04', NULL, '2022-11-24', 1, 1),
+(28, '20221201-PRIJEM-27', 8, '', 'ff', NULL, '2022-12-01 13:13:53', NULL, '2022-12-01', 1, 1),
+(29, '20221201-PRIJEM-28', 8, '', 'ff', NULL, '2022-12-01 13:55:51', NULL, '2022-12-01', 1, 1),
+(30, '20221201-PRIJEM-29', 8, 'test', 'ff', NULL, '2022-12-01 13:56:23', NULL, '2022-12-01', 1, 1),
+(31, '20221201-PRIJEM-30', 8, 't', 'ff', NULL, '2022-12-01 13:58:55', NULL, '2022-12-01', 1, 1),
+(32, '20221202-PRIJEM-31', 8, '', 'ff', NULL, '2022-12-02 06:59:35', NULL, '2022-12-02', 1, 1),
+(33, '20221202-PRIJEM-32', 8, 'test', 'ff', NULL, '2022-12-02 07:01:26', NULL, '2022-12-02', 1, 1),
+(34, '20221202-PRIJEM-33', 8, 'test', 'ff', NULL, '2022-12-02 07:03:27', NULL, '2022-12-02', 1, 1),
+(35, '20221202-PRIJEM-34', 8, 'test', 'ff', NULL, '2022-12-02 07:14:03', NULL, '2022-12-02', 1, 1),
+(36, '20221202-PRIJEM-35', 8, 'test', 'ff', NULL, '2022-12-02 07:16:58', NULL, '2022-12-02', 1, 1),
+(37, '20221202-PRIJEM-36', 8, 't', 'ff', NULL, '2022-12-02 07:17:24', NULL, '2022-12-02', 1, 1),
+(38, '20221202-PRIJEM-37', 8, 'test', 'ff', NULL, '2022-12-02 07:21:17', NULL, '2022-12-02', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `prijem_stavka`
+--
+
+CREATE TABLE `prijem_stavka` (
+  `id_prijem_stavka` int(11) NOT NULL,
+  `id_prijem` int(11) NOT NULL DEFAULT 0,
+  `id_kategorija` int(11) NOT NULL,
+  `id_podkategorija` int(11) DEFAULT NULL,
+  `id_lokacija` int(11) NOT NULL,
+  `id_racunar` int(11) DEFAULT NULL,
+  `id_stampac` int(11) DEFAULT NULL,
+  `id_toner` int(11) DEFAULT NULL,
+  `broj_prijem` varchar(50) NOT NULL,
+  `naziv` varchar(50) NOT NULL,
+  `korisnikLokacija` varchar(50) NOT NULL,
+  `napomena` varchar(50) NOT NULL,
+  `kolicina` int(11) NOT NULL,
+  `uneo` varchar(50) NOT NULL,
+  `editovao` varchar(50) DEFAULT NULL,
+  `uneo_ts` timestamp NOT NULL DEFAULT current_timestamp(),
+  `edit_ts` timestamp NULL DEFAULT NULL,
+  `datum` varchar(50) NOT NULL,
+  `aktivan` tinyint(1) NOT NULL DEFAULT 1,
+  `vazeci` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `prijem_stavka`
+--
+
+INSERT INTO `prijem_stavka` (`id_prijem_stavka`, `id_prijem`, `id_kategorija`, `id_podkategorija`, `id_lokacija`, `id_racunar`, `id_stampac`, `id_toner`, `broj_prijem`, `naziv`, `korisnikLokacija`, `napomena`, `kolicina`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
+(1, 5, 1, NULL, 1, 5, NULL, NULL, '20221103-PRIJEM-12-5', 'racunar', '', '', 1, 'ff', NULL, '2022-12-01 07:05:22', NULL, '', 1, 1),
+(4, 34, 4, 2, 4, NULL, NULL, NULL, '20221202-PRIJEM-33', 'test', 'test', 'test', 1, 'ff', NULL, '2022-12-02 07:03:29', NULL, '2022-12-02', 1, 1),
+(5, 34, 4, 2, 5, NULL, NULL, NULL, '20221202-PRIJEM-33', 'test', 'test', 'test', 1, 'ff', NULL, '2022-12-02 07:03:29', NULL, '2022-12-02', 1, 1),
+(6, 34, 2, 2, 2, NULL, NULL, NULL, '20221202-PRIJEM-33', 'test', 'test', 'test', 1, 'ff', NULL, '2022-12-02 07:03:29', NULL, '2022-12-02', 1, 1),
+(9, 38, 2, NULL, 2, NULL, NULL, NULL, '20221202-PRIJEM-37', 'test', '', '', 1, 'ff', NULL, '2022-12-02 07:21:18', NULL, '2022-12-02', 1, 1),
+(10, 38, 2, 1, 2, NULL, NULL, NULL, '20221202-PRIJEM-37', 'test', 'test', 'test', 1, 'ff', NULL, '2022-12-02 07:21:18', NULL, '2022-12-02', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -378,9 +491,9 @@ CREATE TABLE `toneri` (
 --
 
 INSERT INTO `toneri` (`id_toner`, `naziv`, `kolicina`, `prep_kolicina`, `uneo`, `editovao`, `uneo_ts`, `edit_ts`, `datum`, `aktivan`, `vazeci`) VALUES
-(1, 'CF259A', 10, 4, 'ff', NULL, '2022-11-15 13:50:49', NULL, NULL, 1, 1),
-(2, 'CRG039', 4, 4, 'ff', NULL, '2022-11-16 09:31:37', NULL, NULL, 1, 1),
-(3, 'CF217A', 3, 4, 'ff', NULL, '2022-11-25 10:48:46', NULL, NULL, 1, 1);
+(1, 'CF259A', 0, 4, 'ff', NULL, '2022-11-15 13:50:49', NULL, NULL, 1, 1),
+(2, 'CRG039', 0, 4, 'ff', NULL, '2022-11-16 09:31:37', NULL, NULL, 1, 1),
+(3, 'CF217A', 0, 4, 'ff', NULL, '2022-11-25 10:48:46', NULL, NULL, 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -395,6 +508,19 @@ ALTER TABLE `inventar`
   ADD KEY `FK_lokacija_inventar` (`id_lokacija`),
   ADD KEY `FK_racunar_inventar` (`id_racunar`),
   ADD KEY `FK_stampac_inventar` (`id_stampac`);
+
+--
+-- Indexes for table `izdavanje`
+--
+ALTER TABLE `izdavanje`
+  ADD PRIMARY KEY (`id_izdavanje`),
+  ADD KEY `FK_izdavanje_kategorija` (`id_kategorija`),
+  ADD KEY `FK_izdavanje_lokacija_stara` (`id_lokacija_stara`),
+  ADD KEY `FK_izdavanje_lokacija_nova` (`id_lokacija_nova`),
+  ADD KEY `FK_izdavanje_stavka` (`id_stavka`),
+  ADD KEY `FK_izdavanje_toner` (`id_toner`),
+  ADD KEY `FK_izdavanje_racunar` (`id_racunar`),
+  ADD KEY `FK_izdavanje_stampac` (`id_stampac`);
 
 --
 -- Indexes for table `kategorija`
@@ -438,12 +564,21 @@ ALTER TABLE `podkategorija`
 --
 ALTER TABLE `prijem`
   ADD PRIMARY KEY (`id_prijem`),
-  ADD UNIQUE KEY `broj_prijem` (`broj_prijem`),
-  ADD KEY `FK_prijem_kategorija` (`id_kategorija`),
-  ADD KEY `FK_prijem_podkategorija` (`id_podkategorija`),
-  ADD KEY `FK_prijem_lokacija` (`id_lokacija`),
-  ADD KEY `FK_prijem_racunar` (`id_racunar`),
-  ADD KEY `FK_prijem_stampaci` (`id_stampac`);
+  ADD UNIQUE KEY `broj_prijem` (`broj_prijem`);
+
+--
+-- Indexes for table `prijem_stavka`
+--
+ALTER TABLE `prijem_stavka`
+  ADD PRIMARY KEY (`id_prijem_stavka`),
+  ADD KEY `FK_prijemStavka_prijem` (`id_prijem`),
+  ADD KEY `FK_prijemStavka_kategorija` (`id_kategorija`),
+  ADD KEY `FK_prijemStavka_podkategorija` (`id_podkategorija`),
+  ADD KEY `FK_prijemStavka_lokacija` (`id_lokacija`),
+  ADD KEY `FK_prijemStavka_racunar` (`id_racunar`),
+  ADD KEY `FK_prijemStavka_stampac` (`id_stampac`),
+  ADD KEY `FK_prijemStavka_toner` (`id_toner`),
+  ADD KEY `FK_prijemStavka_brojPrijem` (`broj_prijem`);
 
 --
 -- Indexes for table `racunari`
@@ -484,6 +619,12 @@ ALTER TABLE `inventar`
   MODIFY `id_inventar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `izdavanje`
+--
+ALTER TABLE `izdavanje`
+  MODIFY `id_izdavanje` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
 -- AUTO_INCREMENT for table `kategorija`
 --
 ALTER TABLE `kategorija`
@@ -517,7 +658,13 @@ ALTER TABLE `podkategorija`
 -- AUTO_INCREMENT for table `prijem`
 --
 ALTER TABLE `prijem`
-  MODIFY `id_prijem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_prijem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT for table `prijem_stavka`
+--
+ALTER TABLE `prijem_stavka`
+  MODIFY `id_prijem_stavka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `racunari`
@@ -551,6 +698,18 @@ ALTER TABLE `inventar`
   ADD CONSTRAINT `FK_stampac_inventar` FOREIGN KEY (`id_stampac`) REFERENCES `stampaci` (`id_stampaci`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
+-- Constraints for table `izdavanje`
+--
+ALTER TABLE `izdavanje`
+  ADD CONSTRAINT `FK_izdavanje_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_izdavanje_lokacija_nova` FOREIGN KEY (`id_lokacija_nova`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_izdavanje_lokacija_stara` FOREIGN KEY (`id_lokacija_stara`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_izdavanje_racunar` FOREIGN KEY (`id_racunar`) REFERENCES `racunari` (`id_racunar`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_izdavanje_stampac` FOREIGN KEY (`id_stampac`) REFERENCES `stampaci` (`id_stampaci`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_izdavanje_stavka` FOREIGN KEY (`id_stavka`) REFERENCES `prijem_stavka` (`id_prijem_stavka`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_izdavanje_toner` FOREIGN KEY (`id_toner`) REFERENCES `toneri` (`id_toner`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Constraints for table `otpis`
 --
 ALTER TABLE `otpis`
@@ -566,14 +725,17 @@ ALTER TABLE `podkategorija`
   ADD CONSTRAINT `FK_podkategorija_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `prijem`
+-- Constraints for table `prijem_stavka`
 --
-ALTER TABLE `prijem`
-  ADD CONSTRAINT `FK_prijem_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_prijem_lokacija` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_prijem_podkategorija` FOREIGN KEY (`id_podkategorija`) REFERENCES `podkategorija` (`id_podkategorija`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_prijem_racunar` FOREIGN KEY (`id_racunar`) REFERENCES `racunari` (`id_racunar`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_prijem_stampaci` FOREIGN KEY (`id_stampac`) REFERENCES `stampaci` (`id_stampaci`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `prijem_stavka`
+  ADD CONSTRAINT `FK_prijemStavka_brojPrijem` FOREIGN KEY (`broj_prijem`) REFERENCES `prijem` (`broj_prijem`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_prijemStavka_kategorija` FOREIGN KEY (`id_kategorija`) REFERENCES `kategorija` (`id_kategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_prijemStavka_lokacija` FOREIGN KEY (`id_lokacija`) REFERENCES `lokacija` (`id_lokacija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_prijemStavka_podkategorija` FOREIGN KEY (`id_podkategorija`) REFERENCES `podkategorija` (`id_podkategorija`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_prijemStavka_prijem` FOREIGN KEY (`id_prijem`) REFERENCES `prijem` (`id_prijem`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_prijemStavka_racunar` FOREIGN KEY (`id_racunar`) REFERENCES `racunari` (`id_racunar`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_prijemStavka_stampac` FOREIGN KEY (`id_stampac`) REFERENCES `stampaci` (`id_stampaci`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_prijemStavka_toner` FOREIGN KEY (`id_toner`) REFERENCES `toneri` (`id_toner`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `racunari`

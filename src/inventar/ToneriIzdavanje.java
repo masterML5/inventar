@@ -24,7 +24,7 @@ public class ToneriIzdavanje extends javax.swing.JFrame {
 
     Stampaci stmp = new Stampaci();
     Lokacija lok = new Lokacija();
-    Izdavanje izd = new Izdavanje();
+    Izdavanje izd ;
     Kategorija kat = new Kategorija();
     ToneriPregled tp;
     private static String nazivToner;
@@ -51,6 +51,7 @@ public class ToneriIzdavanje extends javax.swing.JFrame {
 
         }
         tp = new ToneriPregled();
+        izd = new Izdavanje();
         ArrayList<String> sveLokacije = lok.getAll();
         sveLokacije.add(0, null);
         lokacijaComboBox.setModel(new DefaultComboBoxModel<>(sveLokacije.toArray(new String[0])));
@@ -69,9 +70,9 @@ public class ToneriIzdavanje extends javax.swing.JFrame {
         kolicinaSpin.setMinimum(1);
         kolicinaSpin.setValue(1);
         nazivToner = toner;
-        this.datum = datum;
-        this.username = username;
-        this.idToner = idToner;
+        ToneriIzdavanje.datum = datum;
+        ToneriIzdavanje.username = username;
+        ToneriIzdavanje.idToner = idToner;
     }
     boolean updateTonerKol (int idToner, int kol) throws SQLException{
         int kolicinaS = tp.getKolicinaById(idToner);
@@ -247,6 +248,8 @@ public class ToneriIzdavanje extends javax.swing.JFrame {
 
     @SuppressWarnings("empty-statement")
     private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
+        
+        
         try {
             String korisnik = korisnikField.getText();
             int kategorija = 2;
@@ -259,12 +262,16 @@ public class ToneriIzdavanje extends javax.swing.JFrame {
             String brojDok = izd.brojDok(kategorija, lokacijaS, lokacijaN, datum);
             if(izd.izdavanjeAdd(kategorija, korisnik, lokacijaS, lokacijaN, kolicina, naziv, brojDok, uneo, datum)){
                 JOptionPane.showMessageDialog(null, "Uspešno ste uneli novi prijem tonera! \n"+brojDok, "Izdavanje", JOptionPane.INFORMATION_MESSAGE);
-                updateTonerKol(idToner,kolicina);                
+                updateTonerKol(idToner,kolicina);   
                 this.dispose();
+                tp.refreshTable();
+                
+                
+                
             }else{
                 JOptionPane.showMessageDialog(null,"Došlo je do greške","Greška", JOptionPane.ERROR_MESSAGE);
             }
-;
+
                     } catch (SQLException ex) {
               JOptionPane.showMessageDialog(null,"Došlo je do greške \n"+ex,"Greška", JOptionPane.ERROR_MESSAGE);          
             Logger.getLogger(ToneriIzdavanje.class.getName()).log(Level.SEVERE, null, ex);

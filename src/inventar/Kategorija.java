@@ -76,7 +76,7 @@ public class Kategorija {
     }
 
     ArrayList<String> getAll() throws SQLException {
-        String sqlAllKategorije = "SELECT * FROM kategorija";
+        String sqlAllKategorije = "SELECT naziv FROM kategorija WHERE aktivan and vazeci";
         PreparedStatement pstAllKategorije = conSQL.prepareStatement(sqlAllKategorije);
         ResultSet rsAllKategorije = pstAllKategorije.executeQuery();
         ArrayList<String> kategorije = new ArrayList();
